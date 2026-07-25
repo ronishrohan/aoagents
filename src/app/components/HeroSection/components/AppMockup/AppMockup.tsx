@@ -245,7 +245,190 @@ const projectItems: TrackItem[] = [
 	},
 ];
 
-const incomingCards: StaticPreviewCard[] = [
+function previewCard(
+	card: Pick<
+		StaticPreviewCard,
+		"title" | "branch" | "activity" | "activityState" | "pr"
+	> &
+		Partial<StaticPreviewCard>,
+): StaticPreviewCard {
+	return {
+		agent: "Claude",
+		badge: null,
+		checks: "checks running",
+		files: "2 files",
+		icon: "/app-icons/coverage-claude-code.svg",
+		time: "18m ago",
+		tone: "default",
+		...card,
+	};
+}
+
+const trackCardTemplates: Record<TrackId, StaticPreviewCard[]> = {
+	landing: columns.flatMap((column) =>
+		column.cards.slice(0, 1).map((card) => ({ ...card }) as StaticPreviewCard),
+	),
+	deploy: [
+		previewCard({
+			title: "Pin the Vercel monorepo root",
+			branch: "deploy/vercel-root",
+			activity: "Updating project config",
+			activityState: "running",
+			pr: "PR #411",
+			agent: "Codex",
+			icon: "/app-icons/coverage-codex.svg",
+		}),
+		previewCard({
+			title: "Choose production region failover",
+			branch: "deploy/region-failover",
+			activity: "Waiting for infra decision",
+			activityState: "waiting",
+			pr: "PR #414",
+			badge: "Needs input",
+			tone: "blocked",
+		}),
+		previewCard({
+			title: "Verify preview environment variables",
+			branch: "deploy/preview-env",
+			activity: "Deployment checks running",
+			activityState: "reviewing",
+			pr: "PR #415",
+			agent: "OpenCode",
+			icon: "/app-icons/opencode.svg",
+			badge: "Awaiting review",
+			tone: "review",
+		}),
+		previewCard({
+			title: "Cache workspace dependencies in builds",
+			branch: "deploy/workspace-cache",
+			activity: "Production deploy green",
+			activityState: "passed",
+			pr: "PR #409",
+			badge: "Ready",
+			tone: "ready",
+		}),
+	],
+	stars: [
+		previewCard({
+			title: "Fetch GitHub stars during revalidation",
+			branch: "metrics/server-stars",
+			activity: "Adding cached fetch",
+			activityState: "running",
+			pr: "PR #428",
+		}),
+		previewCard({
+			title: "Set the stale count fallback",
+			branch: "metrics/star-fallback",
+			activity: "Waiting on product copy",
+			activityState: "waiting",
+			pr: "PR #430",
+			agent: "Cursor",
+			icon: "/app-icons/cursor.svg",
+			badge: "Needs input",
+			tone: "blocked",
+		}),
+		previewCard({
+			title: "Prevent hero metrics hydration shift",
+			branch: "metrics/hydration-layout",
+			activity: "Visual regression review",
+			activityState: "reviewing",
+			pr: "PR #432",
+			badge: "Awaiting review",
+			tone: "review",
+		}),
+		previewCard({
+			title: "Preload the repository avatar",
+			branch: "metrics/avatar-preload",
+			activity: "Performance checks passed",
+			activityState: "passed",
+			pr: "PR #426",
+			badge: "Ready",
+			tone: "ready",
+		}),
+	],
+	icons: [
+		previewCard({
+			title: "Replace placeholder harness marks",
+			branch: "icons/harness-marks",
+			activity: "Updating icon assets",
+			activityState: "running",
+			pr: "PR #447",
+			agent: "OpenCode",
+			icon: "/app-icons/opencode.svg",
+		}),
+		previewCard({
+			title: "Pick a fallback for unknown agents",
+			branch: "icons/agent-fallback",
+			activity: "Waiting for design input",
+			activityState: "waiting",
+			pr: "PR #450",
+			badge: "Needs input",
+			tone: "blocked",
+		}),
+		previewCard({
+			title: "Audit dark-mode logo contrast",
+			branch: "icons/dark-contrast",
+			activity: "Design review in progress",
+			activityState: "reviewing",
+			pr: "PR #452",
+			agent: "Cursor",
+			icon: "/app-icons/cursor.svg",
+			badge: "Awaiting review",
+			tone: "review",
+		}),
+		previewCard({
+			title: "Remove stale generated icon imports",
+			branch: "icons/remove-stale-imports",
+			activity: "Asset checks passed",
+			activityState: "passed",
+			pr: "PR #444",
+			badge: "Ready",
+			tone: "ready",
+		}),
+	],
+	footer: [
+		previewCard({
+			title: "Test footer columns at mobile widths",
+			branch: "qa/footer-mobile",
+			activity: "Running viewport checks",
+			activityState: "running",
+			pr: "PR #468",
+			agent: "Codex",
+			icon: "/app-icons/coverage-codex.svg",
+		}),
+		previewCard({
+			title: "Confirm final demo video caption",
+			branch: "qa/video-caption",
+			activity: "Waiting for copy approval",
+			activityState: "waiting",
+			pr: "PR #471",
+			badge: "Needs input",
+			tone: "blocked",
+		}),
+		previewCard({
+			title: "Check section order across routes",
+			branch: "qa/section-order",
+			activity: "Cross-browser review",
+			activityState: "reviewing",
+			pr: "PR #473",
+			agent: "Cursor",
+			icon: "/app-icons/cursor.svg",
+			badge: "Awaiting review",
+			tone: "review",
+		}),
+		previewCard({
+			title: "Fix footer placeholder row spacing",
+			branch: "qa/footer-spacing",
+			activity: "Responsive checks passed",
+			activityState: "passed",
+			pr: "PR #465",
+			badge: "Ready",
+			tone: "ready",
+		}),
+	],
+};
+
+const landingIncomingCards: StaticPreviewCard[] = [
 	{
 		title: "Tighten hero window border alignment",
 		branch: "landing/window-border-pass",
@@ -373,6 +556,74 @@ const incomingCards: StaticPreviewCard[] = [
 		tone: "default",
 	},
 ];
+
+const incomingCardsByTrack: Record<TrackId, StaticPreviewCard[]> = {
+	landing: landingIncomingCards,
+	deploy: [
+		previewCard({
+			title: "Add deploy health-check retries",
+			branch: "deploy/health-retries",
+			activity: "Editing deployment workflow",
+			activityState: "running",
+			pr: "draft",
+		}),
+		previewCard({
+			title: "Document preview alias ownership",
+			branch: "deploy/alias-ownership",
+			activity: "Writing deployment notes",
+			activityState: "running",
+			pr: "draft",
+		}),
+	],
+	stars: [
+		previewCard({
+			title: "Add rate-limit telemetry for star fetches",
+			branch: "metrics/star-rate-limit",
+			activity: "Instrumenting cache requests",
+			activityState: "running",
+			pr: "draft",
+		}),
+		previewCard({
+			title: "Test zero-star fallback rendering",
+			branch: "metrics/zero-state",
+			activity: "Writing component tests",
+			activityState: "running",
+			pr: "draft",
+		}),
+	],
+	icons: [
+		previewCard({
+			title: "Normalize harness icon viewboxes",
+			branch: "icons/viewbox-normalization",
+			activity: "Editing SVG assets",
+			activityState: "running",
+			pr: "draft",
+		}),
+		previewCard({
+			title: "Add Gemini CLI authorized state",
+			branch: "icons/gemini-state",
+			activity: "Updating harness preview",
+			activityState: "running",
+			pr: "draft",
+		}),
+	],
+	footer: [
+		previewCard({
+			title: "Verify video controls on iOS",
+			branch: "qa/video-ios",
+			activity: "Running device checks",
+			activityState: "running",
+			pr: "draft",
+		}),
+		previewCard({
+			title: "Audit footer links and focus order",
+			branch: "qa/footer-focus",
+			activity: "Testing keyboard navigation",
+			activityState: "running",
+			pr: "draft",
+		}),
+	],
+};
 
 const BASE_WIDTH = 1024;
 const BASE_HEIGHT = 615;
@@ -648,14 +899,23 @@ function ResizeHandles({
 	);
 }
 
-function createInitialCards(): PreviewCard[] {
-	return columns.flatMap((column) =>
-		column.cards.slice(0, 1).map((card, index) => ({
-			...card,
-			column: column.id,
-			id: `${column.id}-${index}`,
-		})),
-	);
+function createInitialCards(trackId: TrackId): PreviewCard[] {
+	return columns.flatMap((column, index) => {
+		const card = trackCardTemplates[trackId][index];
+		return card
+			? [{
+					...card,
+					column: column.id,
+					id: `${trackId}-${column.id}`,
+				}]
+			: [];
+	});
+}
+
+function createInitialCardsByTrack(): Record<TrackId, PreviewCard[]> {
+	return Object.fromEntries(
+		projectItems.map(({ id }) => [id, createInitialCards(id)]),
+	) as Record<TrackId, PreviewCard[]>;
 }
 
 function advanceCard(card: PreviewCard): PreviewCard {
@@ -1598,13 +1858,25 @@ function OrchestratorView({
 }
 
 export function AppMockup() {
-	const [cards, setCards] = useState<PreviewCard[]>(createInitialCards);
-	const [mergedCount, setMergedCount] = useState(18);
+	const [cardsByTrack, setCardsByTrack] = useState(createInitialCardsByTrack);
+	const [mergedCounts, setMergedCounts] = useState<Record<TrackId, number>>({
+		landing: 18,
+		deploy: 11,
+		stars: 24,
+		icons: 16,
+		footer: 9,
+	});
 	const [boardVersion, setBoardVersion] = useState(0);
 	const [selectedTrackId, setSelectedTrackId] = useState<TrackId>("landing");
 	const [selectedCard, setSelectedCard] = useState<PreviewCard | null>(null);
 	const [viewMode, setViewMode] = useState<ViewMode>("board");
-	const incomingIndex = useRef(0);
+	const incomingIndexes = useRef<Record<TrackId, number>>({
+		landing: 0,
+		deploy: 0,
+		stars: 0,
+		icons: 0,
+		footer: 0,
+	});
 	const windowRef = useRef<HTMLDivElement>(null);
 	const sidebarRef = useRef<HTMLElement>(null);
 	const sidebarWidthRef = useRef(178);
@@ -1613,6 +1885,18 @@ export function AppMockup() {
 
 	const selectedTrack =
 		projectItems.find((item) => item.id === selectedTrackId) ?? projectItems[0];
+	const cards = cardsByTrack[selectedTrackId];
+	const mergedCount = mergedCounts[selectedTrackId];
+
+	const updateTrackCards = useCallback(
+		(trackId: TrackId, update: (cards: PreviewCard[]) => PreviewCard[]) => {
+			setCardsByTrack((current) => ({
+				...current,
+				[trackId]: update(current[trackId]),
+			}));
+		},
+		[],
+	);
 
 	const startSidebarResize = useCallback((clientX: number) => {
 		const startWidth = sidebarWidthRef.current;
@@ -1637,19 +1921,25 @@ export function AppMockup() {
 	}, []);
 
 	const mergeCard = useCallback((id: string) => {
-		setCards((current) =>
+		const trackId = selectedTrackId;
+		updateTrackCards(trackId, (current) =>
 			current.map((card) => (card.id === id ? { ...card, merging: true } : card)),
 		);
 
 		window.setTimeout(() => {
-			setCards((current) => current.filter((card) => card.id !== id));
-			setMergedCount((current) => current + 1);
+			updateTrackCards(trackId, (current) => current.filter((card) => card.id !== id));
+			setMergedCounts((current) => ({
+				...current,
+				[trackId]: current[trackId] + 1,
+			}));
 		}, 520);
-	}, []);
+	}, [selectedTrackId, updateTrackCards]);
 
 	const spawnRandomTask = useCallback(() => {
 		setViewMode("board");
-		setCards((current) => {
+		const trackId = selectedTrackId;
+		const incomingCards = incomingCardsByTrack[trackId];
+		updateTrackCards(trackId, (current) => {
 			const existingTitles = new Set(current.map((card) => card.title));
 			const startIndex = Math.floor(Math.random() * incomingCards.length);
 			const templateOffset = incomingCards.findIndex((_, offset) => {
@@ -1663,26 +1953,25 @@ export function AppMockup() {
 			const template = incomingCards[templateIndex];
 			if (!template) return current;
 
-			incomingIndex.current += 1;
+			incomingIndexes.current[trackId] += 1;
 			return [
 				{
 					...template,
 					badge: "New task",
 					column: "working",
-					id: `manual-${Date.now()}-${incomingIndex.current}`,
+					id: `${trackId}-manual-${Date.now()}-${incomingIndexes.current[trackId]}`,
 					time: "now",
 				},
 				...current,
 			];
 		});
-	}, []);
+	}, [selectedTrackId, updateTrackCards]);
 
 	const selectTrack = useCallback((trackId: TrackId) => {
 		setSelectedTrackId(trackId);
 		setSelectedCard(null);
 		setViewMode("board");
 		setBoardVersion((current) => current + 1);
-		setCards(createInitialCards());
 	}, []);
 
 	const selectedCardId = selectedCard?.id ?? null;
@@ -1695,7 +1984,9 @@ export function AppMockup() {
 		};
 
 		const runStep = () => {
-			setCards((current) => {
+			const trackId = selectedTrackId;
+			const incomingCards = incomingCardsByTrack[trackId];
+			updateTrackCards(trackId, (current) => {
 				const chosen = randomItem(
 					current.filter((card) => !card.merging && card.id !== selectedCardId),
 				);
@@ -1717,21 +2008,24 @@ export function AppMockup() {
 					const existingTitles = new Set(next.map((card) => card.title));
 					const templateOffset = incomingCards.findIndex((_, offset) => {
 						const candidate =
-							incomingCards[(incomingIndex.current + offset) % incomingCards.length];
+							incomingCards[
+								(incomingIndexes.current[trackId] + offset) % incomingCards.length
+							];
 						return candidate ? !existingTitles.has(candidate.title) : false;
 					});
 
 					if (templateOffset >= 0) {
 						const templateIndex =
-							(incomingIndex.current + templateOffset) % incomingCards.length;
+							(incomingIndexes.current[trackId] + templateOffset) %
+							incomingCards.length;
 						const template = incomingCards[templateIndex];
 						if (template) {
-							incomingIndex.current = templateIndex + 1;
+							incomingIndexes.current[trackId] = templateIndex + 1;
 							next = [
 								{
 									...template,
 									column: "working",
-									id: `incoming-${incomingIndex.current}`,
+									id: `${trackId}-incoming-${incomingIndexes.current[trackId]}`,
 								},
 								...next,
 							];
@@ -1747,7 +2041,7 @@ export function AppMockup() {
 
 		scheduleNext();
 		return () => window.clearTimeout(timeoutId);
-	}, [mergeCard, selectedCardId]);
+	}, [mergeCard, selectedCardId, selectedTrackId, updateTrackCards]);
 
 	const runningCount = cards.filter((card) => card.column === "working").length;
 	const waitingCount = cards.filter((card) => card.column === "action").length;
