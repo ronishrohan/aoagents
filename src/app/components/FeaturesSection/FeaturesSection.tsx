@@ -23,17 +23,17 @@ const FEATURE_BACKGROUNDS = [
 
 export function FeaturesSection() {
 	return (
-		<section className="relative py-24 px-8 lg:px-[30px]">
+		<section className="relative px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px] lg:py-24">
 			<div className="max-w-7xl mx-auto">
 				{/* Feature Rows */}
-				<div className="space-y-32">
+				<div className="space-y-20 sm:space-y-24 lg:space-y-32">
 					{FEATURES.map((feature, index) => {
 						const isReversed = index % 2 === 1;
 						const DemoComponent = DEMO_COMPONENTS[index];
 						return (
 							<div
 								key={feature.title}
-								className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center ${
+								className={`grid grid-cols-1 items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-16 ${
 									isReversed ? "lg:direction-rtl" : ""
 								}`}
 							>

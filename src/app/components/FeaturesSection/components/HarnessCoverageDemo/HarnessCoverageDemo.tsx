@@ -82,7 +82,7 @@ export function HarnessCoverageDemo() {
 				</span>
 			}
 		>
-			<div className="relative h-[318px] p-4">
+			<div className="relative h-[340px] p-3 sm:h-[318px] sm:p-4">
 				<div className="flex items-center gap-2">
 					<div className="grid size-8 place-items-center rounded-lg border border-[var(--preview-border)] bg-[var(--preview-muted)]">
 						<Settings2 className="size-4" />
@@ -97,7 +97,7 @@ export function HarnessCoverageDemo() {
 					</div>
 				</div>
 
-				<div className="mt-4 grid grid-cols-2 gap-3">
+				<div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
 					<HarnessField
 						label="Default worker agent"
 						harness={harnesses[worker]}
@@ -106,16 +106,18 @@ export function HarnessCoverageDemo() {
 							setOpenField((current) => (current === "worker" ? null : "worker"))
 						}
 					/>
-					<HarnessField
-						label="Orchestrator agent"
-						harness={harnesses[orchestrator]}
-						open={openField === "orchestrator"}
-						onClick={() =>
-							setOpenField((current) =>
-								current === "orchestrator" ? null : "orchestrator",
-							)
-						}
-					/>
+					<div className="hidden sm:block">
+						<HarnessField
+							label="Orchestrator agent"
+							harness={harnesses[orchestrator]}
+							open={openField === "orchestrator"}
+							onClick={() =>
+								setOpenField((current) =>
+									current === "orchestrator" ? null : "orchestrator",
+								)
+							}
+						/>
+					</div>
 				</div>
 
 				<div className="mt-3 flex items-center justify-between text-[9px] text-[var(--preview-muted-foreground)]">
@@ -138,8 +140,10 @@ export function HarnessCoverageDemo() {
 							animate={{ opacity: 1, y: 0, scale: 1 }}
 							exit={{ opacity: 0, y: -3, scale: 0.98 }}
 							transition={{ duration: 0.16 }}
-							className={`absolute top-[142px] z-10 w-[calc(50%_-_22px)] min-w-[220px] overflow-hidden rounded-lg border border-[var(--preview-border)] bg-[var(--preview-card)] p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] ${
-								openField === "worker" ? "left-4" : "right-4"
+							className={`absolute left-3 right-3 top-[132px] z-10 overflow-hidden rounded-lg border border-[var(--preview-border)] bg-[var(--preview-card)] p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] sm:top-[142px] sm:w-[calc(50%_-_22px)] sm:min-w-[220px] ${
+								openField === "worker"
+									? "sm:left-4 sm:right-auto"
+									: "sm:left-auto sm:right-4"
 							}`}
 						>
 							{harnesses.map((harness, index) => {
@@ -187,8 +191,8 @@ export function HarnessCoverageDemo() {
 					) : null}
 				</AnimatePresence>
 
-				<div className="absolute bottom-4 left-4 right-4 flex items-center justify-between border-t border-[var(--preview-border)] pt-3">
-					<span className="text-[9px] text-[var(--preview-muted-foreground)]">
+				<div className="absolute bottom-3 left-3 right-3 flex items-center justify-end border-t border-[var(--preview-border)] pt-3 sm:bottom-4 sm:left-4 sm:right-4 sm:justify-between">
+					<span className="hidden text-[9px] text-[var(--preview-muted-foreground)] sm:block">
 						Selections apply to new sessions.
 					</span>
 					<button

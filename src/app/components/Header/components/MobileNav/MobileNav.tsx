@@ -42,7 +42,7 @@ export function MobileNav({ ctaButtons }: MobileNavProps) {
 						exit={{ height: 0 }}
 						transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
 					>
-						<div className="px-8 lg:px-[30px]">
+						<div className="px-4 sm:px-8 lg:px-[30px]">
 							<div className="max-w-7xl mx-auto py-4 flex flex-col gap-6">
 								<MobileSection
 									title="Product"

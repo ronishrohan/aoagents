@@ -35,7 +35,7 @@ const SECURITY_FEATURES: {
 
 export function SecuritySection() {
 	return (
-		<section className="relative py-24 px-8 lg:px-[30px]">
+		<section className="relative px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px] lg:py-24">
 			<div className="max-w-7xl mx-auto">
 				{/* Heading */}
 				<motion.div

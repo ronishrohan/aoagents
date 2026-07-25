@@ -43,7 +43,7 @@ export function Header({ ctaButtons }: HeaderProps) {
           : "sticky top-0 z-50 bg-background"
       }
     >
-      <div className="px-8 lg:px-[30px]">
+      <div className="px-4 sm:px-8 lg:px-[30px]">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center">

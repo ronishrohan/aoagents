@@ -86,7 +86,7 @@ export function WallOfLoveSection() {
 	const testimonials = TESTIMONIALS.slice(0, 9);
 
 	return (
-		<section className="relative py-24">
+		<section className="relative px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px] lg:py-24">
 			<div className="max-w-7xl mx-auto">
 				<div className="text-left mb-12 select-none">
 					<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground">

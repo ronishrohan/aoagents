@@ -19,11 +19,11 @@ export function TrustedBySection() {
   return (
     <section className="py-16 sm:py-24 bg-background overflow-hidden">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="select-none text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground max-w-3xl mx-auto mb-12">
+        <h2 className="mx-auto mb-12 max-w-3xl select-none px-4 text-3xl font-semibold text-foreground sm:px-8 sm:text-4xl lg:px-[30px] lg:text-5xl">
           Use the agents you already trust.
         </h2>
 
-        <div className="mx-auto flex w-full max-w-6xl flex-row items-center justify-center gap-4 overflow-x-auto px-4 scrollbar-hide sm:gap-5">
+        <div className="mx-auto flex w-full max-w-6xl flex-row items-center justify-start gap-4 overflow-x-auto px-4 scrollbar-hide sm:justify-center sm:gap-5 sm:px-8">
           {SUPPORTED_APP_ICONS.map((app) => (
             <img
               key={app.name}

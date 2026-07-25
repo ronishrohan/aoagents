@@ -53,8 +53,8 @@ export function DelegationDemo() {
 				</span>
 			}
 		>
-			<div className="grid h-[318px] grid-cols-[minmax(0,1.08fr)_minmax(176px,0.72fr)]">
-				<section className="flex min-w-0 flex-col border-r border-[var(--preview-border)] p-4">
+			<div className="grid h-[340px] grid-cols-1 sm:h-[318px] sm:grid-cols-[minmax(0,1.08fr)_minmax(176px,0.72fr)]">
+				<section className="flex min-w-0 flex-col p-3 sm:border-r sm:border-[var(--preview-border)] sm:p-4">
 					<div className="flex items-center gap-2.5">
 						<div className="grid size-8 place-items-center rounded-lg border border-[var(--preview-border)] bg-[var(--preview-muted)]">
 							<Network className="size-4 text-[var(--preview-foreground)]" />
@@ -119,7 +119,7 @@ export function DelegationDemo() {
 					</div>
 				</section>
 
-				<aside className="min-w-0 bg-[var(--preview-background)] p-3">
+				<aside className="hidden min-w-0 bg-[var(--preview-background)] p-3 sm:block">
 					<div className="flex items-center justify-between">
 						<span className="text-[10px] font-semibold text-[var(--preview-muted-foreground)]">
 							Worker queue

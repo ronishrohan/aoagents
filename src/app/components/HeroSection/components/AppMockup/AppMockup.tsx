@@ -902,29 +902,30 @@ function WindowTitlebar({
 }) {
 	return (
 		<div
-			className="flex h-10 shrink-0 cursor-grab items-center border-b border-[var(--preview-border)] bg-[var(--preview-background)] pl-3 pr-1.5 active:cursor-grabbing"
+			className="flex h-10 shrink-0 items-center border-b border-[var(--preview-border)] bg-[var(--preview-background)] px-2 sm:cursor-grab sm:pl-3 sm:pr-1.5 sm:active:cursor-grabbing"
 			onPointerDown={(event) => {
 				if ((event.target as HTMLElement).closest("button")) return;
+				if (!window.matchMedia("(min-width: 640px)").matches) return;
 				event.preventDefault();
 				onTitlebarPointerDown(event.clientX, event.clientY);
 			}}
 		>
-			<div className="relative z-50 flex items-center gap-2">
-				<span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-				<span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-				<span className="h-3 w-3 rounded-full bg-[#28c840]" />
+			<div className="relative z-50 flex items-center gap-1.5 sm:gap-2">
+				<span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57] sm:h-3 sm:w-3" />
+				<span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e] sm:h-3 sm:w-3" />
+				<span className="h-2.5 w-2.5 rounded-full bg-[#28c840] sm:h-3 sm:w-3" />
 			</div>
-			<div className="ml-5 flex min-w-0 items-center gap-2">
+			<div className="ml-2 flex min-w-0 items-center gap-2 sm:ml-5">
 				<span className="truncate text-[12px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
 					{repoName}
 				</span>
-				<span className="rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70">
+				<span className="hidden rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 md:inline">
 					{mergedCount} PRs merged
 				</span>
-				<span className="rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70">
+				<span className="hidden rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 lg:inline">
 					{runningCount} agents running
 				</span>
-				<span className="rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70">
+				<span className="hidden rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 lg:inline">
 					{waitingCount} waiting
 				</span>
 			</div>
@@ -932,7 +933,7 @@ function WindowTitlebar({
 				<button
 					type="button"
 					onClick={() => onViewChange(viewMode === "orchestrator" ? "board" : "orchestrator")}
-					className={`inline-flex h-[28px] items-center gap-2 rounded-[6px] border px-3 text-[12px] font-semibold transition-[background-color,border-color,color,transform] active:scale-[0.96] ${
+					className={`hidden h-[28px] items-center gap-2 rounded-[6px] border px-3 text-[12px] font-semibold transition-[background-color,border-color,color,transform] active:scale-[0.96] sm:inline-flex ${
 						viewMode === "orchestrator"
 							? "border-[var(--preview-ring)] bg-[var(--preview-muted)] text-[var(--preview-foreground)]"
 							: "border-[var(--preview-border)] text-[var(--preview-muted-foreground)] hover:bg-[var(--preview-muted)]"
@@ -944,14 +945,14 @@ function WindowTitlebar({
 				<button
 					type="button"
 					onClick={onNewTask}
-					className="inline-flex h-[28px] items-center gap-2 rounded-[8px] bg-[var(--preview-primary)] px-3 text-[12px] font-semibold text-[var(--preview-primary-foreground)] transition-transform active:scale-[0.96]"
+					className="inline-flex h-[28px] items-center gap-2 rounded-[8px] bg-[var(--preview-primary)] px-2 text-[12px] font-semibold text-[var(--preview-primary-foreground)] transition-transform active:scale-[0.96] sm:px-3"
 				>
 					<PlusIcon className="h-4 w-4" />
-					New task
+					<span className="hidden sm:inline">New task</span>
 				</button>
 				<button
 					type="button"
-					className="grid h-[28px] w-[28px] place-items-center rounded-[6px] border border-[var(--preview-border)] text-[var(--preview-muted-foreground)] transition-transform active:scale-[0.96]"
+					className="hidden h-[28px] w-[28px] place-items-center rounded-[6px] border border-[var(--preview-border)] text-[var(--preview-muted-foreground)] transition-transform active:scale-[0.96] min-[420px]:grid"
 					aria-label="Notifications"
 				>
 					<BellIcon className="h-5 w-5" />
@@ -977,7 +978,7 @@ function Sidebar({
 	return (
 		<aside
 			ref={sidebarRef}
-			className="relative flex shrink-0 flex-col border-r border-[var(--preview-sidebar-border)] bg-[var(--preview-sidebar)] text-[var(--preview-muted-foreground)]"
+			className="relative hidden shrink-0 flex-col border-r border-[var(--preview-sidebar-border)] bg-[var(--preview-sidebar)] text-[var(--preview-muted-foreground)] sm:flex"
 			style={{ width: 178 }}
 		>
 			<div className="flex h-[36px] items-center gap-2 px-3">
@@ -1086,7 +1087,7 @@ function Topbar({
 	viewMode: ViewMode;
 }) {
 	return (
-		<div className="flex h-[53px] shrink-0 items-center border-b border-[var(--preview-border)] bg-[var(--preview-card)] px-4">
+		<div className="flex h-[53px] shrink-0 items-center border-b border-[var(--preview-border)] bg-[var(--preview-card)] px-3 sm:px-4">
 			<div className="min-w-0">
 				<div className="truncate text-[12px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
 					{viewMode === "orchestrator" ? "Orchestrator" : "Board"}, {selectedTrack.label.toLowerCase()}
@@ -1095,7 +1096,7 @@ function Topbar({
 					{selectedTrack.summary}
 				</div>
 			</div>
-			<div className="ml-auto grid grid-cols-2 gap-2 font-mono text-[10px] tabular-nums tracking-[0.5px] text-[var(--preview-muted-foreground)]/75">
+			<div className="ml-auto hidden grid-cols-2 gap-2 font-mono text-[10px] tabular-nums tracking-[0.5px] text-[var(--preview-muted-foreground)]/75 sm:grid">
 				<span className="rounded border border-[var(--preview-border)] px-2 py-1">CI 2 failed</span>
 				<span className="rounded border border-[var(--preview-border)] px-2 py-1">{mergedCount} Merged</span>
 			</div>
@@ -1495,8 +1496,8 @@ function OrchestratorView({
 	const leadWorker = workingCards[0] ?? activeCards[0];
 
 	return (
-		<div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1.05fr)_minmax(260px,0.65fr)] overflow-hidden bg-[var(--preview-background)]">
-			<section className="flex min-h-0 flex-col border-r border-[var(--preview-border)] p-4">
+		<div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden bg-[var(--preview-background)] sm:grid-cols-[minmax(0,1.05fr)_minmax(260px,0.65fr)]">
+			<section className="flex min-h-0 flex-col p-3 sm:border-r sm:border-[var(--preview-border)] sm:p-4">
 				<div className="flex items-center gap-3">
 					<div className="grid h-9 w-9 place-items-center rounded-[10px] border border-[var(--preview-border)] bg-[var(--preview-muted)] text-[var(--preview-foreground)]">
 						<BeakerIcon className="h-5 w-5" />
@@ -1550,7 +1551,7 @@ function OrchestratorView({
 				</div>
 			</section>
 
-			<aside className="flex min-h-0 flex-col bg-[var(--preview-background)] p-4">
+			<aside className="hidden min-h-0 flex-col bg-[var(--preview-background)] p-4 sm:flex">
 				<div className="text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
 					Worker queue
 				</div>
@@ -1799,7 +1800,7 @@ export function AppMockup() {
 							/>
 						) : (
 							<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
-								<div className="grid min-h-0 flex-1 grid-cols-4 overflow-hidden">
+								<div className="grid min-h-0 flex-1 auto-cols-[minmax(150px,1fr)] grid-flow-col overflow-x-auto scrollbar-hide sm:grid-flow-row sm:grid-cols-4 sm:auto-cols-auto sm:overflow-hidden">
 									{boardColumns.map((column) => (
 										<BoardColumn
 											key={column.title}
@@ -1819,7 +1820,11 @@ export function AppMockup() {
 				card={selectedCard}
 				onClose={() => setSelectedCard(null)}
 			/>
-			{selectedCard ? null : <ResizeHandles onResizeStart={startResize} />}
+			{selectedCard ? null : (
+				<div className="hidden sm:contents">
+					<ResizeHandles onResizeStart={startResize} />
+				</div>
+			)}
 		</div>
 	);
 }

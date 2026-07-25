@@ -12,7 +12,7 @@ export function Footer() {
 
   return (
     <footer className="bg-card">
-      <div className="px-8 lg:px-[30px]">
+      <div className="px-4 sm:px-8 lg:px-[30px]">
         <div className="max-w-7xl mx-auto py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.75fr)] lg:items-start">
           <div className="flex flex-col gap-5">

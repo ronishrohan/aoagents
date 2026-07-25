@@ -111,7 +111,7 @@ function TextLink({
 export default function DesignPartnersPage() {
   return (
     <main className="bg-background text-foreground">
-      <section className="relative overflow-hidden px-8 pb-20 pt-24 sm:pb-28 sm:pt-32 lg:px-[30px] lg:pt-36">
+      <section className="relative overflow-hidden px-4 pb-20 pt-24 sm:px-8 sm:pb-28 sm:pt-32 lg:px-[30px] lg:pt-36">
         <div className="relative mx-auto max-w-7xl">
           <div className="max-w-5xl">
             <SectionLabel>Design partners</SectionLabel>
@@ -160,7 +160,7 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
+      <section className="border-t border-border px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px]">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div>
             <SectionLabel>Why now</SectionLabel>
@@ -184,7 +184,7 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
+      <section className="border-t border-border px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px]">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
             <SectionLabel>Program shape</SectionLabel>
@@ -222,7 +222,7 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
+      <section className="border-t border-border px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px]">
         <div className="mx-auto max-w-7xl">
           <SectionLabel>Roadmap</SectionLabel>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
@@ -246,7 +246,7 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
+      <section className="border-t border-border px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px]">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 py-8 lg:flex-row lg:items-center">
           <div>
             <SectionLabel>Start with your real repos</SectionLabel>

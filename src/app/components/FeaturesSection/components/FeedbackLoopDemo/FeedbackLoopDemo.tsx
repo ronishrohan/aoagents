@@ -86,8 +86,8 @@ export function FeedbackLoopDemo() {
 				</div>
 			}
 		>
-			<div className="grid h-[318px] grid-cols-[190px_minmax(0,1fr)]">
-				<aside className="border-r border-[var(--preview-border)] bg-[var(--preview-card)]/35 p-3">
+			<div className="grid h-[318px] grid-cols-1 sm:grid-cols-[190px_minmax(0,1fr)]">
+				<aside className="hidden border-r border-[var(--preview-border)] bg-[var(--preview-card)]/35 p-3 sm:block">
 					<div className="flex items-center gap-2">
 						<img
 							src="/app-icons/coverage-claude-code.svg"
@@ -157,7 +157,7 @@ export function FeedbackLoopDemo() {
 					</div>
 				</aside>
 
-				<section className="flex min-w-0 flex-col p-3.5">
+				<section className="flex min-w-0 flex-col p-3 sm:p-3.5">
 					<div className="flex items-start justify-between gap-3 rounded-lg border border-[var(--preview-border)] bg-[var(--preview-card)] p-3">
 						<div className="min-w-0">
 							<div className="flex items-center gap-2 text-[10px] font-semibold">

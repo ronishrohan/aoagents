@@ -58,7 +58,7 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="relative py-24 px-8 lg:px-[30px]">
+    <section id="faq" className="relative px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px] lg:py-24">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_1.5fr] gap-12 xl:gap-20">
           <div className="xl:sticky xl:top-24 xl:self-start">

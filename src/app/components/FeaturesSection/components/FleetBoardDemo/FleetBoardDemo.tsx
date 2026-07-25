@@ -45,11 +45,11 @@ export function FleetBoardDemo() {
 
 	return (
 		<div
-			className="h-[318px] w-full max-w-[570px] overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans text-[var(--preview-foreground)] shadow-[0_24px_64px_-20px_rgba(0,0,0,0.8)]"
+			className="mx-auto h-[318px] w-full min-w-0 max-w-[570px] overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans text-[var(--preview-foreground)] shadow-[0_24px_64px_-20px_rgba(0,0,0,0.8)]"
 			style={featurePreviewTokens}
 		>
 			<LayoutGroup>
-				<div className="grid h-full min-h-0 grid-cols-4 overflow-hidden">
+				<div className="grid h-full min-h-0 auto-cols-[minmax(140px,1fr)] grid-flow-col overflow-x-auto scrollbar-hide sm:grid-flow-row sm:grid-cols-4 sm:auto-cols-auto sm:overflow-hidden">
 					{columns.map((column, columnIndex) => {
 						const columnCards = cards.filter(
 							(card) => card.column === columnIndex,

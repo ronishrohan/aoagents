@@ -43,7 +43,7 @@ export function ProductDemo() {
 
 	return (
 		<div className="relative w-full max-w-full">
-			<div className="relative min-h-[720px] overflow-hidden bg-card p-3 shadow-[0_40px_120px_-50px_rgba(0,0,0,0.9)] sm:p-4 lg:p-6">
+			<div className="relative min-h-[440px] overflow-hidden bg-card p-2 shadow-[0_40px_120px_-50px_rgba(0,0,0,0.9)] sm:min-h-[560px] sm:p-4 lg:min-h-[720px] lg:p-6">
 				<Image
 					src={PREVIEW_BACKGROUND_IMAGE}
 					alt=""

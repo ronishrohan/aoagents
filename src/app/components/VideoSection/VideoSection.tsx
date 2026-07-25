@@ -26,7 +26,7 @@ export function VideoSection() {
 	const [playing, setPlaying] = useState(false);
 
 	return (
-		<section id="see-it" className="relative py-24 px-8 lg:px-[30px]">
+		<section id="see-it" className="relative px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px] lg:py-24">
 			<div className="mx-auto max-w-7xl">
 				<div className="max-w-3xl text-left select-none">
 					<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground">
