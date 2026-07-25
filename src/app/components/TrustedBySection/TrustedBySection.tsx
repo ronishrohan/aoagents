@@ -23,7 +23,7 @@ export function TrustedBySection() {
           Use the agents you already trust.
         </h2>
 
-        <div className="mx-auto flex w-full max-w-6xl flex-row items-center justify-start gap-4 overflow-x-auto px-4 scrollbar-hide sm:justify-center sm:gap-5 sm:px-8">
+        <div className="mx-auto flex w-full max-w-6xl flex-row flex-wrap items-center justify-center gap-x-6 gap-y-5 px-4 sm:gap-5 sm:px-8">
           {SUPPORTED_APP_ICONS.map((app) => (
             <img
               key={app.name}

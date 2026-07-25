@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	type NavLink,
 	PRODUCT_LINKS,
@@ -18,6 +18,36 @@ export function MobileNav({ ctaButtons }: MobileNavProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const close = () => setIsOpen(false);
 
+	// Lock the page behind the panel and let Escape dismiss it.
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") setIsOpen(false);
+		};
+		window.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			document.body.style.overflow = previousOverflow;
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [isOpen]);
+
+	// The trigger is hidden at lg, so close on the way up or the lock sticks.
+	useEffect(() => {
+		const query = window.matchMedia("(min-width: 1024px)");
+		const sync = () => {
+			if (query.matches) setIsOpen(false);
+		};
+
+		sync();
+		query.addEventListener("change", sync);
+		return () => query.removeEventListener("change", sync);
+	}, []);
+
 	return (
 		<div className="lg:hidden flex items-center gap-2 select-none">
 			<div className="hidden sm:flex items-center gap-2 shrink-0">
@@ -25,41 +55,56 @@ export function MobileNav({ ctaButtons }: MobileNavProps) {
 			</div>
 			<button
 				type="button"
-				className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+				className="-mr-2.5 grid size-11 place-items-center text-muted-foreground hover:text-foreground transition-colors"
 				onClick={() => setIsOpen((prev) => !prev)}
 				aria-label={isOpen ? "Close menu" : "Open menu"}
 				aria-expanded={isOpen}
+				aria-controls="mobile-nav"
 			>
 				{isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
 			</button>
 
 			<AnimatePresence>
 				{isOpen && (
-					<motion.div
-						className="absolute inset-x-0 top-14 overflow-hidden border-t border-border bg-background/95 backdrop-blur-sm"
-						initial={{ height: 0 }}
-						animate={{ height: "auto" }}
-						exit={{ height: 0 }}
-						transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-					>
-						<div className="px-4 sm:px-8 lg:px-[30px]">
-							<div className="max-w-7xl mx-auto py-4 flex flex-col gap-6">
-								<MobileSection
-									title="Product"
-									links={PRODUCT_LINKS}
-									onNavigate={close}
-								/>
-								<MobileSection
-									title="Resources"
-									links={RESOURCE_LINKS}
-									onNavigate={close}
-								/>
-								<div className="pt-4 border-t border-border flex flex-col gap-3">
-									{ctaButtons}
+					<>
+						<motion.div
+							key="mobile-nav-backdrop"
+							className="fixed inset-x-0 bottom-0 top-14 z-40 bg-background/70 backdrop-blur-sm"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+							onClick={close}
+							aria-hidden="true"
+						/>
+						<motion.div
+							key="mobile-nav-panel"
+							id="mobile-nav"
+							className="absolute inset-x-0 top-14 z-50 overflow-hidden border-t border-border bg-background"
+							initial={{ height: 0 }}
+							animate={{ height: "auto" }}
+							exit={{ height: 0 }}
+							transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+						>
+							<div className="max-h-[calc(100dvh-3.5rem)] overflow-y-auto overscroll-contain px-4 pb-[env(safe-area-inset-bottom)] sm:px-8 lg:px-[30px]">
+								<div className="max-w-7xl mx-auto py-4 flex flex-col gap-6">
+									<MobileSection
+										title="Product"
+										links={PRODUCT_LINKS}
+										onNavigate={close}
+									/>
+									<MobileSection
+										title="Resources"
+										links={RESOURCE_LINKS}
+										onNavigate={close}
+									/>
+									<div className="pt-4 border-t border-border flex flex-col gap-3">
+										{ctaButtons}
+									</div>
 								</div>
 							</div>
-						</div>
-					</motion.div>
+						</motion.div>
+					</>
 				)}
 			</AnimatePresence>
 		</div>
@@ -89,7 +134,7 @@ function MobileSection({
 						href={link.href}
 						target="_blank"
 						rel="noopener noreferrer"
-						className="px-2 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						className="flex min-h-11 items-center rounded-md px-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
 					>
 						{link.label}
 					</a>
@@ -98,7 +143,7 @@ function MobileSection({
 						key={link.href}
 						href={link.href}
 						onClick={onNavigate}
-						className="px-2 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						className="flex min-h-11 items-center rounded-md px-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
 					>
 						{link.label}
 					</Link>

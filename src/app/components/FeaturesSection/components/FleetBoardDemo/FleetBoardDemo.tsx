@@ -49,7 +49,7 @@ export function FleetBoardDemo() {
 			style={featurePreviewTokens}
 		>
 			<LayoutGroup>
-				<div className="grid h-full min-h-0 auto-cols-[minmax(140px,1fr)] grid-flow-col overflow-x-auto sm:grid-flow-row sm:grid-cols-4 sm:auto-cols-auto sm:overflow-hidden">
+				<div className="grid h-full min-h-0 auto-cols-[85%] grid-flow-col snap-x snap-mandatory overflow-x-auto overscroll-x-contain scrollbar-hide sm:auto-cols-[48%] md:grid-flow-row md:grid-cols-4 md:auto-cols-auto md:snap-none md:overflow-hidden">
 					{columns.map((column, columnIndex) => {
 						const columnCards = cards.filter(
 							(card) => card.column === columnIndex,
@@ -60,7 +60,7 @@ export function FleetBoardDemo() {
 						return (
 							<section
 								key={column.id}
-								className="flex min-h-0 min-w-0 flex-col border-r border-[var(--preview-border)] last:border-r-0"
+								className="flex min-h-0 min-w-0 snap-start flex-col border-r border-[var(--preview-border)] last:border-r-0"
 							>
 								<button
 									type="button"

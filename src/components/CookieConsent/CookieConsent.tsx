@@ -38,12 +38,12 @@ export function CookieConsent() {
 					animate={{ y: 0, opacity: 1 }}
 					exit={{ y: 20, opacity: 0 }}
 					transition={{ type: "spring", damping: 25, stiffness: 300 }}
-					className="fixed bottom-4 left-4 z-50 max-w-xs rounded-lg border border-border bg-card p-4 shadow-lg"
+					className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 rounded-lg border border-border bg-card p-3 shadow-lg sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-xs sm:p-4"
 				>
 					<p className="text-sm text-muted-foreground">
 						We only collect analytics cookies so we can improve your experience.
 					</p>
-					<div className="mt-3 flex items-center justify-between">
+					<div className="mt-3 flex flex-wrap items-center justify-between gap-2">
 						<Button variant="link" asChild className="px-0">
 							<Link href="/privacy">Privacy policy</Link>
 						</Button>
