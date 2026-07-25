@@ -54,10 +54,10 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-6 sm:mt-8">
-              <DownloadButton />
+              <DownloadButton className="rounded-3xl" />
               <button
                 type="button"
-                className="px-4 py-2.5 sm:px-6 sm:py-3 rounded-2xl text-sm sm:text-base tracking-[-0.5px] font-normal bg-background border border-border text-foreground hover:bg-muted transition-colors flex items-center gap-2"
+                className="px-4 py-2.5 sm:px-6 sm:py-3 rounded-3xl text-sm sm:text-base tracking-[-0.5px] font-normal bg-background border border-border text-foreground hover:bg-muted transition-colors flex items-center gap-2"
                 onClick={() => window.open(COMPANY.GITHUB_URL, "_blank")}
                 aria-label={githubButtonLabel}
               >
@@ -70,7 +70,7 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
               type="button"
               aria-label={`Copy brew install command: ${INSTALL_COMMAND}`}
               title="Click to copy"
-              className="group mt-4 flex w-full max-w-xl items-center gap-2 overflow-hidden rounded-2xl border border-border bg-card/70 px-3 py-2.5 text-left font-mono text-sm tracking-[0.5px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:w-auto"
+              className="group mt-4 flex w-full max-w-xl items-center gap-2 overflow-hidden rounded-3xl border border-border bg-card/70 px-3 py-2.5 text-left font-mono text-sm tracking-[0.5px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:w-auto"
               onClick={copyInstallCommand}
             >
               <span className="text-foreground/40" aria-hidden="true">
