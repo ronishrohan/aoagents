@@ -1297,7 +1297,8 @@ function AgentTerminalDisplay({ card }: { card: PreviewCard }) {
 		if (!element) return;
 
 		element.replaceChildren();
-		const cols = 72;
+		const getCols = () => Math.max(24, Math.floor(element.clientWidth / 6.8));
+		const cols = getCols();
 		const block = (text: string) => `\x1b[48;2;17;24;39m\x1b[37m ${text.padEnd(cols - 2, " ")} \x1b[0m\r\n`;
 
 		const terminal = new XTerm({
@@ -1329,6 +1330,10 @@ function AgentTerminalDisplay({ card }: { card: PreviewCard }) {
 		});
 
 		terminal.open(element);
+		const resizeObserver = new ResizeObserver(() => {
+			terminal.resize(getCols(), 15);
+		});
+		resizeObserver.observe(element);
 		terminal.write(block(card.title.toLowerCase()));
 		terminal.write("I'll inspect the branch, check the current agent output, and keep\r\n");
 		terminal.write("the fix scoped to this worktree.\r\n\r\n");
@@ -1357,6 +1362,7 @@ function AgentTerminalDisplay({ card }: { card: PreviewCard }) {
 
 		return () => {
 			window.clearInterval(spinnerInterval);
+			resizeObserver.disconnect();
 			terminal.dispose();
 		};
 	}, [card]);
@@ -1408,7 +1414,7 @@ function AgentStatusModal({
 					/>
 					<motion.div
 						key="agent-status-overlay"
-						className="absolute inset-x-0 bottom-0 top-10 z-40 grid place-items-center bg-black/35 p-8 backdrop-blur-[1px]"
+						className="absolute inset-x-0 bottom-0 top-10 z-40 grid place-items-center bg-black/35 p-3 backdrop-blur-[1px] sm:p-8"
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
@@ -1419,7 +1425,7 @@ function AgentStatusModal({
 						role="dialog"
 						aria-modal="true"
 						aria-label={`${card.title} agent status`}
-						className="w-[520px] max-w-full rounded-2xl border border-[var(--preview-border)] bg-[var(--preview-card)] p-4 text-[var(--preview-card-foreground)] shadow-[0_24px_80px_rgba(0,0,0,0.45)] outline-none"
+						className="w-full min-w-0 max-w-[520px] rounded-2xl border border-[var(--preview-border)] bg-[var(--preview-card)] p-3 text-[var(--preview-card-foreground)] shadow-[0_24px_80px_rgba(0,0,0,0.45)] outline-none sm:p-4"
 						initial={{ opacity: 0, scale: 0.99 }}
 						animate={{ opacity: 1, scale: 1 }}
 						exit={{ opacity: 0, scale: 0.99 }}
@@ -1800,7 +1806,7 @@ export function AppMockup() {
 							/>
 						) : (
 							<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
-								<div className="grid min-h-0 flex-1 auto-cols-[minmax(150px,1fr)] grid-flow-col overflow-x-auto scrollbar-hide sm:grid-flow-row sm:grid-cols-4 sm:auto-cols-auto sm:overflow-hidden">
+								<div className="grid min-h-0 flex-1 auto-cols-[minmax(150px,1fr)] grid-flow-col overflow-x-auto lg:grid-flow-row lg:grid-cols-4 lg:auto-cols-auto lg:overflow-hidden">
 									{boardColumns.map((column) => (
 										<BoardColumn
 											key={column.title}

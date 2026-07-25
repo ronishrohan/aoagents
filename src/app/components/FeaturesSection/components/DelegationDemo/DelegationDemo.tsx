@@ -160,7 +160,7 @@ export function DelegationDemo() {
 										pulse={stage === 2}
 									/>
 								</div>
-								<div className="mt-2 flex items-center gap-1.5 truncate font-mono text-[8px] text-[var(--preview-muted-foreground)]">
+								<div className="mt-2 flex items-center gap-1.5 truncate font-mono text-[9px] text-[var(--preview-muted-foreground)]">
 									<GitBranch className="size-2.5 shrink-0" />
 									{worker.branch}
 								</div>

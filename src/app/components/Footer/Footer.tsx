@@ -86,7 +86,7 @@ function FooterColumn({
           return (
           <li key={link?.href ?? `${title}-empty-${index}`}>
             {!link ? (
-              <div className="min-h-8" aria-hidden="true" />
+              <div className="hidden min-h-8 sm:block" aria-hidden="true" />
             ) : link.external ? (
               <a
                 href={link.href}

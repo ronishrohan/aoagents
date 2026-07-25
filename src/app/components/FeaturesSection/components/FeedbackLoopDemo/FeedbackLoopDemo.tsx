@@ -99,13 +99,13 @@ export function FeedbackLoopDemo() {
 							<div className="truncate text-[10px] font-semibold">
 								Claude worker
 							</div>
-							<div className="truncate font-mono text-[8px] text-[var(--preview-muted-foreground)]">
+							<div className="truncate font-mono text-[9px] text-[var(--preview-muted-foreground)]">
 								feat/github-auth
 							</div>
 						</div>
 					</div>
 
-					<div className="mt-4 text-[8px] font-semibold uppercase tracking-[0.08em] text-[var(--preview-muted-foreground)]">
+					<div className="mt-4 text-[9px] font-semibold uppercase tracking-[0.08em] text-[var(--preview-muted-foreground)]">
 						PR #2481
 					</div>
 					<div className="mt-2 space-y-1.5">
@@ -147,7 +147,7 @@ export function FeedbackLoopDemo() {
 										<div className="truncate text-[9px] font-medium">
 											{item.event}
 										</div>
-										<div className="mt-0.5 truncate text-[7px] text-[var(--preview-muted-foreground)]">
+										<div className="mt-0.5 truncate text-[9px] text-[var(--preview-muted-foreground)]">
 											{item.label}
 										</div>
 									</div>
@@ -172,7 +172,7 @@ export function FeedbackLoopDemo() {
 							key={state.label}
 							initial={{ opacity: 0, scale: 0.9 }}
 							animate={{ opacity: 1, scale: 1 }}
-							className="shrink-0 rounded px-1.5 py-1 font-mono text-[8px]"
+							className="shrink-0 rounded px-1.5 py-1 font-mono text-[9px]"
 							style={{
 								backgroundColor: `color-mix(in srgb, ${state.color} 16%, transparent)`,
 								color: state.color,

@@ -33,13 +33,13 @@ export function FeaturesSection() {
 						return (
 							<div
 								key={feature.title}
-								className={`grid grid-cols-1 items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-16 ${
-									isReversed ? "lg:direction-rtl" : ""
+								className={`grid grid-cols-1 items-center gap-8 sm:gap-10 xl:grid-cols-2 xl:gap-16 ${
+									isReversed ? "xl:direction-rtl" : ""
 								}`}
 							>
 								{/* Text Content */}
 								<div
-									className={`space-y-6 ${isReversed ? "lg:order-2 lg:text-right" : "lg:order-1"}`}
+									className={`space-y-6 ${isReversed ? "xl:order-2 xl:text-right" : "xl:order-1"}`}
 								>
 									<div className="space-y-4">
 										<span className="text-sm font-mono text-muted-foreground tracking-[0.5px]">
@@ -50,14 +50,14 @@ export function FeaturesSection() {
 										</h3>
 									</div>
 									<p
-										className={`text-base sm:text-lg text-muted-foreground leading-relaxed max-w-[500px] ${isReversed ? "lg:ml-auto" : ""}`}
+										className={`text-base sm:text-lg text-muted-foreground leading-relaxed max-w-[500px] ${isReversed ? "xl:ml-auto" : ""}`}
 									>
 										{feature.description}
 									</p>
 								</div>
 
 								{/* Demo */}
-								<div className={`${isReversed ? "lg:order-1" : "lg:order-2"}`}>
+								<div className={`${isReversed ? "xl:order-1" : "xl:order-2"}`}>
 									<FeatureDemo
 										className={index === 3 ? "overflow-visible" : ""}
 										backgroundImage={

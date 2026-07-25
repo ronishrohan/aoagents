@@ -49,7 +49,7 @@ export function FleetBoardDemo() {
 			style={featurePreviewTokens}
 		>
 			<LayoutGroup>
-				<div className="grid h-full min-h-0 auto-cols-[minmax(140px,1fr)] grid-flow-col overflow-x-auto scrollbar-hide sm:grid-flow-row sm:grid-cols-4 sm:auto-cols-auto sm:overflow-hidden">
+				<div className="grid h-full min-h-0 auto-cols-[minmax(140px,1fr)] grid-flow-col overflow-x-auto sm:grid-flow-row sm:grid-cols-4 sm:auto-cols-auto sm:overflow-hidden">
 					{columns.map((column, columnIndex) => {
 						const columnCards = cards.filter(
 							(card) => card.column === columnIndex,
@@ -71,10 +71,10 @@ export function FleetBoardDemo() {
 										className="size-2 shrink-0 rounded-[2px]"
 										style={{ backgroundColor: column.color }}
 									/>
-									<span className="min-w-0 flex-1 truncate text-[9px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
+									<span className="min-w-0 flex-1 truncate text-[10px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
 										{column.label}
 									</span>
-									<span className="text-[9px] tabular-nums text-[var(--preview-muted-foreground)]">
+									<span className="text-[10px] tabular-nums text-[var(--preview-muted-foreground)]">
 										{count}
 									</span>
 								</button>
@@ -149,16 +149,16 @@ function BoardCard({
 					className="mt-0.5 size-3.5 shrink-0"
 					draggable="false"
 				/>
-				<div className="min-w-0 text-[9px] font-medium leading-[13px] text-[var(--preview-card-foreground)]">
+				<div className="min-w-0 text-[10px] font-medium leading-[14px] text-[var(--preview-card-foreground)]">
 					{title}
 				</div>
 			</div>
-			<div className="mt-2 flex items-center gap-1.5 border-t border-[var(--preview-border)] pt-2 font-mono text-[7px] text-[var(--preview-muted-foreground)]">
+			<div className="mt-2 flex items-center gap-1.5 border-t border-[var(--preview-border)] pt-2 font-mono text-[9px] text-[var(--preview-muted-foreground)]">
 				<GitBranch className="size-2.5 shrink-0" />
 				<span className="truncate">{branch}</span>
 			</div>
 			<div
-				className="mt-2 flex items-center gap-1.5 truncate text-[7px]"
+				className="mt-2 flex items-center gap-1.5 truncate text-[9px]"
 				style={{ color: state.color }}
 			>
 				{column === 0 ? (

@@ -168,7 +168,7 @@ export function HarnessCoverageDemo() {
 											{harness.label}
 										</span>
 										<span
-											className="text-[8px]"
+											className="text-[9px]"
 											style={{
 												color:
 													harness.status === "Authorized"
@@ -184,7 +184,7 @@ export function HarnessCoverageDemo() {
 									</button>
 								);
 							})}
-							<div className="mt-1 border-t border-[var(--preview-border)] px-2 pt-2 text-[8px] text-[var(--preview-muted-foreground)]">
+							<div className="mt-1 border-t border-[var(--preview-border)] px-2 pt-2 text-[9px] text-[var(--preview-muted-foreground)]">
 								18 more harnesses available
 							</div>
 						</motion.div>
