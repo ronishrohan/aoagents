@@ -1,47 +1,38 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
 
 const AGENT_LOGOS = [
-  // Clockwise from the top-left.
-  { name: "claude-code", label: "Claude Code", src: "/app-icons/harness-claude-code.svg", x: 0, y: 0, entry: { x: 0, y: -130 } },
-  { name: "aider", label: "Aider", src: "/app-icons/harness-aider.png", x: 14.3, y: 0, entry: { x: 0, y: -130 } },
-  { name: "opencode", label: "OpenCode", src: "/app-icons/harness-opencode.svg", x: 28.6, y: 0, entry: { x: 0, y: -130 } },
-  { name: "grok", label: "Grok", src: "/app-icons/harness-grok.png", x: 42.9, y: 0, entry: { x: 0, y: -130 } },
-  { name: "droid", label: "Droid", src: "/app-icons/harness-droid.png", x: 57.1, y: 0, entry: { x: 0, y: -130 } },
-  { name: "amp", label: "Amp", src: "/app-icons/amp.svg", x: 71.4, y: 0, entry: { x: 0, y: -130 } },
-  { name: "agy", label: "Antigravity", src: "/app-icons/harness-agy.png", x: 85.7, y: 0, entry: { x: 0, y: -130 } },
-  { name: "crush", label: "Crush", src: "/app-icons/harness-crush.png", x: 100, y: 0, entry: { x: 90, y: -90 } },
-  { name: "cursor", label: "Cursor", src: "/app-icons/harness-cursor.svg", x: 100, y: 25, entry: { x: 130, y: 0 } },
-  { name: "qwen", label: "Qwen Code", src: "/app-icons/harness-qwen.png", x: 100, y: 50, entry: { x: 130, y: 0 } },
-  { name: "copilot", label: "GitHub Copilot", src: "/app-icons/harness-copilot.png", x: 100, y: 75, entry: { x: 130, y: 0 } },
-  { name: "goose", label: "Goose", src: "/app-icons/harness-goose.png", x: 100, y: 100, entry: { x: 90, y: 90 } },
-  { name: "auggie", label: "Auggie", src: "/app-icons/harness-auggie.png", x: 85.7, y: 100, entry: { x: 0, y: 130 } },
-  { name: "continue", label: "Continue", src: "/app-icons/harness-continue.png", x: 71.4, y: 100, entry: { x: 0, y: 130 } },
-  { name: "devin", label: "Devin", src: "/app-icons/harness-devin.png", x: 57.1, y: 100, entry: { x: 0, y: 130 } },
-  { name: "cline", label: "Cline", src: "/app-icons/harness-cline.png", x: 42.9, y: 100, entry: { x: 0, y: 130 } },
-  { name: "codex", label: "Codex", src: "/app-icons/harness-codex.svg", x: 28.6, y: 100, entry: { x: 0, y: 130 } },
-  { name: "gemini", label: "Gemini CLI", src: "/app-icons/gemini.svg", x: 14.3, y: 100, entry: { x: 0, y: 130 } },
-  { name: "kimi", label: "Kimi Code", src: "/app-icons/harness-kimi.png", x: 0, y: 100, entry: { x: -90, y: 90 } },
-  { name: "kiro", label: "Kiro", src: "/app-icons/harness-kiro.png", x: 0, y: 83.3, entry: { x: -130, y: 0 } },
-  { name: "kilocode", label: "Kilo Code", src: "/app-icons/harness-kilocode.png", x: 0, y: 66.7, entry: { x: -130, y: 0 } },
-  { name: "vibe", label: "Vibe", src: "/app-icons/harness-vibe.png", x: 0, y: 50, entry: { x: -130, y: 0 } },
-  { name: "pi", label: "Pi", src: "/app-icons/harness-pi.png", x: 0, y: 33.3, entry: { x: -130, y: 0 } },
-  { name: "autohand", label: "Autohand", src: "/app-icons/harness-autohand.png", x: 0, y: 16.7, entry: { x: -130, y: 0 } },
+  { name: "claude-code", label: "Claude Code", src: "/app-icons/lobe-claude-code.svg", x: 0, y: 0, entry: { x: 0, y: -130 } },
+  { name: "codex", label: "Codex", src: "/app-icons/lobe-codex.svg", x: 20, y: 0, entry: { x: 0, y: -130 } },
+  { name: "cursor", label: "Cursor", src: "/app-icons/lobe-cursor.svg", x: 40, y: 0, entry: { x: 0, y: -130 }, invert: true },
+  { name: "opencode", label: "OpenCode", src: "/app-icons/lobe-opencode.svg", x: 60, y: 0, entry: { x: 0, y: -130 } },
+  { name: "gemini-cli", label: "Gemini CLI", src: "/app-icons/lobe-gemini-cli.svg", x: 80, y: 0, entry: { x: 0, y: -130 } },
+  { name: "github-copilot", label: "GitHub Copilot", src: "/app-icons/lobe-github-copilot.svg", x: 100, y: 0, entry: { x: 90, y: -90 }, invert: true },
+  { name: "amp", label: "Amp", src: "/app-icons/lobe-amp.svg", x: 100, y: 33.3, entry: { x: 130, y: 0 } },
+  { name: "kimi", label: "Kimi Code", src: "/app-icons/lobe-kimi.svg", x: 100, y: 66.7, entry: { x: 130, y: 0 } },
+  { name: "cline", label: "Cline", src: "/app-icons/lobe-cline.svg", x: 100, y: 100, entry: { x: 90, y: 90 }, invert: true },
+  { name: "devin", label: "Devin", src: "/app-icons/lobe-devin.svg", x: 80, y: 100, entry: { x: 0, y: 130 } },
+  { name: "goose", label: "Goose", src: "/app-icons/lobe-goose.svg", x: 60, y: 100, entry: { x: 0, y: 130 }, invert: true },
+  { name: "qwen", label: "Qwen Code", src: "/app-icons/lobe-qwen.svg", x: 40, y: 100, entry: { x: 0, y: 130 } },
+  { name: "grok", label: "Grok", src: "/app-icons/lobe-grok.svg", x: 20, y: 100, entry: { x: 0, y: 130 }, invert: true },
+  { name: "kilo-code", label: "Kilo Code", src: "/app-icons/lobe-kilocode.svg", x: 0, y: 100, entry: { x: -90, y: 90 }, invert: true },
+  { name: "kiro", label: "Kiro", src: "/app-icons/lobe-kiro.svg", x: 0, y: 66.7, entry: { x: -130, y: 0 } },
+  { name: "antigravity", label: "Antigravity", src: "/app-icons/lobe-antigravity.svg", x: 0, y: 33.3, entry: { x: -130, y: 0 } },
 ];
 
 export function TrustedBySection() {
   const shouldReduceMotion = useReducedMotion();
-  const [hasEnteredViewport, setHasEnteredViewport] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const hasEnteredViewport = useInView(sectionRef, { once: true, amount: 0.05 });
 
   return (
     <section className="overflow-hidden bg-background py-16 sm:py-24">
       <div className="w-full">
         <motion.div
+          ref={sectionRef}
           className="relative min-h-[360px] overflow-hidden sm:min-h-[440px]"
-          onViewportEnter={() => setHasEnteredViewport(true)}
-          viewport={{ once: true, amount: 0.35 }}
         >
           <div
             className="pointer-events-none absolute inset-x-0 top-0 z-50 h-px bg-[linear-gradient(90deg,transparent_0%,color-mix(in_oklch,var(--foreground)_32%,transparent)_50%,transparent_100%)]"
@@ -107,12 +98,14 @@ export function TrustedBySection() {
                     }
               }
             >
-              <img
-                src={agent.src}
-                alt=""
-                className="h-full w-full object-contain drop-shadow-[0_8px_18px_rgb(0_0_0/0.3)]"
-                loading="lazy"
-              />
+              <div className="flex h-full w-full items-center justify-center">
+                <img
+                  src={agent.src}
+                  alt=""
+                  className={`h-[58%] w-[58%] object-contain ${agent.invert ? "invert" : ""}`}
+                  loading="lazy"
+                />
+              </div>
               <span className="sr-only">{agent.label}</span>
             </motion.div>
           ))}
