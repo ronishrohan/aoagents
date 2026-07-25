@@ -14,6 +14,13 @@ const DEMO_COMPONENTS = [
 	OpenInDemo,
 ];
 
+const FEATURE_BACKGROUNDS = [
+	"/feature3.png",
+	"/feature.png",
+	"/feature4.png",
+	"/feature2.png",
+] as const;
+
 export function FeaturesSection() {
 	return (
 		<section className="relative py-24 px-8 lg:px-[30px]">
@@ -51,7 +58,11 @@ export function FeaturesSection() {
 
 								{/* Demo */}
 								<div className={`${isReversed ? "lg:order-1" : "lg:order-2"}`}>
-									<FeatureDemo colors={feature.colors}>
+									<FeatureDemo
+										backgroundImage={
+											FEATURE_BACKGROUNDS[index % FEATURE_BACKGROUNDS.length]
+										}
+									>
 										{DemoComponent && <DemoComponent />}
 									</FeatureDemo>
 								</div>

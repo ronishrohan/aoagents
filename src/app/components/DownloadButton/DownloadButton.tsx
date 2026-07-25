@@ -19,8 +19,9 @@ export function DownloadButton({
     size === "sm"
       ? "h-8 px-3 text-sm"
       : "px-3 sm:px-6 py-2 sm:py-3 text-sm sm:text-base";
+  const label = size === "sm" ? "Download" : "Download for Mac";
 
-  const buttonClasses = `bg-foreground text-background ${sizeClasses} rounded-xl tracking-[0.5px] font-normal hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap shrink-0 ${className}`;
+  const buttonClasses = `bg-foreground text-background ${sizeClasses} rounded-2xl tracking-[0.5px] font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap shrink-0 ${className}`;
 
   const openLatestRelease = () => {
     track("download_clicked");
@@ -29,8 +30,8 @@ export function DownloadButton({
 
   return (
     <button type="button" className={buttonClasses} onClick={openLatestRelease}>
-      Download
       <HiMiniArrowDownTray className="size-4" />
+      {label}
     </button>
   );
 }

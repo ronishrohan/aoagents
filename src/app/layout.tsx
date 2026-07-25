@@ -24,12 +24,12 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 const siteDescription =
-  "Mission control for a fleet of coding agents. 23 harnesses in isolated worktrees, with CI and review feedback routed back to the agent that owns the branch. Free and open source under Apache 2.0.";
+  "Run a fleet of coding agents without losing track of branches, reviews, or CI failures. Free and open source under Apache 2.0.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(COMPANY.MARKETING_URL),
   title: {
-    default: `${COMPANY.NAME}: Mission control for coding agents`,
+    default: `${COMPANY.SHORT_NAME}: Run coding agents in parallel`,
     template: `%s | ${COMPANY.SHORT_NAME}`,
   },
   description: siteDescription,
@@ -54,20 +54,20 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: COMPANY.MARKETING_URL,
     siteName: COMPANY.NAME,
-    title: `${COMPANY.NAME}: Stop babysitting agents. Start merging real work.`,
+    title: `${COMPANY.SHORT_NAME}: Run coding agents in parallel`,
     description: siteDescription,
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: `${COMPANY.NAME}: Mission control for coding agents`,
+        alt: `${COMPANY.SHORT_NAME}: Run coding agents in parallel`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${COMPANY.NAME}: Stop babysitting agents. Start merging real work.`,
+    title: `${COMPANY.SHORT_NAME}: Run coding agents in parallel`,
     description: siteDescription,
     images: ["/og-image.png"],
     creator: "@aoagents",

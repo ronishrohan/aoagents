@@ -1,87 +1,28 @@
 "use client";
 
-import { useIsMobile } from "@superset/ui/hooks/use-mobile";
-import { type MotionValue, motion, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { type ActiveDemo, AppMockup } from "../AppMockup";
-import { SelectorPill } from "./components/SelectorPill";
-import { DEMO_OPTIONS } from "./constants";
+import { AppMockup } from "../AppMockup";
 
-interface ProductDemoProps {
-	scrollYProgress: MotionValue<number>;
-}
-
-export function ProductDemo({ scrollYProgress }: ProductDemoProps) {
-	const [activeOption, setActiveOption] =
-		useState<ActiveDemo>("Use Any Agents");
-	const [containerWidth, setContainerWidth] = useState(0);
-	const [viewportHeight, setViewportHeight] = useState(0);
-	const isMobile = useIsMobile();
-	const containerRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		const container = containerRef.current;
-		if (!container) return;
-
-		const updateViewportHeight = () => setViewportHeight(window.innerHeight);
-		updateViewportHeight();
-
-		const resizeObserver = new ResizeObserver((entries) => {
-			for (const entry of entries) {
-				setContainerWidth(entry.contentRect.width);
-			}
-		});
-		resizeObserver.observe(container);
-
-		window.addEventListener("resize", updateViewportHeight);
-
-		return () => {
-			resizeObserver.disconnect();
-			window.removeEventListener("resize", updateViewportHeight);
-		};
-	}, []);
-
-	const scale = useTransform(
-		scrollYProgress,
-		[0, 1],
-		[1, isMobile ? 0.95 : 0.82],
-	);
-
-	const maxHeightCap = viewportHeight * 0.8;
-	const constrainedWidth = Math.min(containerWidth, maxHeightCap * 1.6);
-	const maxWidth = useTransform(
-		scrollYProgress,
-		[0, 1],
-		[containerWidth || 1, constrainedWidth || 1],
-	);
-
+export function ProductDemo() {
 	return (
-		<div ref={containerRef} className="relative w-full max-w-full">
-			<motion.div
-				className="relative mx-auto w-full"
+		<div className="relative w-full max-w-full">
+			<div
+				className="relative overflow-hidden bg-card p-3 shadow-[0_40px_120px_-50px_rgba(0,0,0,0.9)] sm:p-4 lg:p-6"
 				style={{
-					scale,
-					willChange: "transform",
-					...(containerWidth > 0 ? { maxWidth } : {}),
+					backgroundImage: "url('/hero-background.jpeg')",
+					backgroundPosition: "center",
+					backgroundSize: "cover",
 				}}
 			>
-				<div className="relative">
-					<div className="absolute inset-[10%] top-[20%] rounded-3xl bg-white/[0.07] blur-[60px] pointer-events-none" />
-					<div className="relative overflow-x-auto scrollbar-hide">
-						<AppMockup activeDemo={activeOption} />
+				<div className="pointer-events-none absolute inset-0 bg-background/35" />
+				<div className="pointer-events-none absolute inset-x-8 top-8 h-24 rounded-full bg-foreground/[0.08] blur-3xl" />
+				<div className="relative mx-auto w-full py-6 sm:py-8 lg:py-10">
+					<div className="relative">
+						<div className="absolute inset-[10%] top-[20%] rounded-3xl bg-white/[0.07] blur-[60px] pointer-events-none" />
+						<div className="relative overflow-x-auto rounded-2xl scrollbar-hide">
+							<AppMockup />
+						</div>
 					</div>
 				</div>
-			</motion.div>
-
-			<div className="mt-4 flex items-center gap-2 px-4 sm:px-0 sm:justify-center overflow-x-auto scrollbar-hide">
-				{DEMO_OPTIONS.map((option) => (
-					<SelectorPill
-						key={option.label}
-						label={option.label}
-						active={activeOption === option.label}
-						onSelect={() => setActiveOption(option.label as ActiveDemo)}
-					/>
-				))}
 			</div>
 		</div>
 	);

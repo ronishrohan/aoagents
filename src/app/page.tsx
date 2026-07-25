@@ -15,14 +15,14 @@ const TrustedBySection = dynamic(() =>
 const FeaturesSection = dynamic(() =>
   import("./components/FeaturesSection").then((mod) => mod.FeaturesSection),
 );
+const VideoSection = dynamic(() =>
+  import("./components/VideoSection").then((mod) => mod.VideoSection),
+);
 const WallOfLoveSection = dynamic(() =>
   import("./components/WallOfLoveSection").then((mod) => mod.WallOfLoveSection),
 );
 const FAQSection = dynamic(() =>
   import("./components/FAQSection").then((mod) => mod.FAQSection),
-);
-const CTASection = dynamic(() =>
-  import("./components/CTASection").then((mod) => mod.CTASection),
 );
 
 export const metadata: Metadata = {
@@ -41,8 +41,8 @@ export default function Home() {
       <TrustedBySection />
       <FeaturesSection />
       <WallOfLoveSection />
+      <VideoSection />
       <FAQSection />
-      <CTASection />
     </main>
   );
 }

@@ -1,8 +1,7 @@
 "use client";
 
 import { COMPANY, HERO_SUBHEADLINE, TAGLINE } from "@superset/shared/constants";
-import { useScroll } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { DownloadButton } from "../DownloadButton";
 import { ProductDemo } from "./components/ProductDemo";
@@ -23,14 +22,8 @@ function formatStarCount(count: number) {
 }
 
 export function HeroSection() {
-  const demoRef = useRef<HTMLDivElement>(null);
   const [stars, setStars] = useState<number | null>(null);
   const [copiedCommand, setCopiedCommand] = useState(false);
-
-  const { scrollYProgress } = useScroll({
-    target: demoRef,
-    offset: ["start 0.45", "start 0"],
-  });
 
   useEffect(() => {
     const apiUrl = getGitHubApiUrl();
@@ -72,7 +65,7 @@ export function HeroSection() {
         <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-[30px]">
           <div className="flex flex-col items-center text-center">
             <div className="space-y-5 sm:space-y-7">
-              <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-normal tracking-[0.5px] leading-[0.98] text-foreground max-w-6xl mx-auto text-balance">
+              <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-normal tracking-[0.5px] leading-[0.98] text-foreground max-w-6xl mx-auto text-balance">
                 {TAGLINE}
               </h1>
               <p
@@ -87,7 +80,7 @@ export function HeroSection() {
               <DownloadButton />
               <button
                 type="button"
-                className="px-4 py-2.5 sm:px-6 sm:py-3 rounded-xl text-sm sm:text-base tracking-[0.5px] font-normal bg-background border border-border text-foreground hover:bg-muted transition-colors flex items-center gap-2"
+                className="px-4 py-2.5 sm:px-6 sm:py-3 rounded-2xl text-sm sm:text-base tracking-[0.5px] font-normal bg-background border border-border text-foreground hover:bg-muted transition-colors flex items-center gap-2"
                 onClick={() => window.open(COMPANY.GITHUB_URL, "_blank")}
                 aria-label={githubButtonLabel}
               >
@@ -100,7 +93,7 @@ export function HeroSection() {
               type="button"
               aria-label={`Copy brew install command: ${INSTALL_COMMAND}`}
               title="Click to copy"
-              className="group mt-4 flex w-full max-w-xl items-center gap-2 overflow-hidden rounded-xl border border-border bg-card/70 px-3 py-2.5 text-left font-mono text-sm tracking-[0.5px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:w-auto"
+              className="group mt-4 flex w-full max-w-xl items-center gap-2 overflow-hidden rounded-2xl border border-border bg-card/70 px-3 py-2.5 text-left font-mono text-sm tracking-[0.5px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:w-auto"
               onClick={copyInstallCommand}
             >
               <span className="text-foreground/40" aria-hidden="true">
@@ -128,11 +121,8 @@ export function HeroSection() {
             </button>
           </div>
 
-          <div
-            ref={demoRef}
-            className="relative w-full mt-12 sm:mt-16 lg:mt-20"
-          >
-            <ProductDemo scrollYProgress={scrollYProgress} />
+          <div className="relative w-full max-w-7xl mx-auto mt-12 sm:mt-16 lg:mt-20">
+            <ProductDemo />
           </div>
         </div>
       </div>
