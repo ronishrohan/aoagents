@@ -18,7 +18,7 @@ export function ProductDemo() {
 				<div className="relative mx-auto w-full py-6 sm:py-8 lg:py-10">
 					<div className="relative">
 						<div className="absolute inset-[10%] top-[20%] rounded-3xl bg-white/[0.07] blur-[60px] pointer-events-none" />
-						<div className="relative overflow-x-auto rounded-2xl scrollbar-hide">
+						<div className="relative overflow-x-auto scrollbar-hide">
 							<AppMockup />
 						</div>
 					</div>
