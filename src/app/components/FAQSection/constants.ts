@@ -1,32 +1,32 @@
 export interface FAQItem {
-	question: string;
-	answer: string;
+  question: string;
+  answer: string;
 }
 
 export const FAQ_ITEMS: FAQItem[] = [
-	{
-		question: "I already use an IDE like Cursor, is this for me?",
-		answer:
-			"Superset is designed to work with your existing tool, we natively support deep-linking to IDEs like Cursor so you can open your workspaces and files in your IDE.",
-	},
-	{
-		question: "Which AI coding agents are supported?",
-		answer:
-			"Superset works with any CLI-based coding agent including Claude Code, OpenCode, OpenAI Codex, and more. If it runs in a terminal, it runs in Superset.",
-	},
-	{
-		question: "How does the parallel agent system work?",
-		answer:
-			"Each agent runs in its own isolated Git worktree, which means they can work on different branches or features simultaneously without conflicts. You can monitor all agents in real-time and switch between them instantly.",
-	},
-	{
-		question: "Is Superset free to use?",
-		answer:
-			"Superset has a free tier. The source code is available on GitHub under Elastic License 2.0 (ELv2), so you can inspect and self-host it subject to the license terms.",
-	},
-	{
-		question: "Can I use my own API keys?",
-		answer:
-			"Absolutely. Superset doesn't proxy any API calls. You use your own API keys directly with whatever AI providers you choose. This means you have full control over costs and usage.",
-	},
+  {
+    question: "I already use an IDE like Cursor, is this for me?",
+    answer:
+      "AO is designed to work with your existing tool. We natively support deep-linking to IDEs like Cursor so you can open your workspaces and files in your IDE. AO sits above individual tools - use whatever agent you like, AO keeps the workflow the same.",
+  },
+  {
+    question: "Which AI coding agents are supported?",
+    answer:
+      "AO works with any CLI-based coding agent including Claude Code, OpenCode, OpenAI Codex, Cursor, Aider, Goose, and 18 more. If it runs in a terminal, it runs in AO. 23 harnesses total, with per-project agent choice.",
+  },
+  {
+    question: "How does the parallel agent system work?",
+    answer:
+      "Each agent runs in its own isolated Git worktree, which means they can work on different branches or features simultaneously without conflicts. AO's orchestrator spawns workers, routes CI failures and review feedback to the right session, and lets you monitor the entire fleet from one board.",
+  },
+  {
+    question: "Is Agent Orchestrator free to use?",
+    answer:
+      "Yes. AO is free and open source under Apache 2.0. It runs as a local daemon on your machine - your code never leaves localhost. No account, no cloud, no credit card required.",
+  },
+  {
+    question: "Can I use my own API keys?",
+    answer:
+      "Absolutely. AO doesn't proxy any API calls. You use your own API keys directly with whatever AI providers you choose. This means you have full control over costs and usage.",
+  },
 ];

@@ -38,7 +38,7 @@ export function MainPanel({ activeDemo }: MainPanelProps) {
 								</div>
 								<div>Opus 4.5 · Claude Max</div>
 								<div className="text-muted-foreground/65">
-									~/.superset/worktrees/superset/cloud-ws
+									~/.ao-agents/worktrees/main/feature-ws
 								</div>
 							</div>
 						</div>
@@ -49,7 +49,7 @@ export function MainPanel({ activeDemo }: MainPanelProps) {
 						</div>
 
 						<div className="space-y-2.5 border-t border-border pt-4">
-							<div className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/65">
+							<div className="text-[10px] font-medium tracking-[0.5px] text-muted-foreground/65">
 								MCP Servers
 							</div>
 							<div className="text-[11px] text-muted-foreground">
@@ -59,7 +59,7 @@ export function MainPanel({ activeDemo }: MainPanelProps) {
 							<div>
 								<span className="text-muted-foreground/55">❯</span>
 								<span className="ml-1 text-foreground">1.</span>
-								<span className="ml-1 text-brand-light">superset-mcp</span>
+								<span className="ml-1 text-brand-light">ao-agents-mcp</span>
 								<span className="ml-2 text-emerald-400/85">✓ connected</span>
 							</div>
 
@@ -76,7 +76,7 @@ export function MainPanel({ activeDemo }: MainPanelProps) {
 							<span className="flex-1 text-[11px] text-muted-foreground/55">
 								Type a task for Claude…
 							</span>
-							<div className="flex size-5 items-center justify-center rounded-sm bg-brand/15 text-[11px] text-brand-light">
+							<div className="flex size-5 items-center justify-center rounded-xl bg-brand/15 text-[11px] text-brand-light">
 								<LuArrowUp className="size-3" />
 							</div>
 						</div>
@@ -92,7 +92,7 @@ export function MainPanel({ activeDemo }: MainPanelProps) {
 				>
 					<div className="mb-3 text-foreground">
 						<span className="text-muted-foreground/55">❯</span>{" "}
-						<span className="text-brand-light">superset new</span>
+						<span className="text-brand-light">ao new</span>
 					</div>
 					<div className="space-y-1.5 text-muted-foreground">
 						<div className="flex items-center gap-2">

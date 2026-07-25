@@ -32,7 +32,7 @@ export function RightSidebar({ activeDemo }: RightSidebarProps) {
 			<div className="flex h-9 items-center justify-end border-b border-border px-3">
 				<button
 					type="button"
-					className="flex h-6 items-center gap-1.5 border border-border bg-background px-2 text-[10px] font-medium uppercase tracking-[0.06em] text-foreground/85 hover:bg-foreground/[0.04]"
+					className="flex h-6 items-center gap-1.5 border border-border bg-background px-2 text-[10px] font-medium tracking-[0.5px] text-foreground/85 hover:bg-foreground/[0.04]"
 				>
 					<LuGitPullRequest className="size-2.5 text-brand-light" />
 					<span>PR</span>
@@ -153,13 +153,13 @@ export function RightSidebar({ activeDemo }: RightSidebarProps) {
 					<div className="flex items-center gap-1.5 border-t border-border px-3 py-2">
 						<button
 							type="button"
-							className="h-7 rounded-sm bg-emerald-500/15 px-2.5 text-[11px] font-medium text-emerald-300 hover:bg-emerald-500/25"
+							className="h-7 rounded-xl bg-emerald-500/15 px-2.5 text-[11px] font-medium text-emerald-300 hover:bg-emerald-500/25"
 						>
 							Approve
 						</button>
 						<button
 							type="button"
-							className="h-7 rounded-sm border border-border bg-background px-2.5 text-[11px] font-medium text-foreground/80 hover:bg-foreground/[0.04]"
+							className="h-7 rounded-xl border border-border bg-background px-2.5 text-[11px] font-medium text-foreground/80 hover:bg-foreground/[0.04]"
 						>
 							Comment
 						</button>

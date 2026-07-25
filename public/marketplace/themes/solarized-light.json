@@ -3,7 +3,7 @@
 	"name": "Solarized Light",
 	"type": "light",
 	"author": "Ethan Schoonover (port: Baris Can Sayin)",
-	"description": "Precision colors engineered for legibility — light variant. Cream paper base, ink foreground, same accent hues as Solarized Dark.",
+	"description": "Precision colors engineered for legibility - light variant. Cream paper base, ink foreground, same accent hues as Solarized Dark.",
 	"ui": {
 		"background": "#fdf6e3",
 		"foreground": "#586e75",

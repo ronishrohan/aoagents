@@ -32,7 +32,7 @@ function Video({ src, title }: { src: string; title?: string }) {
 			<video
 				src={src}
 				title={title}
-				className="w-full rounded-lg border border-border"
+				className="w-full rounded-xl border border-border"
 				controls
 				playsInline
 				preload="metadata"
@@ -94,7 +94,7 @@ export const mdxComponents = {
 			<img
 				src={src}
 				alt={alt}
-				className="w-full rounded-lg border border-border"
+				className="w-full rounded-xl border border-border"
 				{...props}
 			/>
 			{alt && (

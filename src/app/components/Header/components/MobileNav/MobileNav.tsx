@@ -80,7 +80,7 @@ function MobileSection({
 	return (
 		<div className="flex flex-col gap-1">
 			{title && (
-				<p className="px-2 pb-1 text-xs uppercase tracking-wide text-muted-foreground/70">
+				<p className="px-2 pb-1 text-xs tracking-[0.5px] text-muted-foreground/70">
 					{title}
 				</p>
 			)}

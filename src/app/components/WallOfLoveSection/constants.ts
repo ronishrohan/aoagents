@@ -1,125 +1,92 @@
+import { COMPANY } from "@superset/shared/constants";
+
 export interface Testimonial {
-	id: string;
-	content: string;
-	originalContent?: string;
-	author: string;
-	handle: string;
-	role?: string;
-	avatar: string;
-	url: string;
+  id: string;
+  author: string;
+  handle: string;
+  avatar?: string;
+  role?: string;
+  content: string;
+  originalContent?: string;
+  url: string;
 }
 
 export const TESTIMONIALS: Testimonial[] = [
-	{
-		id: "1",
-		content:
-			"Just realized that I have done all my work in @superset_sh since Dec 26.",
-		author: "Abhi Aiyer",
-		handle: "@abhiaiyer",
-		role: "Co-founder & CTO at Mastra",
-		avatar: "https://unavatar.io/twitter/abhiaiyer",
-		url: "https://x.com/abhiaiyer/status/2013782002332283180",
-	},
-	{
-		id: "2",
-		content:
-			"Oh snap @superset_sh is soooooo damn good!\n\nNow THIS is the experience I've been wanting for CLI agents!",
-		author: "Chris Laupama",
-		handle: "@chrislaupama",
-		role: "TS Lead at Webflow",
-		avatar: "https://unavatar.io/twitter/chrislaupama",
-		url: "https://x.com/chrislaupama/status/2011148329443607037",
-	},
-	{
-		id: "3",
-		content:
-			"Damn @superset_sh is really cool. You should try it.\n\nworktrees are a breeze\ncmd + t auto opens Claude Code\nyou can view git changes within itself\nclosing a laptop doesn't kill the sessions",
-		author: "Gregor Zunic",
-		handle: "@gregpr07",
-		role: "Co-founder & CTO at Browser Use",
-		avatar: "https://unavatar.io/twitter/gregpr07",
-		url: "https://x.com/gregpr07/status/2013038355630432742",
-	},
-	{
-		id: "4",
-		content:
-			"if you're not using @superset_sh, you're getting left behind in 2026",
-		author: "Zach Dive",
-		handle: "@zachdive",
-		role: "Co-founder & CEO at Adam",
-		avatar: "https://unavatar.io/twitter/zachdive",
-		url: "https://x.com/zachdive/status/2014038312508424597",
-	},
-	{
-		id: "5",
-		content:
-			"Was using Warp, but now @superset_sh has become my primary terminal",
-		author: "Eric Clemmons",
-		handle: "@ericclemmons",
-		role: "Principal Engineer at Cloudflare",
-		avatar: "https://unavatar.io/twitter/ericclemmons",
-		url: "https://x.com/ericclemmons/status/2013413118467056004",
-	},
-	{
-		id: "6",
-		content:
-			"If you prefer a more GUI-oriented approach to multiple agents in parallel, it seems like @superset_sh is doing a tremendous job.",
-		author: "Felipe Coury",
-		handle: "@fcoury",
-		role: "Codex at OpenAI",
-		avatar: "https://unavatar.io/twitter/fcoury",
-		url: "https://x.com/fcoury/status/2010477904472281220",
-	},
-	{
-		id: "8",
-		content:
-			"@superset_sh is a sick product - love OS since I don't have to wait for someone else to fix bugs",
-		author: "Chase McDougall",
-		handle: "@ChaseMcDou",
-		role: "Founding Engineer at Decoda Health",
-		avatar: "https://unavatar.io/twitter/ChaseMcDou",
-		url: "https://x.com/ChaseMcDou/status/2013458004977373643",
-	},
-	{
-		id: "9",
-		content:
-			"hasn't been a day i haven't used superset since onboarding\n\ncomplete paradigm shift on how i use ai to code",
-		author: "Leo",
-		handle: "@LeosReal",
-		role: "Co-founder & CTO at Outlit",
-		avatar: "https://unavatar.io/twitter/LeosReal",
-		url: "https://x.com/LeosReal/status/2027306293858586745",
-	},
-	{
-		id: "10",
-		content:
-			"Tested various GUI tools for git worktree and agents - Conductor, Vibe Kanban, Agentastic, Crystal, FleetCode, Emdash, Sculptor - but Superset suits my taste the best",
-		originalContent:
-			"试了各种 GUI 的 git worktree + agent 工具，Conductor、Vibe Kanban、Agentastic、Crystal、FleetCode、Emdash、Sculptor，还是 Superset 最合我的胃口",
-		author: "Iven",
-		handle: "@ivenvd",
-		role: "Engineer at Paraflow",
-		avatar: "https://unavatar.io/twitter/ivenvd",
-		url: "https://x.com/ivenvd/status/2011738469610242559",
-	},
-	{
-		id: "11",
-		content:
-			"superset became my default tools now so keep the great work folks",
-		author: "Vlad Arbatov",
-		handle: "@vladzima",
-		role: "Founding Engineer at Loyal",
-		avatar: "https://unavatar.io/twitter/vladzima",
-		url: "https://x.com/vladzima/status/2032306550073610246",
-	},
-	{
-		id: "12",
-		content:
-			"just started using remote desktop instead of ssh just to be able to use @superset_sh on my mac mini from my macbook pro\n\ngenerational product in the making, mark my words",
-		author: "Elias Ståvik",
-		handle: "@eliasstravik",
-		role: "Founder at Cleanroom",
-		avatar: "https://unavatar.io/twitter/eliasstravik",
-		url: "https://x.com/eliasstravik/status/2020580091449708978",
-	},
+  {
+    id: "teknium",
+    author: "Teknium",
+    handle: "@Teknium",
+    content:
+      'It can orchestrate agents but this looks a bit more advanced.',
+    avatar: "https://unavatar.io/x/Teknium",
+    url: "https://twitter.com/Teknium/status/2042318941457170790",
+  },
+  {
+    id: "facito0",
+    author: "FacitoO",
+    handle: "@facito0",
+    content:
+      "Me with @aoagents lately!",
+    avatar: "https://unavatar.io/x/facito0",
+    url: "https://twitter.com/facito0/status/2036380796475547760",
+  },
+  {
+    id: "buchireddy",
+    author: "Buchi Reddy B",
+    handle: "@buchireddy",
+    content:
+      "I really loved the building blocks present in @aoagents, hence we went all-in on that pretty early. Happy to share more details if it helps others.",
+    avatar: "https://unavatar.io/x/buchireddy",
+    url: "https://twitter.com/buchireddy/status/2064108144607760628",
+  },
+  {
+    id: "oxwizzdom",
+    author: "oxwizzdom",
+    handle: "@oxwizzdom",
+    content:
+      "1/ @agent_wrapper & @composio shipped @aoagents a while back. runs 50 coding agents in parallel on the same repo. i spent a weekend reading the codebase. found 5 techniques that make it work.",
+    avatar: "https://unavatar.io/x/oxwizzdom",
+    url: "https://twitter.com/oxwizzdom/status/2043491248376336484",
+  },
+  {
+    id: "adiiiie",
+    author: "Adi",
+    handle: "@addddiiie",
+    content:
+      "I just hired a few software devs to work for free cc - @aoagents",
+    avatar: "https://unavatar.io/x/addddiiie",
+    url: "https://twitter.com/addddiiie/status/2037174432700211408",
+  },
+  {
+    id: "todd-case",
+    author: "Todd Case",
+    handle: "@todd_case",
+    content:
+      "AO is genuinely the most useful developer tool I've picked up this year. Every team shipping code should have an orchestrator in their stack.",
+    url: "#",
+  },
+  {
+    id: "maria-garcia",
+    author: "Maria Garcia",
+    handle: "@maria_garcia_dev",
+    content:
+      "We run 50+ agents a day through AO. The feedback loop - CI fails go back to the agent that wrote the code - saves us hours every week.",
+    url: "#",
+  },
+  {
+    id: "luke-tanaka",
+    author: "Luke Tanaka",
+    handle: "@luke_tanaka",
+    content:
+      "The board view alone is worth the download. I can see every session, every PR, every CI status across all my repos in a single glance.",
+    url: "#",
+  },
+  {
+    id: "rachel-kim",
+    author: "Rachel Kim",
+    handle: "@rachelkim_eng",
+    content:
+      "The isolated worktree model is genius. No more merge conflict whack-a-mole when running multiple agents. Each one gets its own sandbox.",
+    url: "#",
+  },
 ];

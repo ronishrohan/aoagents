@@ -165,7 +165,7 @@ export function ParallelExecutionDemo() {
 	return (
 		<motion.div
 			ref={ref}
-			className="w-full min-w-[500px] max-w-2xl bg-[#1a1a1a]/90 backdrop-blur-sm rounded-lg border border-white/10 shadow-2xl overflow-hidden"
+			className="w-full min-w-[500px] max-w-2xl bg-[#1a1a1a]/90 backdrop-blur-sm rounded-xl border border-white/10 shadow-2xl overflow-hidden"
 			initial={{ opacity: 0, y: 20 }}
 			animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
 			transition={{ duration: 0.5 }}
@@ -177,7 +177,7 @@ export function ParallelExecutionDemo() {
 					<div className="w-3 h-3 rounded-full bg-[#febc2e]" />
 					<div className="w-3 h-3 rounded-full bg-[#28c840]" />
 				</div>
-				<span className="text-xs text-white/40 ml-2 font-mono">Superset</span>
+				<span className="text-xs text-white/40 ml-2 font-mono">AO</span>
 			</div>
 
 			<div className="flex h-[360px]">
@@ -185,7 +185,7 @@ export function ParallelExecutionDemo() {
 				<div className="w-56 border-r border-white/5 bg-[#1e1e1e]/50 overflow-hidden flex-shrink-0">
 					{/* In Progress Section */}
 					<div className="p-3">
-						<div className="text-[10px] uppercase text-white/40 font-medium tracking-wider mb-2">
+						<div className="text-[10px] text-white/40 font-medium tracking-[0.5px] mb-2">
 							In Progress{" "}
 							<span className="text-white/30">{IN_PROGRESS_TASKS.length}</span>
 						</div>
@@ -215,7 +215,7 @@ export function ParallelExecutionDemo() {
 
 					{/* Ready for Review Section */}
 					<div className="p-3 pt-0">
-						<div className="text-[10px] uppercase text-white/40 font-medium tracking-wider mb-2">
+						<div className="text-[10px] text-white/40 font-medium tracking-[0.5px] mb-2">
 							Ready for Review{" "}
 							<span className="text-white/30">{READY_FOR_REVIEW.length}</span>
 						</div>
@@ -282,7 +282,7 @@ export function ParallelExecutionDemo() {
 										href="/download"
 										className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
 									>
-										download Superset
+										download AO
 									</a>
 								</div>
 								<div>{"\u00A0"}</div>
@@ -299,7 +299,7 @@ export function ParallelExecutionDemo() {
 
 					{/* Input box */}
 					<div className="border-t border-white/5 p-2">
-						<div className="flex items-center gap-2 px-3 py-1.5 bg-[#2a2a2a]/60 rounded-lg border border-white/10">
+						<div className="flex items-center gap-2 px-3 py-1.5 bg-[#2a2a2a]/60 rounded-xl border border-white/10">
 							<span className="text-white/30 text-xs">{">"}</span>
 							<input
 								type="text"

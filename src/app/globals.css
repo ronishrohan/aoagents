@@ -4,8 +4,7 @@
 /* ===== shadcn/ui-style dark theme tokens ===== */
 /* These must be defined at :root so Tailwind v4 utilities
    like border-border, bg-background, text-foreground etc.
-   work correctly. The Superset landing page uses these
-   semantic color tokens throughout. */
+   work correctly across the landing page. */
 
 :root {
   /* Base */
@@ -52,7 +51,7 @@
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.554 0.003 0);
 
-  /* Brand tokens (Superset orange) */
+  /* Brand tokens */
   --brand: #d25611;
   --brand-light: #e8804a;
   --brand-dark: #9e400a;
@@ -61,7 +60,8 @@
 @source "../../packages/ui/src/**/*.{ts,tsx}";
 
 @theme {
-	--font-family-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+	--font-family-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+	--font-family-serif: Georgia, "Times New Roman", Times, serif;
 	--font-family-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
 }
 
@@ -92,6 +92,11 @@
 
 
 @layer base {
+	body {
+		font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+		font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+	}
+
 	button:not(:disabled),
 	[role="button"]:not([aria-disabled="true"]) {
 		cursor: pointer;

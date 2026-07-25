@@ -48,7 +48,7 @@ export function OpenInDemo() {
 			transition={{ duration: 0.5 }}
 		>
 			{/* Window */}
-			<div className="bg-[#1a1a1a]/90 backdrop-blur-sm rounded-lg border border-white/10 shadow-2xl overflow-hidden">
+			<div className="bg-[#1a1a1a]/90 backdrop-blur-sm rounded-xl border border-white/10 shadow-2xl overflow-hidden">
 				{/* Header */}
 				<div className="flex items-center justify-between px-4 py-3 bg-[#2a2a2a]/80 border-b border-white/5 rounded-t-lg">
 					<div className="flex items-center gap-2">
@@ -58,7 +58,7 @@ export function OpenInDemo() {
 							<div className="w-3 h-3 rounded-full bg-[#28c840]" />
 						</div>
 						<span className="text-xs font-medium text-white/80 ml-2 px-2 py-0.5 bg-white/10 rounded">
-							superset
+							ao-agents
 						</span>
 					</div>
 					<div className="flex items-center gap-1.5 text-white/50">
@@ -70,7 +70,7 @@ export function OpenInDemo() {
 				{/* Toolbar row */}
 				<div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-white/5">
 					{/* Search input */}
-					<div className="flex items-center gap-2 px-2.5 py-1.5 border border-white/5 rounded-md flex-1">
+					<div className="flex items-center gap-2 px-2.5 py-1.5 border border-white/5 rounded-xl flex-1">
 						<HiMagnifyingGlass className="w-3.5 h-3.5 text-white/30" />
 						<span className="text-xs text-white/30">Search files...</span>
 					</div>
@@ -143,7 +143,7 @@ export function OpenInDemo() {
 
 			{/* Dropdown Menu - positioned outside window for overflow effect */}
 			<motion.div
-				className="absolute -right-10 top-[104px] w-44 bg-[#1e1e1e] border border-white/10 rounded-md shadow-2xl overflow-hidden z-10 py-2"
+				className="absolute -right-10 top-[104px] w-44 bg-[#1e1e1e] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-10 py-2"
 				initial={{ opacity: 0, y: -8 }}
 				animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
 				transition={{ duration: 0.3, delay: 0.4 }}

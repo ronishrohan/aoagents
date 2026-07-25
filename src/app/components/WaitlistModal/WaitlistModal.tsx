@@ -58,7 +58,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
 					<WaitlistForm
 						heading="Join the waitlist"
-						description="Get notified when Superset is available on Windows & Linux."
+						description="Get notified about new releases and features."
 					/>
 				</div>
 			</div>

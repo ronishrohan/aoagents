@@ -1,7 +1,7 @@
 {
-	"name": "Superset",
-	"short_name": "Superset",
-	"description": "Run 10+ parallel coding agents on your machine",
+	"name": "Agent Orchestrator",
+	"short_name": "AO",
+	"description": "Mission control for a fleet of coding agents",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#0a0a0a",

@@ -42,7 +42,7 @@ export function PlatformDropdown({
 				align={align}
 				sideOffset={8}
 				alignOffset={-8}
-				className={`w-[calc(100vw-2rem)] sm:w-80 bg-background border border-border rounded-[5px] shadow-lg p-2 ${className}`}
+				className={`w-[calc(100vw-2rem)] sm:w-80 bg-background border border-border rounded-xl shadow-lg p-2 ${className}`}
 			>
 				{sections.map((section, sectionIndex) => (
 					<div key={section.title || sectionIndex}>
@@ -64,7 +64,7 @@ export function PlatformDropdown({
 									{item.variant === "primary" ? (
 										<button
 											type="button"
-											className="w-full bg-foreground text-background rounded-[5px] px-4 py-3 flex items-center justify-between hover:bg-foreground/90 transition-colors gap-4"
+											className="w-full bg-foreground text-background rounded-xl px-4 py-3 flex items-center justify-between hover:bg-foreground/90 transition-colors gap-4"
 										>
 											<div className="flex items-center gap-3">
 												{item.icon}
@@ -79,7 +79,7 @@ export function PlatformDropdown({
 									) : (
 										<button
 											type="button"
-											className="w-full bg-muted text-foreground rounded-[5px] px-3 py-2 flex items-center gap-2 hover:bg-muted/80 transition-colors text-sm"
+											className="w-full bg-muted text-foreground rounded-xl px-3 py-2 flex items-center gap-2 hover:bg-muted/80 transition-colors text-sm"
 										>
 											{item.icon}
 											<span>{item.label}</span>

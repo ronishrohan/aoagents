@@ -15,9 +15,9 @@ const SECURITY_FEATURES: {
 }[] = [
 	{
 		icon: <HiOutlineCodeBracket className="w-5 h-5 text-foreground/70" />,
-		title: "Source Available",
+		title: "Open Source",
 		description:
-			"Full source available on GitHub under Elastic License 2.0 (ELv2). Inspect, audit, and contribute to the code. No black boxes, no hidden functionality.",
+			"Free and open source under Apache 2.0. Inspect, audit, and contribute to the code. No black boxes, no hidden functionality.",
 	},
 	{
 		icon: <HiOutlineServerStack className="w-5 h-5 text-foreground/70" />,
@@ -29,7 +29,7 @@ const SECURITY_FEATURES: {
 		icon: <HiOutlineSignal className="w-5 h-5 text-foreground/70" />,
 		title: "Local Control",
 		description:
-			"Superset runs on your machine and lets you choose which agents and external services to connect.",
+			"Agent Orchestrator runs on your machine as a local daemon. Your code never leaves localhost.",
 	},
 ];
 
@@ -46,10 +46,10 @@ export function SecuritySection() {
 					transition={{ duration: 0.5 }}
 				>
 					<div className="space-y-1">
-						<h2 className="text-2xl sm:text-3xl font-mono tracking-[-0.01em] text-foreground">
+						<h2 className="text-2xl sm:text-3xl font-mono tracking-[0.5px] text-foreground">
 							Private by default
 						</h2>
-						<h2 className="text-lg sm:text-xl font-light tracking-[-0.03em] text-muted-foreground max-w-[700px]">
+						<h2 className="text-lg sm:text-xl font-light tracking-[0.5px] text-muted-foreground max-w-[700px]">
 							Your code stays local by default, with explicit control over
 							connected services.
 						</h2>
@@ -73,7 +73,7 @@ export function SecuritySection() {
 							viewport={{ once: true }}
 							transition={{ duration: 0.5, delay: 0.1 * index }}
 						>
-							<div className="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-lg bg-muted border border-border">
+							<div className="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-muted border border-border">
 								{feature.icon}
 							</div>
 							<h3 className="text-lg font-medium text-foreground/90 mb-2">

@@ -1,9 +1,9 @@
 import { API_URL, MARKDOWN_HEADERS, MCP_SERVER_URL } from "@/lib/llms";
 
-export async function GET() {
-	const content = `# Superset agent authentication
+export function GET() {
+  const content = `# Agent Orchestrator agent authentication
 
-How an AI agent obtains and uses credentials for the Superset API (${API_URL}). The flow is standard OAuth 2.1 with PKCE plus RFC 7591 dynamic client registration; no manual app setup is required. This document follows the auth.md convention (https://workos.com/auth-md).
+How an AI agent obtains and uses credentials for the Agent Orchestrator API (${API_URL}). The flow is standard OAuth 2.1 with PKCE plus RFC 7591 dynamic client registration; no manual app setup is required. This document follows the auth.md convention (https://workos.com/auth-md).
 
 ## 1. Discover
 
@@ -16,7 +16,7 @@ POST ${MCP_SERVER_URL}
 The response is \`401\` with a spec-shaped header:
 
 \`\`\`
-WWW-Authenticate: Bearer realm="superset", resource_metadata="${API_URL}/.well-known/oauth-protected-resource"
+WWW-Authenticate: Bearer realm="ao-agents", resource_metadata="${API_URL}/.well-known/oauth-protected-resource"
 \`\`\`
 
 Fetch the protected resource metadata (RFC 9728), read \`authorization_servers\`, then fetch the authorization server metadata (RFC 8414) at \`${API_URL}/.well-known/oauth-authorization-server\`. Read the \`agent_auth\` block there for the registration and revocation URIs.
@@ -24,7 +24,7 @@ Fetch the protected resource metadata (RFC 9728), read \`authorization_servers\`
 ## 2. Pick a method
 
 - **OAuth 2.1 (recommended)**: authorization code + PKCE with dynamic client registration. The user approves your agent in a browser; you get a scoped, revocable access token and a refresh token.
-- **API key**: a user can create an API key in the Superset app and hand it to your agent. Send it as a Bearer token. Skip to "Use the credential".
+- **API key**: a user can create an API key in the Agent Orchestrator app and hand it to your agent. Send it as a Bearer token. Skip to "Use the credential".
 
 Identity assertions (\`identity_assertion\`, \`urn:ietf:params:oauth:token-type:id-jag\`) are not yet supported; registration is anonymous until the user claims it via the browser consent step below.
 
@@ -48,7 +48,7 @@ The response contains your \`client_id\`. Public clients (no secret) with PKCE a
 
 ## 4. Claim
 
-Send the user to the authorization endpoint to claim the registration — this is the human-approval step:
+Send the user to the authorization endpoint to claim the registration - this is the human-approval step:
 
 \`\`\`
 GET ${API_URL}/api/auth/oauth2/authorize?client_id=...&response_type=code&redirect_uri=...&scope=openid+profile+email+offline_access&code_challenge=...&code_challenge_method=S256
@@ -80,9 +80,9 @@ Access tokens expire after one hour; refresh with \`grant_type=refresh_token\` a
 
 All errors are JSON. The ones you will see:
 
-- \`401\` \`{"error": {"code": "UNAUTHORIZED", "message": "..."}}\` — missing, expired, or revoked token. Re-read \`WWW-Authenticate\` and re-authenticate.
-- \`invalid_grant\` from the token endpoint — the refresh token was revoked or the code expired; restart at "Claim".
-- \`invalid_client\` — the registration is unknown; restart at "Register".
+- \`401\` \`{"error": {"code": "UNAUTHORIZED", "message": "..."}}\` - missing, expired, or revoked token. Re-read \`WWW-Authenticate\` and re-authenticate.
+- \`invalid_grant\` from the token endpoint - the refresh token was revoked or the code expired; restart at "Claim".
+- \`invalid_client\` - the registration is unknown; restart at "Register".
 
 ## 7. Revocation
 
@@ -95,8 +95,8 @@ Content-Type: application/x-www-form-urlencoded
 token=<access_or_refresh_token>&client_id=...
 \`\`\`
 
-Users can also revoke your agent's access and API keys at any time from the Superset app; revoked tokens fail with \`401\` on the next request.
+Users can also revoke your agent's access and API keys at any time from the Agent Orchestrator app; revoked tokens fail with \`401\` on the next request.
 `;
 
-	return new Response(content, { headers: MARKDOWN_HEADERS });
+  return new Response(content, { headers: MARKDOWN_HEADERS });
 }

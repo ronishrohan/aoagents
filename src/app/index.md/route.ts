@@ -1,58 +1,57 @@
 import { COMPANY } from "@superset/shared/constants";
 import { FAQ_ITEMS } from "@/app/components/FAQSection/constants";
 import {
-	buildDeveloperResourcesSection,
-	buildWhenToUseSection,
-	MARKDOWN_HEADERS,
+  buildDeveloperResourcesSection,
+  buildWhenToUseSection,
+  MARKDOWN_HEADERS,
 } from "@/lib/llms";
 
-export async function GET() {
-	const baseUrl = COMPANY.MARKETING_URL;
-	const docsUrl = COMPANY.DOCS_URL;
+export function GET() {
+  const baseUrl = COMPANY.MARKETING_URL;
+  const docsUrl = COMPANY.DOCS_URL;
 
-	const lines: string[] = [
-		`# ${COMPANY.NAME} — Run 10+ parallel coding agents on your machine`,
-		"",
-		`${COMPANY.NAME} is an open-source desktop application that lets developers run multiple AI coding agents in parallel, each in its own isolated Git worktree. It works with any CLI-based agent including Claude Code, OpenCode, and OpenAI Codex. Agents can work on different branches or features simultaneously without conflicts. ${COMPANY.NAME} is free, does not proxy API calls, and supports macOS with Windows and Linux coming soon.`,
-		"",
-		"## Features",
-		"",
-		"- **Parallel agents**: run many coding agents side by side, each in an isolated Git worktree on its own branch.",
-		"- **Any CLI agent**: Claude Code, OpenAI Codex, OpenCode, and anything else that runs in a terminal.",
-		"- **Diff review**: review every change from one dashboard before merging.",
-		"- **Persistent terminals**: sessions survive app restarts.",
-		"- **Automations**: schedule recurring agent runs with a prompt.",
-		"- **MCP server**: drive Superset from other AI agents over the Model Context Protocol.",
-		"",
-		"## Get started",
-		"",
-		`- [Download for macOS](${baseUrl}/download)`,
-		`- [Documentation](${docsUrl})`,
-		`- [GitHub](${COMPANY.GITHUB_URL})`,
-		`- [Pricing](${baseUrl}/pricing)`,
-		`- [Blog](${baseUrl}/blog)`,
-		`- [Changelog](${baseUrl}/changelog)`,
-		"",
-		...buildWhenToUseSection(),
-		"",
-		...buildDeveloperResourcesSection(),
-		"",
-		"## FAQ",
-		"",
-		...FAQ_ITEMS.flatMap((item) => [
-			`### ${item.question}`,
-			"",
-			item.answer,
-			"",
-		]),
-		`## Contact`,
-		"",
-		`- Support: support${COMPANY.EMAIL_DOMAIN}`,
-		`- Founders: ${COMPANY.FOUNDERS_EMAIL}`,
-		`- [Discord](${COMPANY.DISCORD_URL})`,
-		`- [X](${COMPANY.X_URL})`,
-		`- [Status](${COMPANY.STATUS_URL})`,
-	];
+  const lines: string[] = [
+    `# ${COMPANY.NAME} - Mission control for coding agents`,
+    "",
+    `${COMPANY.NAME} is an open-source desktop application that lets developers orchestrate a fleet of coding agents in parallel, each in its own isolated Git worktree. It works with any CLI-based agent including Claude Code, Codex, OpenCode, Cursor, Aider, and 18 more. Agents work on different branches or features simultaneously without conflicts, and CI failures plus review feedback get routed back to the session that owns the branch. ${COMPANY.NAME} is free and open source under Apache 2.0.`,
+    "",
+    "## Features",
+    "",
+    "- **Fleet orchestration**: delegate to a main agent that plans, spawns workers, and keeps sessions moving - you stay the reviewer.",
+    "- **Live board**: every session flows across one board - working, needs you, in review, ready to merge - with agent, branch, and PR state on each card.",
+    "- **CI + review routing**: failed checks and review comments route back to the session that owns the branch - the right agent fixes the right thing.",
+    "- **Any CLI agent**: Claude Code, Codex, OpenCode, Cursor, Aider, Goose, and 18 more. 23 harnesses total, with per-project agent choice.",
+    "- **Isolated worktrees**: each agent runs in its own Git worktree. No merge conflicts, no stepping on each other's changes.",
+    "- **Local first**: runs as a local daemon. Your code never leaves localhost.",
+    "",
+    "## Get started",
+    "",
+    `- [Download](${baseUrl}/download)`,
+    `- [Documentation](${docsUrl})`,
+    `- [GitHub](${COMPANY.GITHUB_URL})`,
+    `- [Blog](${baseUrl}/blog)`,
+    `- [Changelog](${baseUrl}/changelog)`,
+    "",
+    ...buildWhenToUseSection(),
+    "",
+    ...buildDeveloperResourcesSection(),
+    "",
+    "## FAQ",
+    "",
+    ...FAQ_ITEMS.flatMap((item) => [
+      `### ${item.question}`,
+      "",
+      item.answer,
+      "",
+    ]),
+    "## Contact",
+    "",
+    `- Support: hello${COMPANY.EMAIL_DOMAIN}`,
+    `- Founders: ${COMPANY.FOUNDERS_EMAIL}`,
+    `- [Discord](${COMPANY.DISCORD_URL})`,
+    `- [X](${COMPANY.X_URL})`,
+    "",
+  ];
 
-	return new Response(lines.join("\n"), { headers: MARKDOWN_HEADERS });
+  return new Response(lines.join("\n"), { headers: MARKDOWN_HEADERS });
 }

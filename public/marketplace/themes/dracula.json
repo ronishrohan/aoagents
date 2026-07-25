@@ -3,7 +3,7 @@
 	"name": "Dracula",
 	"type": "dark",
 	"author": "Zeno Rocha (port: Baris Can Sayin)",
-	"description": "A faithful port of Dracula — the dark theme with cyan, green, orange, pink, purple, red, yellow on deep slate.",
+	"description": "A faithful port of Dracula - the dark theme with cyan, green, orange, pink, purple, red, yellow on deep slate.",
 	"ui": {
 		"background": "#282a36",
 		"foreground": "#f8f8f2",

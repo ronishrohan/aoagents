@@ -28,7 +28,7 @@ export function FileChangeItem({
 	if (isFolder) {
 		return (
 			<div
-				className="flex items-center gap-1.5 px-3 pb-2 pt-5 font-mono text-[10px] font-medium uppercase tracking-[0.06em] text-muted-foreground/65"
+				className="flex items-center gap-1.5 px-3 pb-2 pt-5 font-mono text-[10px] font-medium tracking-[0.5px] text-muted-foreground/65"
 				style={{ paddingLeft: `${10 + indent * 12}px` }}
 			>
 				<VscChevronDown className="size-2.5 text-muted-foreground/45" />

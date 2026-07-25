@@ -36,12 +36,12 @@ export function buildWhenToUseSection(): string[] {
 		"",
 		"Reach for Superset when you need to:",
 		"",
-		"- Run several coding agents (Claude Code, Codex, OpenCode, or any CLI agent) at the same time on one repository without them stepping on each other — each agent gets an isolated Git worktree and its own branch.",
+		"- Run several coding agents (Claude Code, Codex, OpenCode, or any CLI agent) at the same time on one repository without them stepping on each other - each agent gets an isolated Git worktree and its own branch.",
 		"- Orchestrate agent work programmatically: create workspaces, launch agents with a prompt, open terminals, and track tasks from another agent or script via the Superset MCP server.",
 		"- Schedule recurring agent runs (automations) that execute a prompt on a cron-like schedule in a fresh or existing workspace.",
 		"- Review diffs, manage ports, and monitor many concurrent agent sessions from one dashboard.",
 		"",
-		"Superset is not a coding agent itself — it is the workspace and orchestration layer the agents run in. If you are an AI agent, the fastest way to act on a user's Superset account is the MCP server below (OAuth or API key auth); the fastest way to learn the product is the docs index at https://docs.superset.sh.",
+		"Superset is not a coding agent itself - it is the workspace and orchestration layer the agents run in. If you are an AI agent, the fastest way to act on a user's Superset account is the MCP server below (OAuth or API key auth); the fastest way to learn the product is the docs index at https://docs.superset.sh.",
 	];
 }
 
@@ -53,7 +53,7 @@ export function buildDeveloperResourcesSection(): string[] {
 		"",
 		`- [API docs](${docsUrl}/mcp-server): Superset MCP server documentation`,
 		`- [OpenAPI spec](${API_URL}/openapi.json): OpenAPI 3.1 description of the Superset API surface`,
-		`- [MCP server](${MCP_SERVER_URL}): Model Context Protocol server (Streamable HTTP transport) — 27 tools for tasks, workspaces, agents, automations, terminals, hosts, and projects. Alias: ${API_URL}/mcp`,
+		`- [MCP server](${MCP_SERVER_URL}): Model Context Protocol server (Streamable HTTP transport) - 27 tools for tasks, workspaces, agents, automations, terminals, hosts, and projects. Alias: ${API_URL}/mcp`,
 		`- [Docs MCP server](${docsUrl}/mcp): search and read the Superset documentation over MCP (Streamable HTTP, no auth)`,
 		`- [MCP server card](${baseUrl}/.well-known/mcp/server-card.json): machine-readable MCP server description`,
 		`- [A2A agent card](${baseUrl}/.well-known/agent-card.json): Agent-to-Agent capability card`,
@@ -62,7 +62,7 @@ export function buildDeveloperResourcesSection(): string[] {
 		`- [Agent instructions](${baseUrl}/agents.md): when and how AI agents should use Superset`,
 		`- [OAuth protected resource metadata](${API_URL}/.well-known/oauth-protected-resource): RFC 9728`,
 		`- [OAuth authorization server metadata](${API_URL}/.well-known/oauth-authorization-server): RFC 8414`,
-		`- [Agent skills](https://github.com/superset-sh/skills): official skills for the CLI and MCP server — \`npx skills add superset-sh/skills\``,
+		`- [Agent skills](https://github.com/superset-sh/skills): official skills for the CLI and MCP server - \`npx skills add superset-sh/skills\``,
 		`- [CLI](${docsUrl}/cli/getting-started): \`brew install superset-sh/tap/superset\` or \`curl -fsSL https://superset.sh/cli/install.sh | sh\``,
 		`- [TypeScript SDK](${docsUrl}/sdk/getting-started): \`npm install @superset_sh/sdk\``,
 		`- [Docs llms.txt](${docsUrl}/llms.txt): scoped context for the documentation`,

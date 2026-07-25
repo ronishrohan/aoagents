@@ -42,12 +42,12 @@ export function ChangelogEntryLayout({
 					<div className="text-center">
 						<time
 							dateTime={entry.date}
-							className="text-sm font-mono text-muted-foreground uppercase tracking-wider"
+							className="text-sm font-mono text-muted-foreground tracking-[0.5px]"
 						>
 							{formattedDate}
 						</time>
 
-						<h1 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-foreground mt-4 mb-4">
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-[0.5px] text-foreground mt-4 mb-4">
 							{entry.title}
 						</h1>
 

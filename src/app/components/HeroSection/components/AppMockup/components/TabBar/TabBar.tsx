@@ -68,7 +68,7 @@ export function TabBar({ activeDemo }: TabBarProps) {
 
 			<button
 				type="button"
-				className="ml-1 flex h-6 items-center rounded-sm px-1.5 text-muted-foreground/45 hover:bg-foreground/[0.04] hover:text-foreground/85"
+				className="ml-1 flex h-6 items-center rounded-xl px-1.5 text-muted-foreground/45 hover:bg-foreground/[0.04] hover:text-foreground/85"
 				aria-label="New tab"
 			>
 				<LuPlus className="size-3.5" />
@@ -78,7 +78,7 @@ export function TabBar({ activeDemo }: TabBarProps) {
 			<div className="ml-auto flex items-center gap-1.5">
 				<button
 					type="button"
-					className="flex h-6 items-center gap-1 border border-border bg-background px-2 text-[10px] font-medium uppercase tracking-[0.06em] text-foreground/85 hover:bg-foreground/[0.04]"
+					className="flex h-6 items-center gap-1 border border-border bg-background px-2 text-[10px] font-medium tracking-[0.5px] text-foreground/85 hover:bg-foreground/[0.04]"
 				>
 					<LuExternalLink className="size-2.5 text-muted-foreground/65" />
 					<span>Open</span>
@@ -86,7 +86,7 @@ export function TabBar({ activeDemo }: TabBarProps) {
 				</button>
 				<button
 					type="button"
-					className="flex h-6 items-center gap-1 border border-emerald-500/40 bg-emerald-500/15 px-2 text-[10px] font-medium uppercase tracking-[0.06em] text-emerald-300 hover:bg-emerald-500/25"
+					className="flex h-6 items-center gap-1 border border-emerald-500/40 bg-emerald-500/15 px-2 text-[10px] font-medium tracking-[0.5px] text-emerald-300 hover:bg-emerald-500/25"
 				>
 					<LuPlay className="size-2.5 fill-current" />
 					<span>Run</span>

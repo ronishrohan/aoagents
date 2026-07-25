@@ -3,7 +3,7 @@
 	"name": "Kintsugi",
 	"type": "dark",
 	"author": "Baris Can Sayin",
-	"description": "Black lacquer mended with gold dust. Cracks showing where the break was — the repair is the point, not what to hide.",
+	"description": "Black lacquer mended with gold dust. Cracks showing where the break was - the repair is the point, not what to hide.",
 	"ui": {
 		"background": "#0d0a08",
 		"foreground": "#e6dac8",

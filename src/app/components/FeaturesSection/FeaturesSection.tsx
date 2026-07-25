@@ -32,17 +32,19 @@ export function FeaturesSection() {
 							>
 								{/* Text Content */}
 								<div
-									className={`space-y-6 ${isReversed ? "lg:order-2" : "lg:order-1"}`}
+									className={`space-y-6 ${isReversed ? "lg:order-2 lg:text-right" : "lg:order-1"}`}
 								>
 									<div className="space-y-4">
-										<span className="text-sm font-mono text-muted-foreground uppercase tracking-wider">
+										<span className="text-sm font-mono text-muted-foreground tracking-[0.5px]">
 											{feature.tag}
 										</span>
-										<h3 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-foreground">
+										<h3 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-[0.5px] text-foreground">
 											{feature.title}
 										</h3>
 									</div>
-									<p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-[500px]">
+									<p
+										className={`text-base sm:text-lg text-muted-foreground leading-relaxed max-w-[500px] ${isReversed ? "lg:ml-auto" : ""}`}
+									>
 										{feature.description}
 									</p>
 								</div>

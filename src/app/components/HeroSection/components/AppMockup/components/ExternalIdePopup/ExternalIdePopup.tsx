@@ -13,7 +13,7 @@ export function ExternalIdePopup({ activeDemo }: ExternalIdePopupProps) {
 
 	return (
 		<motion.div
-			className="absolute bottom-6 right-6 w-[55%] overflow-hidden rounded-lg border border-border bg-background shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]"
+			className="absolute bottom-6 right-6 w-[55%] overflow-hidden rounded-xl border border-border bg-background shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]"
 			style={{
 				aspectRatio: "16/10",
 				pointerEvents: activeDemo === "Open in Any IDE" ? "auto" : "none",
@@ -26,7 +26,7 @@ export function ExternalIdePopup({ activeDemo }: ExternalIdePopupProps) {
 			}}
 			transition={{ duration: 0.3, ease: "easeOut" }}
 		>
-			<div className="pointer-events-none absolute inset-0 z-10 rounded-lg ring-1 ring-inset ring-white/[0.04]" />
+			<div className="pointer-events-none absolute inset-0 z-10 rounded-xl ring-1 ring-inset ring-white/[0.04]" />
 
 			<div className="relative flex h-8 items-center border-b border-border bg-card px-3">
 				<div className="flex items-center gap-1.5">
@@ -34,19 +34,19 @@ export function ExternalIdePopup({ activeDemo }: ExternalIdePopupProps) {
 					<div className="size-2 rounded-full bg-[#febc2e]/85" />
 					<div className="size-2 rounded-full bg-[#28c840]/85" />
 				</div>
-				<span className="pointer-events-none absolute inset-x-0 text-center font-mono text-[10px] tracking-tight text-muted-foreground/60">
-					Cursor — index.ts
+				<span className="pointer-events-none absolute inset-x-0 text-center font-mono text-[10px] tracking-[0.5px] text-muted-foreground/60">
+					Cursor - index.ts
 				</span>
 			</div>
 
 			<div className="flex h-[calc(100%-32px)]">
 				<div className="w-[120px] border-r border-border bg-card p-3 text-[11px]">
-					<div className="mb-2 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.08em] text-muted-foreground/55">
+					<div className="mb-2 flex items-center gap-1.5 text-[10px] font-medium tracking-[0.5px] text-muted-foreground/55">
 						<LuFolder className={treeIconClassName} />
 						<span>src</span>
 					</div>
 					<div className="ml-3 space-y-0.5">
-						<div className="relative flex items-center gap-1.5 rounded-sm bg-foreground/[0.06] px-1.5 py-0.5 text-foreground/95">
+						<div className="relative flex items-center gap-1.5 rounded-xl bg-foreground/[0.06] px-1.5 py-0.5 text-foreground/95">
 							<span className="absolute inset-y-1 left-0 w-[2px] rounded-r-sm bg-brand" />
 							<LuFile className={treeIconClassName} />
 							<span>index.ts</span>

@@ -71,7 +71,7 @@ const DIFF_LINES = [
 		id: "line-12",
 		type: "added",
 		content:
-			"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0Superset",
+			"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0Agent Orchestrator",
 	},
 	{
 		id: "line-13",
@@ -100,7 +100,7 @@ export function IsolationDemo() {
 	return (
 		<motion.div
 			ref={ref}
-			className="w-full min-w-[500px] max-w-2xl bg-[#1a1a1a]/90 backdrop-blur-sm rounded-lg border border-white/10 shadow-2xl overflow-hidden"
+			className="w-full min-w-[500px] max-w-2xl bg-[#1a1a1a]/90 backdrop-blur-sm rounded-xl border border-white/10 shadow-2xl overflow-hidden"
 			initial={{ opacity: 0, y: 20 }}
 			animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
 			transition={{ duration: 0.5 }}
@@ -158,7 +158,7 @@ export function IsolationDemo() {
 
 					{/* Files */}
 					<div className="p-2">
-						<div className="text-[10px] uppercase text-white/30 px-2 py-1">
+						<div className="text-[10px] text-white/30 px-2 py-1">
 							Unstaged
 						</div>
 						{SIDEBAR_FILES.map((file, index) => (

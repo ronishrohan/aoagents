@@ -41,7 +41,6 @@ export function ProductDemo({ scrollYProgress }: ProductDemoProps) {
 		};
 	}, []);
 
-	// Starts full size, shrinks as user scrolls down (less aggressive on mobile)
 	const scale = useTransform(
 		scrollYProgress,
 		[0, 1],
@@ -58,7 +57,6 @@ export function ProductDemo({ scrollYProgress }: ProductDemoProps) {
 
 	return (
 		<div ref={containerRef} className="relative w-full max-w-full">
-			{/* Mockup with scroll-driven scale */}
 			<motion.div
 				className="relative mx-auto w-full"
 				style={{
@@ -68,7 +66,6 @@ export function ProductDemo({ scrollYProgress }: ProductDemoProps) {
 				}}
 			>
 				<div className="relative">
-					{/* Large diffuse back-shadow */}
 					<div className="absolute inset-[10%] top-[20%] rounded-3xl bg-white/[0.07] blur-[60px] pointer-events-none" />
 					<div className="relative overflow-x-auto scrollbar-hide">
 						<AppMockup activeDemo={activeOption} />
@@ -76,7 +73,6 @@ export function ProductDemo({ scrollYProgress }: ProductDemoProps) {
 				</div>
 			</motion.div>
 
-			{/* Selector pills - directly below mockup */}
 			<div className="mt-4 flex items-center gap-2 px-4 sm:px-0 sm:justify-center overflow-x-auto scrollbar-hide">
 				{DEMO_OPTIONS.map((option) => (
 					<SelectorPill

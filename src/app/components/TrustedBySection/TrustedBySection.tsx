@@ -1,177 +1,54 @@
 "use client";
 
-import Image from "next/image";
+import { COMPANY } from "@superset/shared/constants";
 
-const CLIENT_LOGOS = [
-	{
-		name: "microsoft",
-		label: "Microsoft",
-		logo: "/logos/microsoft-wordmark.svg",
-		height: 20,
-	},
-	{
-		name: "openai",
-		label: "OpenAI",
-		logo: "/logos/openai-wordmark.svg",
-		height: 20,
-	},
-	{
-		name: "runway",
-		label: "Runway",
-		logo: "/logos/runway-wordmark.svg",
-		height: 18,
-	},
-	{
-		name: "wordware",
-		label: "Wordware",
-		logo: "/logos/wordware-wordmark.svg",
-		height: 16,
-	},
-	{
-		name: "salesforce",
-		label: "Salesforce",
-		logo: "/logos/salesforce-wordmark-dark.svg",
-		height: 50,
-		invert: false,
-	},
-	{
-		name: "wix",
-		label: "Wix",
-		logo: "/logos/wix-wordmark.svg",
-		height: 16,
-	},
-	{
-		name: "datadog",
-		label: "Datadog",
-		logo: "/logos/datadog-wordmark.svg",
-		height: 42,
-	},
-	{
-		name: "intercom",
-		label: "Intercom",
-		logo: "/logos/intercom-white.png",
-		height: 26,
-	},
-	{
-		name: "bytedance",
-		label: "ByteDance",
-		logo: "/logos/bytedance-wordmark.svg",
-		height: 18,
-	},
-	{
-		name: "toss",
-		label: "Toss",
-		logo: "/logos/toss-wordmark.svg",
-		height: 18,
-	},
-	{
-		name: "google",
-		label: "Google",
-		logo: "/logos/google.svg",
-		height: 24,
-	},
-	{
-		name: "vercel",
-		label: "Vercel",
-		logo: "/logos/vercel-wordmark.svg",
-		height: 38,
-	},
-	{
-		name: "cloudflare",
-		label: "Cloudflare",
-		logo: "/logos/cloudflare-wordmark.svg",
-		height: 48,
-		marginTop: -16,
-	},
-	{
-		name: "amazon",
-		label: "Amazon",
-		logo: "/logos/amazon.png",
-		height: 22,
-	},
-] as {
-	name: string;
-	label: string;
-	logo: string;
-	height: number;
-	marginTop?: number;
-	borderRadius?: number;
-	invert?: boolean;
-}[];
+const AGENT_LOGOS = [
+  { name: "claude-code", label: "Claude Code", src: "/docs/logos/claude-code.svg" },
+  { name: "codex", label: "Codex", src: "/docs/logos/codex.svg" },
+  { name: "opencode", label: "OpenCode", src: "/docs/logos/opencode.svg" },
+  { name: "cursor", label: "Cursor", src: "/docs/logos/cursor.svg" },
+  { name: "aider", label: "Aider", src: "/docs/logos/aider.png" },
+  { name: "gemini", label: "Gemini", src: "/app-icons/gemini.svg" },
+  { name: "copilot", label: "Copilot", src: "/app-icons/copilot-white.svg" },
+  { name: "vibe", label: "Vibe", src: "/app-icons/vibe.svg" },
+];
 
 export function TrustedBySection() {
-	const midpoint = Math.ceil(CLIENT_LOGOS.length / 2);
-	const logoRows = [
-		CLIENT_LOGOS.slice(0, midpoint),
-		CLIENT_LOGOS.slice(midpoint),
-	];
+  return (
+    <section className="py-16 sm:py-24 bg-background overflow-hidden">
+      <div className="max-w-7xl mx-auto text-center">
+        <div className="mb-4">
+          <span className="text-sm font-mono text-muted-foreground tracking-[0.5px]">
+            Coverage
+          </span>
+        </div>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground max-w-3xl mx-auto mb-4">
+          Use the agent you already trust.
+        </h2>
+        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
+          AO keeps the workflow the same. 23 harnesses, per-project agent choice.
+        </p>
 
-	return (
-		<section className="py-6 sm:py-12 md:py-18 bg-background overflow-hidden">
-			<div className="max-w-7xl mx-auto">
-				<div>
-					<h2 className="text-base sm:text-xl font-semibold text-center mb-4 sm:mb-8 text-foreground px-4">
-						Trusted by builders from
-					</h2>
-				</div>
-
-				{/* Mobile/tablet: responsive grid to avoid horizontal overflow */}
-				<div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3.5 px-4 md:hidden">
-					{CLIENT_LOGOS.map((client) => (
-						<div
-							key={client.name}
-							className="flex items-center justify-center min-w-0 whitespace-nowrap h-16 sm:h-18 rounded-[2px] border border-foreground/[0.1] bg-foreground/[0.03] opacity-90 transition-all duration-200 hover:opacity-100 hover:border-foreground/[0.2] hover:bg-foreground/[0.06]"
-						>
-							<Image
-								src={client.logo}
-								alt={client.label}
-								width={200}
-								height={client.height}
-								className={`object-contain scale-75 sm:scale-90 ${client.invert === false ? "" : "grayscale brightness-0 invert"}`}
-								style={{
-									height: client.height,
-									width: "auto",
-									borderRadius: client.borderRadius ?? 0,
-									marginTop: client.marginTop ?? 0,
-								}}
-								unoptimized
-							/>
-						</div>
-					))}
-				</div>
-
-				{/* Desktop: two explicit rows */}
-				<div className="hidden md:block space-y-3 sm:space-y-4 px-4">
-					{logoRows.map((row) => (
-						<div
-							key={row.map((client) => client.name).join("-")}
-							className="flex items-center justify-center gap-3.5"
-						>
-							{row.map((client) => (
-								<div
-									key={client.name}
-									className="flex items-center justify-center whitespace-nowrap h-24 w-[168px] rounded-[2px] border border-foreground/[0.1] bg-foreground/[0.03] opacity-90 transition-all duration-200 hover:opacity-100 hover:border-foreground/[0.2] hover:bg-foreground/[0.06]"
-								>
-									<Image
-										src={client.logo}
-										alt={client.label}
-										width={200}
-										height={client.height}
-										className={`object-contain scale-100 ${client.invert === false ? "" : "grayscale brightness-0 invert"}`}
-										style={{
-											height: client.height,
-											width: "auto",
-											borderRadius: client.borderRadius ?? 0,
-											marginTop: client.marginTop ?? 0,
-										}}
-										unoptimized
-									/>
-								</div>
-							))}
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
-	);
+        {/* Agent logo grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+          {AGENT_LOGOS.map((agent) => (
+            <div
+              key={agent.name}
+              className="flex items-center justify-center gap-2.5 h-14 rounded-xl border border-border bg-card px-4 hover:border-muted-foreground/30 transition-colors"
+            >
+              <img
+                src={agent.src}
+                alt={agent.label}
+                className="h-6 w-6 object-contain"
+                loading="lazy"
+              />
+              <span className="text-sm font-medium text-muted-foreground">
+                {agent.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }

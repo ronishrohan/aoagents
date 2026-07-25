@@ -59,11 +59,11 @@ export function WaitlistForm({ heading, description }: WaitlistFormProps) {
 					placeholder="you@example.com"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
-					className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+					className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
 				/>
 				<button
 					type="submit"
-					className="w-full rounded-lg bg-foreground py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+					className="w-full rounded-xl bg-foreground py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
 				>
 					Join waitlist
 				</button>
