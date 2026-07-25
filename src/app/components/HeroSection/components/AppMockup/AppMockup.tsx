@@ -984,6 +984,23 @@ function useImageReady(src: string) {
 	return isReady;
 }
 
+// The preview is a prop, not a real app. It exposes ~13 fake controls, so pull the
+// whole subtree out of the tab order and let the root stand in for it as a single
+// image node. Runs after every render because cards mount and unmount constantly.
+function useDecorativeSubtree(rootRef: React.RefObject<HTMLElement | null>) {
+	useEffect(() => {
+		const root = rootRef.current;
+		if (!root) return;
+
+		const focusable = root.querySelectorAll<HTMLElement>(
+			'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])',
+		);
+		focusable.forEach((element) => {
+			element.tabIndex = -1;
+		});
+	});
+}
+
 function PanelIcon({ className = "" }: { className?: string }) {
 	return (
 		<svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1352,7 +1369,7 @@ function Topbar({
 				<div className="truncate text-[12px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
 					{viewMode === "orchestrator" ? "Orchestrator" : "Board"}, {selectedTrack.label.toLowerCase()}
 				</div>
-				<div className="mt-0.5 max-w-[420px] truncate text-[10px] text-[var(--preview-muted-foreground)]/75">
+				<div className="mt-0.5 truncate text-[10px] text-[var(--preview-muted-foreground)]/75 lg:max-w-[420px]">
 					{selectedTrack.summary}
 				</div>
 			</div>
@@ -1519,7 +1536,7 @@ function BoardColumn({
 	title: string;
 }) {
 	return (
-		<section className="flex min-h-0 min-w-0 flex-col border-r border-[var(--preview-border)] last:border-r-0">
+		<section className="flex min-h-0 min-w-0 snap-start flex-col border-r border-[var(--preview-border)] last:border-r-0">
 			<div className="flex items-center gap-2 border-b border-[var(--preview-border)] px-3 py-2.5">
 				<span className="h-2 w-2 rounded-[2px]" style={{ backgroundColor: color }} />
 				<div className="text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">{title}</div>
@@ -1882,6 +1899,7 @@ export function AppMockup() {
 	const sidebarWidthRef = useRef(178);
 	const { startDrag, startResize } = useFloatingWindow(windowRef);
 	const isRepoAvatarReady = useImageReady(repoAvatar);
+	useDecorativeSubtree(windowRef);
 
 	const selectedTrack =
 		projectItems.find((item) => item.id === selectedTrackId) ?? projectItems[0];
@@ -2057,6 +2075,8 @@ export function AppMockup() {
 	return (
 		<div
 			ref={windowRef}
+			role="img"
+			aria-label="Preview of the Agent Orchestrator board: agent tasks move across Working, Needs you, In review, and Ready to merge, each card showing its agent, branch, and pull request state."
 			className="absolute z-10 select-none overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans tracking-[-0.5px] text-[var(--preview-foreground)] antialiased shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75)] [&_.font-mono]:tracking-normal"
 			style={{
 				...previewTokenStyle,
@@ -2100,7 +2120,7 @@ export function AppMockup() {
 							/>
 						) : (
 							<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
-								<div className="grid min-h-0 flex-1 auto-cols-[minmax(150px,1fr)] grid-flow-col overflow-x-auto lg:grid-flow-row lg:grid-cols-4 lg:auto-cols-auto lg:overflow-hidden">
+								<div className="grid min-h-0 flex-1 auto-cols-[85%] grid-flow-col snap-x snap-mandatory overflow-x-auto overscroll-x-contain scrollbar-hide md:auto-cols-[48%] lg:grid-flow-row lg:grid-cols-4 lg:auto-cols-auto lg:snap-none lg:overflow-hidden">
 									{boardColumns.map((column) => (
 										<BoardColumn
 											key={column.title}

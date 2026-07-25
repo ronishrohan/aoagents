@@ -40,15 +40,6 @@ export const TESTIMONIALS: Testimonial[] = [
     url: "https://twitter.com/buchireddy/status/2064108144607760628",
   },
   {
-    id: "oxwizzdom",
-    author: "oxwizzdom",
-    handle: "@oxwizzdom",
-    content:
-      "1/ @agent_wrapper & @composio shipped @aoagents a while back. runs 50 coding agents in parallel on the same repo. i spent a weekend reading the codebase. found 5 techniques that make it work.",
-    avatar: "https://unavatar.io/x/oxwizzdom",
-    url: "https://twitter.com/oxwizzdom/status/2043491248376336484",
-  },
-  {
     id: "adiiiie",
     author: "Adi",
     handle: "@addddiiie",
@@ -56,14 +47,6 @@ export const TESTIMONIALS: Testimonial[] = [
       "I just hired a few software devs to work for free cc, @aoagents",
     avatar: "https://unavatar.io/x/addddiiie",
     url: "https://twitter.com/addddiiie/status/2037174432700211408",
-  },
-  {
-    id: "todd-case",
-    author: "Todd Case",
-    handle: "@todd_case",
-    content:
-      "AO is genuinely the most useful developer tool I've picked up this year. Every team shipping code should have an orchestrator in their stack.",
-    url: "#",
   },
   {
     id: "maria-garcia",

@@ -8,6 +8,8 @@ import { DownloadButton } from "../DownloadButton";
 import { ProductDemo } from "./components/ProductDemo";
 
 const INSTALL_COMMAND = "brew install agentwrapper/tap/agent-orchestrator";
+// Wraps at the path separators instead of mid-word once the pill goes two-line.
+const INSTALL_COMMAND_PARTS = INSTALL_COMMAND.split("/");
 
 function formatStarCount(count: number) {
   if (count >= 1000) {
@@ -74,14 +76,20 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
                 type="button"
                 aria-label={`Copy brew install command: ${INSTALL_COMMAND}`}
                 title="Click to copy"
-                className="group mt-4 flex w-full max-w-xl items-center gap-2 overflow-hidden rounded-3xl border border-border bg-card/70 px-3 py-2.5 text-left font-mono text-sm tracking-[0.5px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:w-auto"
+                className="group mt-4 flex min-h-11 w-full max-w-xl items-start gap-2 rounded-3xl border border-border bg-card/70 px-3 py-2.5 text-left font-mono text-xs tracking-[0.5px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:w-auto sm:items-center sm:overflow-hidden sm:text-sm"
                 onClick={copyInstallCommand}
               >
                 <span className="text-foreground/40" aria-hidden="true">
                   $
                 </span>
-                <code className="truncate text-foreground/80">
-                  {INSTALL_COMMAND}
+                <code className="min-w-0 flex-1 break-words whitespace-normal text-foreground/80 sm:flex-none sm:truncate sm:whitespace-nowrap">
+                  {INSTALL_COMMAND_PARTS.map((part, index) => (
+                    <span key={part}>
+                      {index > 0 ? "/" : null}
+                      {part}
+                      {index < INSTALL_COMMAND_PARTS.length - 1 ? <wbr /> : null}
+                    </span>
+                  ))}
                 </code>
                 <span
                   className="ml-2 inline-flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-foreground"
