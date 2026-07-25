@@ -36,11 +36,11 @@ export function MobileNav({ ctaButtons }: MobileNavProps) {
 			<AnimatePresence>
 				{isOpen && (
 					<motion.div
-						className="absolute inset-x-0 top-14 border-t border-border bg-background/95 backdrop-blur-sm"
-						initial={{ opacity: 0, height: 0 }}
-						animate={{ opacity: 1, height: "auto" }}
-						exit={{ opacity: 0, height: 0 }}
-						transition={{ duration: 0.2 }}
+						className="absolute inset-x-0 top-14 overflow-hidden border-t border-border bg-background/95 backdrop-blur-sm"
+						initial={{ height: 0 }}
+						animate={{ height: "auto" }}
+						exit={{ height: 0 }}
+						transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
 					>
 						<div className="px-8 lg:px-[30px]">
 							<div className="max-w-7xl mx-auto py-4 flex flex-col gap-6">
