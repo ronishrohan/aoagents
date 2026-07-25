@@ -42,7 +42,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 			href={testimonial.url}
 			target="_blank"
 			rel="noopener noreferrer"
-			className="block h-full min-h-[220px] border-r border-b border-border bg-card p-5 hover:bg-muted/60 transition-colors"
+			className="block h-full min-h-[220px] bg-card p-5 hover:bg-muted/60 transition-colors"
 		>
 			<div className="flex items-start gap-3">
 				<Avatar src={testimonial.avatar} name={testimonial.author} />
@@ -97,7 +97,7 @@ export function WallOfLoveSection() {
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-3 auto-rows-fr border-l border-t border-border">
+				<div className="grid grid-cols-1 gap-px bg-border md:grid-cols-3 auto-rows-fr">
 					{testimonials.map((testimonial) => (
 						<TestimonialCard key={testimonial.id} testimonial={testimonial} />
 					))}
