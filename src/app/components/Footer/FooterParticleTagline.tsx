@@ -14,6 +14,10 @@ interface Particle {
   vx: number;
   vy: number;
   delay: number;
+  red: number;
+  green: number;
+  blue: number;
+  visibility: number;
 }
 
 const clamp = (value: number, minimum: number, maximum: number) =>
@@ -34,6 +38,7 @@ export function FooterParticleTagline() {
       "(prefers-reduced-motion: reduce)",
     ).matches;
     const pointer = { x: -9999, y: -9999, active: false };
+    const logoImage = new Image();
     let width = 1;
     let height = 1;
     let dpr = 1;
@@ -48,8 +53,9 @@ export function FooterParticleTagline() {
       context.clearRect(0, 0, width, height);
 
       for (const particle of particles) {
-        context.globalAlpha = 0.9;
-        context.fillStyle = "#faf8ef";
+        if (particle.visibility <= 0.01) continue;
+        context.globalAlpha = 0.9 * particle.visibility;
+        context.fillStyle = `rgb(${particle.red} ${particle.green} ${particle.blue})`;
         context.beginPath();
         context.arc(particle.x, particle.y, 1.35, 0, Math.PI * 2);
         context.fill();
@@ -63,6 +69,7 @@ export function FooterParticleTagline() {
       if (!visible || document.hidden) return;
 
       if (!assembled) {
+        for (const particle of particles) particle.visibility = 1;
         if (now < assemblyStartedAt) {
           for (const particle of particles) {
             particle.x += particle.vx;
@@ -87,10 +94,11 @@ export function FooterParticleTagline() {
               particle.startY + (particle.homeY - particle.startY) * eased;
             if (progress < 1) complete = false;
           }
-          assembled = complete;
+          if (complete) assembled = true;
         }
       } else if (!reducedMotion) {
         for (const particle of particles) {
+          particle.visibility = 1;
           let forceX = (particle.homeX - particle.x) * 0.075;
           let forceY = (particle.homeY - particle.y) * 0.075;
 
@@ -150,15 +158,29 @@ export function FooterParticleTagline() {
       const targetHeight = width >= 640 ? 300 : 250;
       const targetTop = width >= 640 ? 80 : 56;
       const fontSize = Math.min(
-        64,
+        56,
         targetWidth / 7.5,
-        targetHeight / 4.15,
+        targetHeight / 5.1,
       );
       const lineHeight = fontSize * 1.12;
       const blockHeight = lineHeight * TAGLINE_LINES.length;
+      const logoHeight = clamp(fontSize * 1.2, 48, 72);
+      const logoWidth = logoHeight * (870 / 760);
+      const logoGap = 10;
+      const combinedHeight = logoHeight + logoGap + blockHeight;
+      const logoTop = targetTop + (targetHeight - combinedHeight) / 2;
       const firstBaseline =
-        targetTop + (targetHeight - blockHeight) / 2 + fontSize * 0.86;
+        logoTop + logoHeight + logoGap + fontSize * 0.86;
 
+      if (logoImage.complete && logoImage.naturalWidth > 0) {
+        sampleContext.drawImage(
+          logoImage,
+          contentLeft + 10,
+          logoTop,
+          logoWidth,
+          logoHeight,
+        );
+      }
       sampleContext.fillStyle = "#fff";
       sampleContext.font = `650 ${fontSize}px ${fontFamily}`;
       sampleContext.textBaseline = "alphabetic";
@@ -172,6 +194,49 @@ export function FooterParticleTagline() {
 
       const pixels = sampleContext.getImageData(0, 0, width, height).data;
       const sampleGap = width < 560 ? 3 : 4;
+      const eyeCenterY =
+        Math.round((logoTop + logoHeight * 0.56) / sampleGap) * sampleGap;
+      const logoLeft = Math.round(contentLeft + 10);
+      const logoRight = Math.round(logoLeft + logoWidth);
+      let bodyLeft = logoLeft;
+      let bodyRight = logoRight;
+      let longestRun = 0;
+      let runStart = -1;
+
+      for (let scanX = logoLeft; scanX <= logoRight; scanX += 1) {
+        let isOpaque = false;
+        for (
+          let scanY = eyeCenterY - 2;
+          scanY <= eyeCenterY + 2;
+          scanY += 1
+        ) {
+          if (pixels[(scanY * width + scanX) * 4 + 3] >= 20) {
+            isOpaque = true;
+            break;
+          }
+        }
+
+        if (isOpaque && runStart < 0) runStart = scanX;
+        if ((!isOpaque || scanX === logoRight) && runStart >= 0) {
+          const runEnd = isOpaque ? scanX : scanX - 1;
+          const runLength = runEnd - runStart;
+          if (runLength > longestRun) {
+            longestRun = runLength;
+            bodyLeft = runStart;
+            bodyRight = runEnd;
+          }
+          runStart = -1;
+        }
+      }
+
+      const bodyWidth = bodyRight - bodyLeft;
+      const leftEyeX =
+        Math.round((bodyLeft + bodyWidth * 0.28) / sampleGap) * sampleGap;
+      const unsnappedRightEyeX = bodyRight - bodyWidth * 0.28;
+      const rightEyeX =
+        leftEyeX +
+        Math.round((unsnappedRightEyeX - leftEyeX) / sampleGap) * sampleGap;
+      const eyeHalfSize = sampleGap * 0.75;
       const nextParticles: Particle[] = [];
 
       for (let y = 0; y < height; y += sampleGap) {
@@ -201,6 +266,17 @@ export function FooterParticleTagline() {
           if (!coveredPixels) continue;
           const homeX = coveredX / coveredPixels;
           const homeY = coveredY / coveredPixels;
+          const isLogoParticle =
+            homeX >= contentLeft + 10 &&
+            homeX <= contentLeft + 10 + logoWidth &&
+            homeY >= logoTop &&
+            homeY <= logoTop + logoHeight;
+          const isInsideEye = (centerX: number) =>
+            Math.abs(homeX - centerX) <= eyeHalfSize &&
+            Math.abs(homeY - eyeCenterY) <= eyeHalfSize;
+          const isLogoDetail =
+            isLogoParticle &&
+            (isInsideEye(leftEyeX) || isInsideEye(rightEyeX));
 
           const startX = Math.random() * width;
           const startY = Math.random() * height;
@@ -214,6 +290,10 @@ export function FooterParticleTagline() {
             vx: (Math.random() - 0.5) * 0.55,
             vy: (Math.random() - 0.5) * 0.55,
             delay: Math.random() * 30 + (homeX / width) * 45,
+            red: isLogoParticle ? (isLogoDetail ? 4 : 121) : 255,
+            green: isLogoParticle ? (isLogoDetail ? 5 : 176) : 255,
+            blue: isLogoParticle ? (isLogoDetail ? 4 : 220) : 255,
+            visibility: 1,
           });
         }
       }
@@ -297,6 +377,8 @@ export function FooterParticleTagline() {
     document.addEventListener("visibilitychange", onVisibilityChange);
 
     document.fonts?.ready.then(build).catch(() => undefined);
+    logoImage.addEventListener("load", build);
+    logoImage.src = "/favicon.svg";
     build();
 
     return () => {
@@ -306,6 +388,7 @@ export function FooterParticleTagline() {
       footer.removeEventListener("pointermove", onPointerMove);
       footer.removeEventListener("pointerleave", onPointerLeave);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      logoImage.removeEventListener("load", build);
     };
   }, []);
 
