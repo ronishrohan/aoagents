@@ -1,14 +1,14 @@
 "use client";
 
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 
 export type { ActiveDemo } from "./types";
 
 type BoardColumnId = "working" | "action" | "pending" | "merge";
 type CardTone = "default" | "review" | "blocked" | "ready";
-type ActivityState = "running" | "passed" | "failed" | "waiting";
+type ActivityState = "running" | "passed" | "failed" | "reviewing" | "waiting";
 type TrackId = "landing" | "deploy" | "stars" | "icons" | "footer";
 type ViewMode = "board" | "orchestrator";
 
@@ -163,7 +163,7 @@ const columns = [
 				agent: "OpenCode",
 				icon: "/app-icons/opencode.svg",
 				activity: "Reviewer assigned",
-				activityState: "waiting",
+				activityState: "reviewing",
 				pr: "PR #325",
 				checks: "review pending",
 				files: "2 files",
@@ -209,6 +209,13 @@ const columns = [
 		],
 	},
 ] satisfies PreviewColumn[];
+
+const COLUMN_COLORS: Record<BoardColumnId, string> = {
+	working: "#60a5fa",
+	action: "#fb923c",
+	pending: "#facc15",
+	merge: "#4ade80",
+};
 
 const projectItems: TrackItem[] = [
 	{
@@ -367,6 +374,301 @@ const incomingCards: StaticPreviewCard[] = [
 	},
 ];
 
+const BASE_WIDTH = 1024;
+const BASE_HEIGHT = 615;
+const WINDOW_MARGIN = 4;
+const MIN_WINDOW_WIDTH = 240;
+const MIN_WINDOW_HEIGHT = 144;
+
+interface WindowState {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+	scale: number;
+}
+
+function clampWindowState(
+	state: WindowState,
+	containerWidth: number,
+	containerHeight: number,
+): WindowState {
+	let { x, y, width, height } = state;
+	const maxWidth = containerWidth - WINDOW_MARGIN * 2;
+	const maxHeight = containerHeight - WINDOW_MARGIN * 2;
+
+	width = Math.max(MIN_WINDOW_WIDTH, Math.min(width, maxWidth));
+	height = Math.max(MIN_WINDOW_HEIGHT, Math.min(height, maxHeight));
+
+	let scale = width / BASE_WIDTH;
+	const targetHeight = BASE_HEIGHT * scale;
+	if (targetHeight > maxHeight) {
+		scale = maxHeight / BASE_HEIGHT;
+		width = BASE_WIDTH * scale;
+		height = BASE_HEIGHT * scale;
+	} else {
+		height = targetHeight;
+	}
+
+	x = Math.max(WINDOW_MARGIN, Math.min(x, containerWidth - width - WINDOW_MARGIN));
+	y = Math.max(WINDOW_MARGIN, Math.min(y, containerHeight - height - WINDOW_MARGIN));
+
+	return { x, y, width, height, scale };
+}
+
+function createInitialWindowState(
+	containerWidth: number,
+	containerHeight: number,
+): WindowState {
+	const availableWidth = containerWidth - WINDOW_MARGIN * 2;
+	const availableHeight = containerHeight - WINDOW_MARGIN * 2;
+	const scale = Math.min(
+		1,
+		availableWidth / BASE_WIDTH,
+		availableHeight / BASE_HEIGHT,
+	);
+	const width = BASE_WIDTH * scale;
+	const height = BASE_HEIGHT * scale;
+	return {
+		x: (containerWidth - width) / 2,
+		y: (containerHeight - height) / 2,
+		width,
+		height,
+		scale,
+	};
+}
+
+function useFloatingWindow(
+	outerRef: React.RefObject<HTMLElement | null>,
+	innerRef: React.RefObject<HTMLElement | null>,
+) {
+	const stateRef = useRef<WindowState | null>(null);
+	const containerSizeRef = useRef({ width: 0, height: 0 });
+	const interactionRef = useRef<{
+		type: "drag" | "resize";
+		direction?: string;
+		startX: number;
+		startY: number;
+		initial: WindowState;
+	} | null>(null);
+
+	const applyState = useCallback(() => {
+		const outer = outerRef.current;
+		const inner = innerRef.current;
+		const state = stateRef.current;
+		if (!outer || !inner || !state) return;
+		outer.style.left = `${state.x}px`;
+		outer.style.top = `${state.y}px`;
+		outer.style.width = `${state.width}px`;
+		outer.style.height = `${state.height}px`;
+		inner.style.transform = `scale(${state.scale})`;
+	}, [outerRef, innerRef]);
+
+	const updateContainer = useCallback(() => {
+		const outer = outerRef.current;
+		const parent = outer?.offsetParent as HTMLElement | null;
+		if (!parent) return;
+		const rect = parent.getBoundingClientRect();
+		containerSizeRef.current = { width: rect.width, height: rect.height };
+		if (stateRef.current) {
+			stateRef.current = clampWindowState(
+				stateRef.current,
+				rect.width,
+				rect.height,
+			);
+		} else {
+			stateRef.current = createInitialWindowState(rect.width, rect.height);
+		}
+		applyState();
+	}, [applyState, outerRef]);
+
+	useLayoutEffect(() => {
+		updateContainer();
+		const outer = outerRef.current;
+		const parent = outer?.offsetParent as HTMLElement | null;
+		if (!parent) return;
+		const observer = new ResizeObserver(updateContainer);
+		observer.observe(parent);
+		return () => observer.disconnect();
+	}, [updateContainer, outerRef]);
+
+	const startDrag = useCallback((clientX: number, clientY: number) => {
+		if (!stateRef.current) return;
+		interactionRef.current = {
+			type: "drag",
+			startX: clientX,
+			startY: clientY,
+			initial: { ...stateRef.current },
+		};
+	}, []);
+
+	const startResize = useCallback(
+		(direction: string, clientX: number, clientY: number) => {
+			if (!stateRef.current) return;
+			interactionRef.current = {
+				type: "resize",
+				direction,
+				startX: clientX,
+				startY: clientY,
+				initial: { ...stateRef.current },
+			};
+		},
+		[],
+	);
+
+	useEffect(() => {
+		const handleMove = (event: PointerEvent) => {
+			const interaction = interactionRef.current;
+			if (!interaction || !stateRef.current) return;
+			const { width: containerWidth, height: containerHeight } =
+				containerSizeRef.current;
+			const dx = event.clientX - interaction.startX;
+			const dy = event.clientY - interaction.startY;
+			let next: WindowState = { ...interaction.initial };
+
+			if (interaction.type === "drag") {
+				next.x = interaction.initial.x + dx;
+				next.y = interaction.initial.y + dy;
+			} else if (interaction.type === "resize" && interaction.direction) {
+				const baseMagSq = BASE_WIDTH * BASE_WIDTH + BASE_HEIGHT * BASE_HEIGHT;
+				switch (interaction.direction) {
+					case "se": {
+						const vectorX = interaction.initial.width + dx;
+						const vectorY = interaction.initial.height + dy;
+						const dot = Math.max(
+							0,
+							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
+						);
+						const scale = dot / baseMagSq;
+						next.width = BASE_WIDTH * scale;
+						next.height = BASE_HEIGHT * scale;
+						break;
+					}
+					case "nw": {
+						const vectorX = interaction.initial.width - dx;
+						const vectorY = interaction.initial.height - dy;
+						const dot = Math.max(
+							0,
+							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
+						);
+						const scale = dot / baseMagSq;
+						next.width = BASE_WIDTH * scale;
+						next.height = BASE_HEIGHT * scale;
+						next.x = interaction.initial.x + (interaction.initial.width - next.width);
+						next.y = interaction.initial.y + (interaction.initial.height - next.height);
+						break;
+					}
+					case "sw": {
+						const vectorX = interaction.initial.width - dx;
+						const vectorY = interaction.initial.height + dy;
+						const dot = Math.max(
+							0,
+							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
+						);
+						const scale = dot / baseMagSq;
+						next.width = BASE_WIDTH * scale;
+						next.height = BASE_HEIGHT * scale;
+						next.x = interaction.initial.x + (interaction.initial.width - next.width);
+						break;
+					}
+					case "ne": {
+						const vectorX = interaction.initial.width + dx;
+						const vectorY = interaction.initial.height - dy;
+						const dot = Math.max(
+							0,
+							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
+						);
+						const scale = dot / baseMagSq;
+						next.width = BASE_WIDTH * scale;
+						next.height = BASE_HEIGHT * scale;
+						next.y = interaction.initial.y + (interaction.initial.height - next.height);
+						break;
+					}
+				}
+			}
+
+			next = clampWindowState(next, containerWidth, containerHeight);
+			stateRef.current = next;
+			applyState();
+		};
+
+		const handleUp = () => {
+			interactionRef.current = null;
+		};
+
+		window.addEventListener("pointermove", handleMove);
+		window.addEventListener("pointerup", handleUp);
+		return () => {
+			window.removeEventListener("pointermove", handleMove);
+			window.removeEventListener("pointerup", handleUp);
+		};
+	}, [applyState]);
+
+	const getScale = useCallback(() => stateRef.current?.scale ?? 1, []);
+
+	return { getScale, startDrag, startResize };
+}
+
+function ResizeHandle({
+	className,
+	cursor,
+	direction,
+	onResizeStart,
+}: {
+	className: string;
+	cursor: string;
+	direction: string;
+	onResizeStart: (direction: string, clientX: number, clientY: number) => void;
+}) {
+	return (
+		<div
+			className={`absolute z-20 ${cursor} ${className}`}
+			onPointerDown={(event) => {
+				event.preventDefault();
+				event.stopPropagation();
+				onResizeStart(direction, event.clientX, event.clientY);
+			}}
+		>
+			<div className="h-full w-full rounded-sm bg-[var(--preview-foreground)]/0 transition-colors hover:bg-[var(--preview-foreground)]/15" />
+		</div>
+	);
+}
+
+function ResizeHandles({
+	onResizeStart,
+}: {
+	onResizeStart: (direction: string, clientX: number, clientY: number) => void;
+}) {
+	return (
+		<>
+			<ResizeHandle
+				className="left-2 top-2 h-4 w-4"
+				cursor="cursor-nwse-resize"
+				direction="nw"
+				onResizeStart={onResizeStart}
+			/>
+			<ResizeHandle
+				className="right-2 top-2 h-4 w-4"
+				cursor="cursor-nesw-resize"
+				direction="ne"
+				onResizeStart={onResizeStart}
+			/>
+			<ResizeHandle
+				className="left-2 bottom-2 h-4 w-4"
+				cursor="cursor-nesw-resize"
+				direction="sw"
+				onResizeStart={onResizeStart}
+			/>
+			<ResizeHandle
+				className="right-2 bottom-2 h-4 w-4"
+				cursor="cursor-nwse-resize"
+				direction="se"
+				onResizeStart={onResizeStart}
+			/>
+		</>
+	);
+}
+
 function createInitialCards(): PreviewCard[] {
 	return columns.flatMap((column) =>
 		column.cards.slice(0, 1).map((card, index) => ({
@@ -395,7 +697,7 @@ function advanceCard(card: PreviewCard): PreviewCard {
 			...card,
 			column: "pending",
 			activity: "Reviewer assigned",
-			activityState: "waiting",
+			activityState: "reviewing",
 			badge: "Awaiting review",
 			tone: "review",
 			time: "just now",
@@ -584,6 +886,7 @@ function SettingsIcon({ className = "" }: { className?: string }) {
 function WindowTitlebar({
 	mergedCount,
 	onNewTask,
+	onTitlebarPointerDown,
 	onViewChange,
 	runningCount,
 	viewMode,
@@ -591,13 +894,21 @@ function WindowTitlebar({
 }: {
 	mergedCount: number;
 	onNewTask: () => void;
+	onTitlebarPointerDown: (clientX: number, clientY: number) => void;
 	onViewChange: (mode: ViewMode) => void;
 	runningCount: number;
 	viewMode: ViewMode;
 	waitingCount: number;
 }) {
 	return (
-		<div className="flex h-10 shrink-0 items-center border-b border-[var(--preview-border)] bg-[var(--preview-background)] pl-3 pr-1.5">
+		<div
+			className="flex h-10 shrink-0 cursor-grab items-center border-b border-[var(--preview-border)] bg-[var(--preview-background)] pl-3 pr-1.5 active:cursor-grabbing"
+			onPointerDown={(event) => {
+				if ((event.target as HTMLElement).closest("button")) return;
+				event.preventDefault();
+				onTitlebarPointerDown(event.clientX, event.clientY);
+			}}
+		>
 			<div className="relative z-50 flex items-center gap-2">
 				<span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
 				<span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
@@ -651,14 +962,22 @@ function WindowTitlebar({
 }
 
 function Sidebar({
+	onResizeStart,
 	onSelectTrack,
 	selectedTrackId,
+	sidebarRef,
 }: {
+	onResizeStart: (clientX: number) => void;
 	onSelectTrack: (trackId: TrackId) => void;
 	selectedTrackId: TrackId;
+	sidebarRef: React.RefObject<HTMLElement | null>;
 }) {
 	return (
-		<aside className="flex w-[178px] shrink-0 flex-col border-r border-[var(--preview-sidebar-border)] bg-[var(--preview-sidebar)] text-[var(--preview-muted-foreground)]">
+		<aside
+			ref={sidebarRef}
+			className="relative flex shrink-0 flex-col border-r border-[var(--preview-sidebar-border)] bg-[var(--preview-sidebar)] text-[var(--preview-muted-foreground)]"
+			style={{ width: 178 }}
+		>
 			<div className="flex h-[36px] items-center gap-2 px-3">
 				<img
 					src="/ao-logo.svg"
@@ -672,7 +991,6 @@ function Sidebar({
 				<div className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-[-0.5px] text-[var(--preview-sidebar-foreground)]">
 					AO
 				</div>
-				<PanelIcon className="h-3.5 w-3.5 shrink-0 text-[var(--preview-muted-foreground)]" />
 			</div>
 
 			<div className="px-3 pt-2">
@@ -687,12 +1005,6 @@ function Sidebar({
 			</div>
 
 			<div className="mt-6 space-y-4 px-2.5">
-				<div>
-					<div className="mb-2 flex items-center justify-between px-0.5 text-[9px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]/70">
-						<span>Workspaces</span>
-						<span className="text-[13px] font-normal">+</span>
-					</div>
-				</div>
 				<div>
 					<div className="mb-2 flex items-center justify-between px-0.5 text-[9px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]/70">
 						<span>Projects</span>
@@ -736,6 +1048,17 @@ function Sidebar({
 					<SettingsIcon className="h-3.5 w-3.5" />
 					<span>Settings</span>
 				</div>
+			</div>
+
+			<div
+				className="absolute right-0 top-0 bottom-0 z-10 w-[6px] cursor-col-resize group"
+				onPointerDown={(event) => {
+					event.preventDefault();
+					event.stopPropagation();
+					onResizeStart(event.clientX);
+				}}
+			>
+				<div className="absolute inset-y-0 left-1/2 w-[2px] -translate-x-1/2 bg-[var(--preview-muted-foreground)]/0 transition-colors group-hover:bg-[var(--preview-muted-foreground)]/25" />
 			</div>
 		</aside>
 	);
@@ -880,6 +1203,8 @@ function BoardCard({
 								? "text-[#86efac]"
 								: card.activityState === "failed"
 									? "text-[#f87171]"
+									: card.activityState === "reviewing"
+										? "text-[#93c5fd]"
 									: card.activityState === "waiting"
 										? "text-[#fcd34d]"
 										: "text-[#9ca3af]"
@@ -889,6 +1214,8 @@ function BoardCard({
 							<CheckIcon className="h-3 w-3" />
 						) : card.activityState === "failed" ? (
 							<WarningIcon className="h-3 w-3" />
+						) : card.activityState === "reviewing" ? (
+							<GitHubIcon className="h-3 w-3" />
 						) : card.activityState === "waiting" ? (
 							<WaitingIcon className="h-3 w-3" />
 						) : (
@@ -905,12 +1232,14 @@ function BoardCard({
 
 function BoardColumn({
 	cards,
+	color,
 	count,
 	onMerge,
 	onOpen,
 	title,
 }: {
 	cards: PreviewCard[];
+	color: string;
 	count: number;
 	onMerge: (id: string) => void;
 	onOpen: (card: PreviewCard) => void;
@@ -918,7 +1247,8 @@ function BoardColumn({
 }) {
 	return (
 		<section className="flex min-h-0 min-w-0 flex-col border-r border-[var(--preview-border)] last:border-r-0">
-			<div className="flex items-center border-b border-[var(--preview-border)] px-3 py-2.5">
+			<div className="flex items-center gap-2 border-b border-[var(--preview-border)] px-3 py-2.5">
+				<span className="h-2 w-2 rounded-[2px]" style={{ backgroundColor: color }} />
 				<div className="text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">{title}</div>
 				<div className="ml-2 text-[10px] tabular-nums text-[var(--preview-muted-foreground)]">{count}</div>
 			</div>
@@ -1256,8 +1586,40 @@ export function AppMockup() {
 	const [selectedCard, setSelectedCard] = useState<PreviewCard | null>(null);
 	const [viewMode, setViewMode] = useState<ViewMode>("board");
 	const incomingIndex = useRef(0);
+	const windowRef = useRef<HTMLDivElement>(null);
+	const innerRef = useRef<HTMLDivElement>(null);
+	const sidebarRef = useRef<HTMLElement>(null);
+	const sidebarWidthRef = useRef(178);
+	const { startDrag, startResize, getScale } = useFloatingWindow(
+		windowRef,
+		innerRef,
+	);
+
 	const selectedTrack =
 		projectItems.find((item) => item.id === selectedTrackId) ?? projectItems[0];
+
+	const startSidebarResize = useCallback((clientX: number) => {
+		const startWidth = sidebarWidthRef.current;
+		const startX = clientX;
+
+		const handleMove = (event: PointerEvent) => {
+			const scale = getScale();
+			const delta = (event.clientX - startX) / scale;
+			const nextWidth = Math.max(140, Math.min(320, startWidth + delta));
+			sidebarWidthRef.current = nextWidth;
+			if (sidebarRef.current) {
+				sidebarRef.current.style.width = `${nextWidth}px`;
+			}
+		};
+
+		const handleUp = () => {
+			window.removeEventListener("pointermove", handleMove);
+			window.removeEventListener("pointerup", handleUp);
+		};
+
+		window.addEventListener("pointermove", handleMove);
+		window.addEventListener("pointerup", handleUp);
+	}, [getScale]);
 
 	const mergeCard = useCallback((id: string) => {
 		setCards((current) =>
@@ -1385,56 +1747,75 @@ export function AppMockup() {
 
 	return (
 		<div
-			className="relative w-full min-w-[1024px] select-none overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans tracking-[-0.5px] text-[var(--preview-foreground)] antialiased shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75)] [&_.font-mono]:tracking-normal"
-			style={{ ...previewTokenStyle, aspectRatio: "1024 / 615" }}
+			ref={windowRef}
+			className="absolute z-10 select-none overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans tracking-[-0.5px] text-[var(--preview-foreground)] antialiased shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75)] [&_.font-mono]:tracking-normal"
+			style={{
+				...previewTokenStyle,
+				position: "absolute",
+				left: 0,
+				top: 0,
+				width: BASE_WIDTH,
+				height: BASE_HEIGHT,
+			}}
 		>
-			<div className="flex h-full flex-col">
-				<WindowTitlebar
-					mergedCount={mergedCount}
-					onNewTask={spawnRandomTask}
-					onViewChange={setViewMode}
-					runningCount={runningCount}
-					viewMode={viewMode}
-					waitingCount={waitingCount}
-				/>
-				<div className="flex min-h-0 flex-1">
-					<Sidebar
-						onSelectTrack={selectTrack}
-						selectedTrackId={selectedTrack.id}
+			<div
+				ref={innerRef}
+				className="origin-top-left"
+				style={{ width: BASE_WIDTH, height: BASE_HEIGHT }}
+			>
+				<div className="flex h-full flex-col">
+					<WindowTitlebar
+						mergedCount={mergedCount}
+						onNewTask={spawnRandomTask}
+						onTitlebarPointerDown={startDrag}
+						onViewChange={setViewMode}
+						runningCount={runningCount}
+						viewMode={viewMode}
+						waitingCount={waitingCount}
 					/>
-					<div className="flex min-w-0 flex-1 flex-col bg-[var(--preview-background)]">
-						<Topbar
-							mergedCount={mergedCount}
-							selectedTrack={selectedTrack}
-							viewMode={viewMode}
+					<div className="flex min-h-0 flex-1">
+						<Sidebar
+							onResizeStart={startSidebarResize}
+							onSelectTrack={selectTrack}
+							selectedTrackId={selectedTrack.id}
+							sidebarRef={sidebarRef}
 						/>
-						{viewMode === "orchestrator" ? (
-							<OrchestratorView
-								cards={cards}
-								onNewTask={spawnRandomTask}
+						<div className="flex min-w-0 flex-1 flex-col bg-[var(--preview-background)]">
+							<Topbar
+								mergedCount={mergedCount}
 								selectedTrack={selectedTrack}
+								viewMode={viewMode}
 							/>
-						) : (
-							<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
-								<div className="grid min-h-0 flex-1 grid-cols-4 overflow-hidden">
-									{boardColumns.map((column) => (
-										<BoardColumn
-											key={column.title}
-											{...column}
-											onMerge={mergeCard}
-											onOpen={setSelectedCard}
-										/>
-									))}
-								</div>
-							</LayoutGroup>
-						)}
+							{viewMode === "orchestrator" ? (
+								<OrchestratorView
+									cards={cards}
+									onNewTask={spawnRandomTask}
+									selectedTrack={selectedTrack}
+								/>
+							) : (
+								<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
+									<div className="grid min-h-0 flex-1 grid-cols-4 overflow-hidden">
+										{boardColumns.map((column) => (
+											<BoardColumn
+												key={column.title}
+												{...column}
+												color={COLUMN_COLORS[column.id]}
+												onMerge={mergeCard}
+												onOpen={setSelectedCard}
+											/>
+										))}
+									</div>
+								</LayoutGroup>
+							)}
+						</div>
 					</div>
 				</div>
+				<AgentStatusModal
+					card={selectedCard}
+					onClose={() => setSelectedCard(null)}
+				/>
 			</div>
-			<AgentStatusModal
-				card={selectedCard}
-				onClose={() => setSelectedCard(null)}
-			/>
+			{selectedCard ? null : <ResizeHandles onResizeStart={startResize} />}
 		</div>
 	);
 }
