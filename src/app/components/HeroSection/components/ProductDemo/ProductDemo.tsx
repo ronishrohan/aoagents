@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AppMockup } from "../AppMockup";
 
-const PREVIEW_BACKGROUND_IMAGE = "/hero-preview-bg.svg";
+const PREVIEW_BACKGROUND_IMAGE = "/hero-background.jpeg";
 
 function useImageLoaded(src: string) {
 	const [isLoaded, setIsLoaded] = useState(false);
@@ -49,6 +49,7 @@ export function ProductDemo() {
 					alt=""
 					fill
 					priority
+					quality={80}
 					sizes="(max-width: 1536px) 100vw, 1536px"
 					className="pointer-events-none select-none object-cover"
 				/>
