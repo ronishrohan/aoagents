@@ -13,13 +13,11 @@ const linkClass = cn(
 );
 
 export function DesktopNav() {
+  const links = [...PRODUCT_LINKS, ...RESOURCE_LINKS];
+
   return (
     <nav className="flex items-center gap-1">
-      {PRODUCT_LINKS.map((link) => (
-        <NavLinkItem key={link.href} link={link} />
-      ))}
-      <div className="h-4 w-px bg-border" />
-      {RESOURCE_LINKS.map((link) => (
+      {links.map((link) => (
         <NavLinkItem key={link.href} link={link} />
       ))}
     </nav>

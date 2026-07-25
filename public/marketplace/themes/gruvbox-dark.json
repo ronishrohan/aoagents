@@ -3,7 +3,7 @@
 	"name": "Gruvbox Dark",
 	"type": "dark",
 	"author": "Pavel Pertsev (port: Baris Can Sayin)",
-	"description": "Retro groove from Pavel Pertsev - warm dark base, ochre/olive/clay accents. Honest, woodgrain feel.",
+	"description": "Retro groove from Pavel Pertsev, warm dark base, ochre/olive/clay accents. Honest, woodgrain feel.",
 	"ui": {
 		"background": "#282828",
 		"foreground": "#ebdbb2",

@@ -8,15 +8,13 @@ import {
 	type NavLink,
 	PRODUCT_LINKS,
 	RESOURCE_LINKS,
-	TOP_LEVEL_LINKS,
 } from "../../constants";
 
 interface MobileNavProps {
 	ctaButtons: React.ReactNode;
-	starCounter?: React.ReactNode;
 }
 
-export function MobileNav({ ctaButtons, starCounter }: MobileNavProps) {
+export function MobileNav({ ctaButtons }: MobileNavProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const close = () => setIsOpen(false);
 
@@ -44,21 +42,21 @@ export function MobileNav({ ctaButtons, starCounter }: MobileNavProps) {
 						exit={{ opacity: 0, height: 0 }}
 						transition={{ duration: 0.2 }}
 					>
-						<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-6">
-							<MobileSection
-								title="Product"
-								links={PRODUCT_LINKS}
-								onNavigate={close}
-							/>
-							<MobileSection
-								title="Resources"
-								links={RESOURCE_LINKS}
-								onNavigate={close}
-							/>
-							<MobileSection links={TOP_LEVEL_LINKS} onNavigate={close} />
-							<div className="pt-4 border-t border-border flex flex-col gap-3">
-								{starCounter}
-								{ctaButtons}
+						<div className="px-8 lg:px-[30px]">
+							<div className="max-w-7xl mx-auto py-4 flex flex-col gap-6">
+								<MobileSection
+									title="Product"
+									links={PRODUCT_LINKS}
+									onNavigate={close}
+								/>
+								<MobileSection
+									title="Resources"
+									links={RESOURCE_LINKS}
+									onNavigate={close}
+								/>
+								<div className="pt-4 border-t border-border flex flex-col gap-3">
+									{ctaButtons}
+								</div>
 							</div>
 						</div>
 					</motion.div>

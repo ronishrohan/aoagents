@@ -8,7 +8,7 @@ export function GET() {
         {
           name: "ao-agents",
           description:
-            `${COMPANY.NAME} MCP server - orchestrate parallel coding agents, workspaces, automations, and tasks.`,
+            `${COMPANY.NAME} MCP server, orchestrate parallel coding agents, workspaces, automations, and tasks.`,
           url: MCP_SERVER_URL,
           transport: "streamable-http",
           serverCard: `${COMPANY.MARKETING_URL}/.well-known/mcp/server-card.json`,

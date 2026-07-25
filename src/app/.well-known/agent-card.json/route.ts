@@ -8,7 +8,7 @@ export function GET() {
     protocolVersion: "0.3.0",
     name: COMPANY.NAME,
     description:
-      `${COMPANY.NAME} orchestrates a fleet of coding agents in isolated Git worktrees. This service speaks the Model Context Protocol (JSON-RPC over Streamable HTTP) - connect an MCP client to the URL below to create workspaces, launch coding agents, schedule automations, and manage tasks.`,
+      `${COMPANY.NAME} orchestrates a fleet of coding agents in isolated Git worktrees. This service speaks the Model Context Protocol (JSON-RPC over Streamable HTTP), connect an MCP client to the URL below to create workspaces, launch coding agents, schedule automations, and manage tasks.`,
     url: MCP_SERVER_URL,
     preferredTransport: "JSONRPC",
     provider: {

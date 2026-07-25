@@ -53,7 +53,7 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "Adi",
     handle: "@addddiiie",
     content:
-      "I just hired a few software devs to work for free cc - @aoagents",
+      "I just hired a few software devs to work for free cc, @aoagents",
     avatar: "https://unavatar.io/x/addddiiie",
     url: "https://twitter.com/addddiiie/status/2037174432700211408",
   },
@@ -70,7 +70,7 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "Maria Garcia",
     handle: "@maria_garcia_dev",
     content:
-      "We run 50+ agents a day through AO. The feedback loop - CI fails go back to the agent that wrote the code - saves us hours every week.",
+      "We run 50+ agents a day through AO. The feedback loop, CI fails go back to the agent that wrote the code, saves us hours every week.",
     url: "#",
   },
   {

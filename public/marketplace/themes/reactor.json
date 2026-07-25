@@ -3,7 +3,7 @@
 	"name": "Reactor",
 	"type": "dark",
 	"author": "Baris Can Sayin",
-	"description": "A cooling pool inside a research reactor - Cherenkov-blue glow on graphite walls, uranium-yellow caution.",
+	"description": "A cooling pool inside a research reactor, Cherenkov-blue glow on graphite walls, uranium-yellow caution.",
 	"ui": {
 		"background": "#0d1216",
 		"foreground": "#cce6f5",

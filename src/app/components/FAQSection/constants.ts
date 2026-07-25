@@ -7,7 +7,7 @@ export const FAQ_ITEMS: FAQItem[] = [
   {
     question: "I already use an IDE like Cursor, is this for me?",
     answer:
-      "AO is designed to work with your existing tool. We natively support deep-linking to IDEs like Cursor so you can open your workspaces and files in your IDE. AO sits above individual tools - use whatever agent you like, AO keeps the workflow the same.",
+      "AO is designed to work with your existing tool. We natively support deep-linking to IDEs like Cursor so you can open your workspaces and files in your IDE. AO sits above individual tools, use whatever agent you like, AO keeps the workflow the same.",
   },
   {
     question: "Which AI coding agents are supported?",
@@ -22,7 +22,7 @@ export const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Is Agent Orchestrator free to use?",
     answer:
-      "Yes. AO is free and open source under Apache 2.0. It runs as a local daemon on your machine - your code never leaves localhost. No account, no cloud, no credit card required.",
+      "Yes. AO is free and open source under Apache 2.0. It runs as a local daemon on your machine, your code never leaves localhost. No account, no cloud, no credit card required.",
   },
   {
     question: "Can I use my own API keys?",

@@ -1,4 +1,4 @@
-import { COMPANY, NAV_ITEMS } from "@superset/shared/constants";
+import { COMPANY } from "@superset/shared/constants";
 
 export interface NavLink {
   href: string;
@@ -13,11 +13,6 @@ export const PRODUCT_LINKS: NavLink[] = [
     label: "Demo",
     description: "Watch AO run a fleet of agents end to end.",
   },
-  {
-    href: "/#features",
-    label: "Features",
-    description: "Delegate, watch, and close the loop.",
-  },
 ];
 
 export const RESOURCE_LINKS: NavLink[] = [
@@ -25,17 +20,6 @@ export const RESOURCE_LINKS: NavLink[] = [
     href: COMPANY.DOCS_URL,
     label: "Documentation",
     description: "Guides, references, and integrations.",
-    external: true,
-  },
-  {
-    href: "/changelog",
-    label: "Changelog",
-    description: "New releases and product updates.",
-  },
-  {
-    href: COMPANY.DISCORD_URL,
-    label: "Discord",
-    description: "Join the community.",
     external: true,
   },
   {

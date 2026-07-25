@@ -3,7 +3,7 @@
 	"name": "Hangar",
 	"type": "dark",
 	"author": "Baris Can Sayin",
-	"description": "Working warehouse at end of shift - concrete grey, safety orange, diesel yellow, exit-sign red. Functional, not decorative.",
+	"description": "Working warehouse at end of shift, concrete grey, safety orange, diesel yellow, exit-sign red. Functional, not decorative.",
 	"ui": {
 		"background": "#1c1d1f",
 		"foreground": "#e8e6df",

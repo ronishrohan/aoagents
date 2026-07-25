@@ -12,7 +12,6 @@ import {
 
 import { CTAButtons } from "./components/CTAButtons";
 import { Footer } from "./components/Footer";
-import { GitHubStarCounter } from "./components/GitHubStarCounter";
 import { Header } from "./components/Header";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -86,10 +85,8 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "32x32" },
-      { url: "/favicon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   manifest: "/manifest.json",
 };
@@ -112,10 +109,7 @@ export default function RootLayout({
       </head>
       <body className="overscroll-none font-sans antialiased">
         <Providers>
-          <Header
-            ctaButtons={<CTAButtons />}
-            starCounter={<GitHubStarCounter />}
-          />
+          <Header ctaButtons={<CTAButtons />} />
           {children}
           <Footer />
           <CookieConsent />

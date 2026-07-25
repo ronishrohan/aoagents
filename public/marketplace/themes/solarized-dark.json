@@ -3,7 +3,7 @@
 	"name": "Solarized Dark",
 	"type": "dark",
 	"author": "Ethan Schoonover (port: Baris Can Sayin)",
-	"description": "Precision colors engineered for legibility - dark variant. Same accents as Solarized Light; only base tones flip.",
+	"description": "Precision colors engineered for legibility, dark variant. Same accents as Solarized Light; only base tones flip.",
 	"ui": {
 		"background": "#002b36",
 		"foreground": "#93a1a1",

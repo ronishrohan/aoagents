@@ -42,7 +42,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 			href={testimonial.url}
 			target="_blank"
 			rel="noopener noreferrer"
-			className="block p-4 bg-card border border-border hover:border-muted-foreground/50 transition-colors"
+			className="block h-full min-h-[220px] border-r border-b border-border bg-card p-5 hover:bg-muted/60 transition-colors"
 		>
 			<div className="flex items-start gap-3">
 				<Avatar src={testimonial.avatar} name={testimonial.author} />
@@ -83,9 +83,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 }
 
 export function WallOfLoveSection() {
-	const leftColumn = TESTIMONIALS.filter((_, i) => i % 3 === 0);
-	const middleColumn = TESTIMONIALS.filter((_, i) => i % 3 === 1);
-	const rightColumn = TESTIMONIALS.filter((_, i) => i % 3 === 2);
+	const testimonials = TESTIMONIALS.slice(0, 9);
 
 	return (
 		<section className="relative py-24">
@@ -95,34 +93,14 @@ export function WallOfLoveSection() {
 						In the wild
 					</h2>
 					<p className="mt-3 text-base text-muted-foreground">
-						Real posts from builders, researchers, and early users - pulled straight from X.
+						Real posts from builders, researchers, and early users, pulled straight from X.
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					<div className="flex flex-col gap-4">
-						{leftColumn.map((testimonial) => (
-							<div key={testimonial.id}>
-								<TestimonialCard testimonial={testimonial} />
-							</div>
-						))}
-					</div>
-
-					<div className="flex flex-col gap-4">
-						{middleColumn.map((testimonial) => (
-							<div key={testimonial.id}>
-								<TestimonialCard testimonial={testimonial} />
-							</div>
-						))}
-					</div>
-
-					<div className="flex flex-col gap-4 md:col-span-2 lg:col-span-1">
-						{rightColumn.map((testimonial) => (
-							<div key={testimonial.id}>
-								<TestimonialCard testimonial={testimonial} />
-							</div>
-						))}
-					</div>
+				<div className="grid grid-cols-1 md:grid-cols-3 auto-rows-fr border-l border-t border-border">
+					{testimonials.map((testimonial) => (
+						<TestimonialCard key={testimonial.id} testimonial={testimonial} />
+					))}
 				</div>
 			</div>
 		</section>

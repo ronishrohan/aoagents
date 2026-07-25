@@ -31,6 +31,7 @@ export function TabBar({ activeDemo }: TabBarProps) {
 						alt="Claude"
 						width={12}
 						height={12}
+						style={{ width: "auto", height: 12 }}
 					/>
 				)}
 				<span>{isSetup ? "setup" : "claude"}</span>
@@ -60,7 +61,13 @@ export function TabBar({ activeDemo }: TabBarProps) {
 						delay: activeDemo === "Use Any Agents" ? tab.delay : 0,
 					}}
 				>
-					<Image src={tab.src} alt={tab.alt} width={12} height={12} />
+					<Image
+						src={tab.src}
+						alt={tab.alt}
+						width={12}
+						height={12}
+						style={{ width: "auto", height: 12 }}
+					/>
 					<span>{tab.label}</span>
 					<LuX className="size-3 text-muted-foreground/30" />
 				</motion.div>

@@ -3,7 +3,7 @@
 	"name": "Tokyo Night",
 	"type": "dark",
 	"author": "Enkia (port: Baris Can Sayin)",
-	"description": "A dark theme inspired by Tokyo at night - neon over deep navy, with cyan, magenta, and lavender highlights.",
+	"description": "A dark theme inspired by Tokyo at night, neon over deep navy, with cyan, magenta, and lavender highlights.",
 	"ui": {
 		"background": "#1a1b26",
 		"foreground": "#c0caf5",

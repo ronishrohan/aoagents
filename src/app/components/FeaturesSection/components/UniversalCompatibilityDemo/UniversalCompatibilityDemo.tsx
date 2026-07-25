@@ -73,6 +73,7 @@ export function UniversalCompatibilityDemo() {
 								width={agent.size}
 								height={agent.size}
 								className="object-contain"
+								style={{ width: "auto", height: agent.size }}
 							/>
 						</div>
 						<span className="text-sm text-white/80">{agent.name}</span>

@@ -3,14 +3,19 @@
 import { COMPANY } from "@superset/shared/constants";
 
 const AGENT_LOGOS = [
-  { name: "claude-code", label: "Claude Code", src: "/docs/logos/claude-code.svg" },
-  { name: "codex", label: "Codex", src: "/docs/logos/codex.svg" },
-  { name: "opencode", label: "OpenCode", src: "/docs/logos/opencode.svg" },
-  { name: "cursor", label: "Cursor", src: "/docs/logos/cursor.svg" },
-  { name: "aider", label: "Aider", src: "/docs/logos/aider.png" },
-  { name: "gemini", label: "Gemini", src: "/app-icons/gemini.svg" },
-  { name: "copilot", label: "Copilot", src: "/app-icons/copilot-white.svg" },
+  { name: "claude-code", label: "Claude Code", src: "/app-icons/coverage-claude-code.svg" },
+  { name: "codex", label: "Codex", src: "/app-icons/coverage-codex.svg" },
+  { name: "opencode", label: "OpenCode", src: "/app-icons/coverage-opencode.svg" },
+  { name: "cursor", label: "Cursor", src: "/app-icons/coverage-cursor.svg" },
+  { name: "aider", label: "Aider", src: "/app-icons/coverage-aider.png" },
+  { name: "gemini", label: "Gemini", src: "/app-icons/coverage-gemini.svg" },
+  { name: "copilot", label: "Copilot", src: "/app-icons/coverage-copilot.svg" },
   { name: "vibe", label: "Vibe", src: "/app-icons/vibe.svg" },
+];
+
+const AGENT_LOGO_ROWS = [
+  AGENT_LOGOS.slice(0, 4),
+  AGENT_LOGOS.slice(4, 8),
 ];
 
 export function TrustedBySection() {
@@ -29,22 +34,28 @@ export function TrustedBySection() {
           AO keeps the workflow the same. 23 harnesses, per-project agent choice.
         </p>
 
-        {/* Agent logo grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-          {AGENT_LOGOS.map((agent) => (
+        <div className="max-w-3xl mx-auto overflow-hidden rounded-xl border border-border bg-card divide-y divide-border">
+          {AGENT_LOGO_ROWS.map((row) => (
             <div
-              key={agent.name}
-              className="flex items-center justify-center gap-2.5 h-14 rounded-xl border border-border bg-card px-4 hover:border-muted-foreground/30 transition-colors"
+              key={row.map((agent) => agent.name).join("-")}
+              className="grid grid-cols-4 divide-x divide-border"
             >
-              <img
-                src={agent.src}
-                alt={agent.label}
-                className="h-6 w-6 object-contain"
-                loading="lazy"
-              />
-              <span className="text-sm font-medium text-muted-foreground">
-                {agent.label}
-              </span>
+              {row.map((agent) => (
+                <div
+                  key={agent.name}
+                  className="flex h-14 items-center justify-center gap-2.5 px-4 hover:bg-muted/60"
+                >
+                  <img
+                    src={agent.src}
+                    alt={agent.label}
+                    className="h-6 w-6 object-contain"
+                    loading="lazy"
+                  />
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {agent.label}
+                  </span>
+                </div>
+              ))}
             </div>
           ))}
         </div>

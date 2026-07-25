@@ -3,7 +3,7 @@
 	"name": "Ferro",
 	"type": "dark",
 	"author": "Baris Can Sayin",
-	"description": "A blacksmith's forge at first light. Cold dark steel meets hot orange embers - the metal hasn't lost its memory of fire.",
+	"description": "A blacksmith's forge at first light. Cold dark steel meets hot orange embers, the metal hasn't lost its memory of fire.",
 	"ui": {
 		"background": "#15181c",
 		"foreground": "#dcd4c8",
