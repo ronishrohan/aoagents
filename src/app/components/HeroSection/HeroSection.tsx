@@ -1,17 +1,12 @@
 "use client";
 
 import { COMPANY, HERO_SUBHEADLINE, TAGLINE } from "@superset/shared/constants";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { DownloadButton } from "../DownloadButton";
 import { ProductDemo } from "./components/ProductDemo";
 
 const INSTALL_COMMAND = "brew install agentwrapper/tap/agent-orchestrator";
-
-function getGitHubApiUrl() {
-  const match = COMPANY.GITHUB_URL.match(/github\.com\/([^/]+\/[^/]+)/);
-  return match ? `https://api.github.com/repos/${match[1]}` : null;
-}
 
 function formatStarCount(count: number) {
   if (count >= 1000) {
@@ -21,35 +16,17 @@ function formatStarCount(count: number) {
   return count.toString();
 }
 
-export function HeroSection() {
-  const [stars, setStars] = useState<number | null>(null);
+interface HeroSectionProps {
+  initialStars: number | null;
+}
+
+export function HeroSection({ initialStars }: HeroSectionProps) {
   const [copiedCommand, setCopiedCommand] = useState(false);
 
-  useEffect(() => {
-    const apiUrl = getGitHubApiUrl();
-    if (!apiUrl) return;
-
-    const controller = new AbortController();
-
-    fetch(apiUrl, {
-      headers: { Accept: "application/vnd.github.v3+json" },
-      signal: controller.signal,
-    })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data: { stargazers_count?: number } | null) => {
-        if (typeof data?.stargazers_count === "number") {
-          setStars(data.stargazers_count);
-        }
-      })
-      .catch(() => {
-        // Keep the fallback label if the public GitHub API is unavailable.
-      });
-
-    return () => controller.abort();
-  }, []);
-
   const githubButtonLabel =
-    stars === null ? "Stars on GitHub" : `${formatStarCount(stars)} Stars on GitHub`;
+    initialStars === null
+      ? "Stars on GitHub"
+      : `${formatStarCount(initialStars)} Stars on GitHub`;
 
   const copyInstallCommand = async () => {
     if (!navigator.clipboard) return;

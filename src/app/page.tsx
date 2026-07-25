@@ -31,13 +31,45 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+interface GitHubRepoResponse {
+  stargazers_count?: number;
+}
+
+function getGitHubApiUrl() {
+  const match = COMPANY.GITHUB_URL.match(/github\.com\/([^/]+\/[^/]+)/);
+  return match ? `https://api.github.com/repos/${match[1]}` : null;
+}
+
+async function getGitHubStars(): Promise<number | null> {
+  const apiUrl = getGitHubApiUrl();
+  if (!apiUrl) return null;
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: { Accept: "application/vnd.github.v3+json" },
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) return null;
+
+    const data = (await response.json()) as GitHubRepoResponse;
+    return typeof data.stargazers_count === "number"
+      ? data.stargazers_count
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function Home() {
+  const stars = await getGitHubStars();
+
   return (
     <main className="flex flex-col bg-background">
       <FAQPageJsonLd items={FAQ_ITEMS} />
       <HomeWebPageJsonLd />
       <OrganizationJsonLd />
-      <HeroSection />
+      <HeroSection initialStars={stars} />
       <TrustedBySection />
       <FeaturesSection />
       <WallOfLoveSection />
