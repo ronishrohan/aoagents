@@ -121,6 +121,133 @@
 	}
 }
 
+.agent-perimeter-logo {
+	width: clamp(4rem, 10.5vw, 10.5rem);
+	height: clamp(4rem, 10.5vw, 10.5rem);
+}
+
+.github-star-particle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 0.7rem;
+	width: 0.7rem;
+	color: var(--foreground);
+	opacity: 0;
+	filter: drop-shadow(0 1px 0 var(--background));
+}
+
+.github-star-trigger:hover .github-star-particle--center,
+.github-star-trigger:focus-within .github-star-particle--center {
+	animation: github-star-pop-center 720ms both;
+}
+
+.github-star-trigger:hover .github-star-particle--left,
+.github-star-trigger:focus-within .github-star-particle--left {
+	animation: github-star-pop-left 720ms both;
+}
+
+.github-star-trigger:hover .github-star-particle--right,
+.github-star-trigger:focus-within .github-star-particle--right {
+	animation: github-star-pop-right 720ms both;
+}
+
+@keyframes github-star-pop-center {
+	0% {
+		opacity: 0;
+		transform: translate(-50%, -45%) scale(0.3);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	10% {
+		opacity: 0.95;
+	}
+	24% {
+		opacity: 0.88;
+		transform: translate(-50%, -180%) scale(0.72);
+		animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	62% {
+		opacity: 0.48;
+		transform: translate(-50%, -440%) scale(1);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	74% {
+		opacity: 0.28;
+		transform: translate(-50%, -455%) scale(1);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(-50%, -500%) scale(0.78);
+	}
+}
+
+@keyframes github-star-pop-left {
+	0% {
+		opacity: 0;
+		transform: translate(-50%, -45%) scale(0.3);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	10% {
+		opacity: 0.95;
+	}
+	24% {
+		opacity: 0.88;
+		transform: translate(-50%, -180%) scale(0.72);
+		animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	62% {
+		opacity: 0.48;
+		transform: translate(calc(-50% - 26px), -350%) scale(0.9);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	74% {
+		opacity: 0.28;
+		transform: translate(calc(-50% - 28px), -365%) scale(0.9);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(calc(-50% - 34px), -410%) scale(0.7);
+	}
+}
+
+@keyframes github-star-pop-right {
+	0% {
+		opacity: 0;
+		transform: translate(-50%, -45%) scale(0.3);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	10% {
+		opacity: 0.95;
+	}
+	24% {
+		opacity: 0.88;
+		transform: translate(-50%, -180%) scale(0.72);
+		animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	62% {
+		opacity: 0.48;
+		transform: translate(calc(-50% + 26px), -350%) scale(0.9);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	74% {
+		opacity: 0.28;
+		transform: translate(calc(-50% + 28px), -365%) scale(0.9);
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(calc(-50% + 34px), -410%) scale(0.7);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.github-star-trigger .github-star-particle {
+		animation: none;
+	}
+}
+
 /* Blog prose styles */
 .prose {
 	--tw-prose-body: rgb(255 255 255 / 0.7);

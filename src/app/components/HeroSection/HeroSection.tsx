@@ -2,7 +2,7 @@
 
 import { COMPANY, HERO_SUBHEADLINE, TAGLINE } from "@superset/shared/constants";
 import { useEffect, useState } from "react";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaStar } from "react-icons/fa";
 import { DownloadButton } from "../DownloadButton";
 import { ProductDemo } from "./components/ProductDemo";
 
@@ -78,15 +78,25 @@ export function HeroSection() {
 
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-6 sm:mt-8">
               <DownloadButton />
-              <button
-                type="button"
-                className="px-4 py-2.5 sm:px-6 sm:py-3 rounded-2xl text-sm sm:text-base tracking-[0.5px] font-normal bg-background border border-border text-foreground hover:bg-muted transition-colors flex items-center gap-2"
-                onClick={() => window.open(COMPANY.GITHUB_URL, "_blank")}
-                aria-label={githubButtonLabel}
-              >
-                {githubButtonLabel}
-                <FaGithub className="size-4" />
-              </button>
+              <div className="github-star-trigger group relative isolate">
+                <span
+                  className="pointer-events-none absolute inset-0 z-0"
+                  aria-hidden="true"
+                >
+                  <FaStar className="github-star-particle github-star-particle--left" />
+                  <FaStar className="github-star-particle github-star-particle--center" />
+                  <FaStar className="github-star-particle github-star-particle--right" />
+                </span>
+                <button
+                  type="button"
+                  className="relative z-10 flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 text-sm font-normal tracking-[0.5px] text-foreground transition-[color,background-color,transform] duration-200 hover:bg-muted active:scale-[0.98] sm:px-6 sm:py-3 sm:text-base"
+                  onClick={() => window.open(COMPANY.GITHUB_URL, "_blank")}
+                  aria-label={githubButtonLabel}
+                >
+                  {githubButtonLabel}
+                  <FaGithub className="size-4" />
+                </button>
+              </div>
             </div>
 
             <button
