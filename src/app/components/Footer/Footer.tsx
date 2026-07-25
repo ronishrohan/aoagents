@@ -4,23 +4,19 @@ import { COMPANY } from "@superset/shared/constants";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { FooterParticleTagline } from "./FooterParticleTagline";
 
 export function Footer() {
   const pathname = usePathname();
   if (pathname === "/download") return null;
 
   return (
-    <footer className="bg-card">
-      <div className="px-8 lg:px-[30px]">
+    <footer className="relative overflow-hidden bg-[oklch(0.125_0.005_107)]">
+      <FooterParticleTagline />
+      <div className="relative z-10 px-8 lg:px-[30px]">
         <div className="max-w-7xl mx-auto py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:items-start">
-          <div className="flex flex-col gap-5">
-            <p className="select-none font-sans text-5xl font-medium leading-none tracking-[-1.5px] text-foreground sm:text-6xl">
-              <span className="block">Spawn Agents</span>
-              <span className="block">Step Away</span>
-              <span className="block">Ship Faster</span>
-            </p>
-          </div>
+          <div className="h-[250px] w-full sm:h-[300px]" aria-hidden="true" />
 
           <div className="grid overflow-hidden rounded-2xl border border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0 divide-y divide-border">
             <FooterColumn
