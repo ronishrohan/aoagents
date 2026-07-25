@@ -28,7 +28,7 @@ export function VideoSection() {
 	return (
 		<section id="see-it" className="relative py-24 px-8 lg:px-[30px]">
 			<div className="mx-auto max-w-7xl">
-				<div className="mx-auto max-w-3xl text-center">
+				<div className="max-w-3xl text-left">
 					<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground">
 						See it in action
 					</h2>
