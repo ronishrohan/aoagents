@@ -1,13 +1,16 @@
 "use client";
 
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { Terminal as XTerm } from "@xterm/xterm";
 
 export type { ActiveDemo } from "./types";
 
 type BoardColumnId = "working" | "action" | "pending" | "merge";
 type CardTone = "default" | "review" | "blocked" | "ready";
 type ActivityState = "running" | "passed" | "failed" | "waiting";
+type TrackId = "landing" | "deploy" | "stars" | "icons" | "footer";
+type ViewMode = "board" | "orchestrator";
 
 interface PreviewCard {
 	activity: string;
@@ -36,8 +39,33 @@ interface PreviewColumn {
 	title: string;
 }
 
+interface TrackItem {
+	id: TrackId;
+	label: string;
+	summary: string;
+}
+
 const repoName = "AgentWrapper/agent-orchestrator";
 const repoAvatar = "https://github.com/AgentWrapper.png?size=64";
+
+const previewTokenStyle = {
+	"--preview-background": "oklch(0.153 0.006 107.1)",
+	"--preview-foreground": "oklch(0.988 0.003 106.5)",
+	"--preview-card": "oklch(0.228 0.013 107.4)",
+	"--preview-card-foreground": "oklch(0.988 0.003 106.5)",
+	"--preview-primary": "oklch(0.93 0.007 106.5)",
+	"--preview-primary-foreground": "oklch(0.228 0.013 107.4)",
+	"--preview-muted": "oklch(0.286 0.016 107.4)",
+	"--preview-muted-foreground": "oklch(0.737 0.021 106.9)",
+	"--preview-accent": "oklch(0.286 0.016 107.4)",
+	"--preview-border": "oklch(1 0 0 / 10%)",
+	"--preview-input": "oklch(1 0 0 / 15%)",
+	"--preview-ring": "oklch(0.58 0.031 107.3)",
+	"--preview-sidebar": "oklch(0.228 0.013 107.4)",
+	"--preview-sidebar-foreground": "oklch(0.988 0.003 106.5)",
+	"--preview-sidebar-accent": "oklch(0.286 0.016 107.4)",
+	"--preview-sidebar-border": "oklch(1 0 0 / 10%)",
+} as CSSProperties;
 
 const columns = [
 	{
@@ -182,12 +210,32 @@ const columns = [
 	},
 ] satisfies PreviewColumn[];
 
-const projectItems = [
-	{ label: "Landing preview polish", active: true },
-	{ label: "Vercel deploy config", active: false },
-	{ label: "Preload stars and layout metrics", active: false },
-	{ label: "Harness icon cleanup", active: false },
-	{ label: "Footer and video section QA", active: false },
+const projectItems: TrackItem[] = [
+	{
+		id: "landing",
+		label: "Landing preview polish",
+		summary: "Refresh the hero board, topbar, and landing sections without losing the AO product language.",
+	},
+	{
+		id: "deploy",
+		label: "Vercel deploy config",
+		summary: "Keep framework detection and deploy payloads boring so every preview goes live cleanly.",
+	},
+	{
+		id: "stars",
+		label: "Preload stars and layout metrics",
+		summary: "Move remote counts into server-rendered data so hydration does not shift the hero controls.",
+	},
+	{
+		id: "icons",
+		label: "Harness icon cleanup",
+		summary: "Replace placeholder logos with real harness marks and keep the compatibility showcase readable.",
+	},
+	{
+		id: "footer",
+		label: "Footer and video section QA",
+		summary: "Verify footer grids, demo video placement, and section order across the landing page.",
+	},
 ];
 
 const incomingCards: StaticPreviewCard[] = [
@@ -533,46 +581,66 @@ function SettingsIcon({ className = "" }: { className?: string }) {
 	);
 }
 
-function WindowTitlebar({ mergedCount, runningCount, waitingCount }: { mergedCount: number; runningCount: number; waitingCount: number }) {
+function WindowTitlebar({
+	mergedCount,
+	onNewTask,
+	onViewChange,
+	runningCount,
+	viewMode,
+	waitingCount,
+}: {
+	mergedCount: number;
+	onNewTask: () => void;
+	onViewChange: (mode: ViewMode) => void;
+	runningCount: number;
+	viewMode: ViewMode;
+	waitingCount: number;
+}) {
 	return (
-		<div className="flex h-10 shrink-0 items-center border-b border-[#2a2d36] bg-[#111111] pl-3 pr-1.5">
-			<div className="flex items-center gap-2">
+		<div className="flex h-10 shrink-0 items-center border-b border-[var(--preview-border)] bg-[var(--preview-background)] pl-3 pr-1.5">
+			<div className="relative z-50 flex items-center gap-2">
 				<span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
 				<span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
 				<span className="h-3 w-3 rounded-full bg-[#28c840]" />
 			</div>
 			<div className="ml-5 flex min-w-0 items-center gap-2">
-				<span className="truncate text-[12px] font-bold tracking-[0.5px] text-[#9ca3af]">
+				<span className="truncate text-[12px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
 					{repoName}
 				</span>
-				<span className="rounded border border-[#2a2d36] px-1.5 py-0.5 font-mono text-[10px] text-[#6b7280]">
+				<span className="rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70">
 					{mergedCount} PRs merged
 				</span>
-				<span className="rounded border border-[#2a2d36] px-1.5 py-0.5 font-mono text-[10px] text-[#6b7280]">
+				<span className="rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70">
 					{runningCount} agents running
 				</span>
-				<span className="rounded border border-[#2a2d36] px-1.5 py-0.5 font-mono text-[10px] text-[#6b7280]">
+				<span className="rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70">
 					{waitingCount} waiting
 				</span>
 			</div>
 			<div className="ml-auto flex items-center gap-1.5">
 				<button
 					type="button"
-					className="inline-flex h-[28px] items-center gap-2 rounded-[6px] border border-[#374151] px-3 text-[12px] text-[#d1d5db]"
+					onClick={() => onViewChange(viewMode === "orchestrator" ? "board" : "orchestrator")}
+					className={`inline-flex h-[28px] items-center gap-2 rounded-[6px] border px-3 text-[12px] font-semibold transition-[background-color,border-color,color,transform] active:scale-[0.96] ${
+						viewMode === "orchestrator"
+							? "border-[var(--preview-ring)] bg-[var(--preview-muted)] text-[var(--preview-foreground)]"
+							: "border-[var(--preview-border)] text-[var(--preview-muted-foreground)] hover:bg-[var(--preview-muted)]"
+					}`}
 				>
 					<BeakerIcon className="h-4 w-4" />
 					Orchestrator
 				</button>
 				<button
 					type="button"
-					className="inline-flex h-[28px] items-center gap-2 rounded-[8px] bg-[#3b82f6] px-3 text-[12px] text-white"
+					onClick={onNewTask}
+					className="inline-flex h-[28px] items-center gap-2 rounded-[8px] bg-[var(--preview-primary)] px-3 text-[12px] font-semibold text-[var(--preview-primary-foreground)] transition-transform active:scale-[0.96]"
 				>
 					<PlusIcon className="h-4 w-4" />
 					New task
 				</button>
 				<button
 					type="button"
-					className="grid h-[28px] w-[28px] place-items-center rounded-[6px] border border-[#2a2d36] text-[#8b949e]"
+					className="grid h-[28px] w-[28px] place-items-center rounded-[6px] border border-[var(--preview-border)] text-[var(--preview-muted-foreground)] transition-transform active:scale-[0.96]"
 					aria-label="Notifications"
 				>
 					<BellIcon className="h-5 w-5" />
@@ -582,9 +650,15 @@ function WindowTitlebar({ mergedCount, runningCount, waitingCount }: { mergedCou
 	);
 }
 
-function Sidebar() {
+function Sidebar({
+	onSelectTrack,
+	selectedTrackId,
+}: {
+	onSelectTrack: (trackId: TrackId) => void;
+	selectedTrackId: TrackId;
+}) {
 	return (
-		<aside className="flex w-[178px] shrink-0 flex-col border-r border-[#242424] bg-[#0c0c0c] text-[#7d8590]">
+		<aside className="flex w-[178px] shrink-0 flex-col border-r border-[var(--preview-sidebar-border)] bg-[var(--preview-sidebar)] text-[var(--preview-muted-foreground)]">
 			<div className="flex h-[36px] items-center gap-2 px-3">
 				<img
 					src="/ao-logo.svg"
@@ -592,21 +666,21 @@ function Sidebar() {
 					width={18}
 					height={18}
 					aria-hidden="true"
-					className="h-[18px] w-[18px] brightness-0 invert"
+					className="h-[18px] w-[18px]"
 					draggable="false"
 				/>
-				<div className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-[-0.2px] text-white">
+				<div className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-[-0.5px] text-[var(--preview-sidebar-foreground)]">
 					AO
 				</div>
-				<PanelIcon className="h-3.5 w-3.5 shrink-0 text-[#7d8590]" />
+				<PanelIcon className="h-3.5 w-3.5 shrink-0 text-[var(--preview-muted-foreground)]" />
 			</div>
 
 			<div className="px-3 pt-2">
-				<div className="flex h-[18px] items-center gap-1.5 text-[9px] text-[#6b7280]">
+				<div className="flex h-[18px] items-center gap-1.5 text-[9px] text-[var(--preview-muted-foreground)]/70">
 					<SearchIcon className="h-3 w-3" />
 					<span>Search</span>
 				</div>
-				<div className="mt-2 flex h-[18px] items-center gap-1.5 text-[9px] text-[#6b7280]">
+				<div className="mt-2 flex h-[18px] items-center gap-1.5 text-[9px] text-[var(--preview-muted-foreground)]/70">
 					<PinIcon className="h-3 w-3" />
 					<span>Pinned</span>
 				</div>
@@ -614,17 +688,17 @@ function Sidebar() {
 
 			<div className="mt-6 space-y-4 px-2.5">
 				<div>
-					<div className="mb-2 flex items-center justify-between px-0.5 text-[9px] font-bold tracking-[0.5px] text-[#6b7280]">
+					<div className="mb-2 flex items-center justify-between px-0.5 text-[9px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]/70">
 						<span>Workspaces</span>
 						<span className="text-[13px] font-normal">+</span>
 					</div>
 				</div>
 				<div>
-					<div className="mb-2 flex items-center justify-between px-0.5 text-[9px] font-bold tracking-[0.5px] text-[#6b7280]">
+					<div className="mb-2 flex items-center justify-between px-0.5 text-[9px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]/70">
 						<span>Projects</span>
 						<span className="text-[13px] font-normal">+</span>
 					</div>
-					<div className="flex h-[18px] items-center gap-1.5 text-[10px] text-[#d1d5db]">
+					<div className="flex h-[18px] items-center gap-1.5 text-[10px] text-[var(--preview-foreground)]">
 						<img
 							src={repoAvatar}
 							alt=""
@@ -635,26 +709,30 @@ function Sidebar() {
 							draggable="false"
 						/>
 						<span className="min-w-0 flex-1 truncate">{repoName}</span>
-						<GridIcon className="h-3.5 w-3.5 text-[#7d8590]" />
-						<BranchIcon className="h-3.5 w-3.5 text-[#7d8590]" />
+						<GridIcon className="h-3.5 w-3.5 text-[var(--preview-muted-foreground)]" />
+						<BranchIcon className="h-3.5 w-3.5 text-[var(--preview-muted-foreground)]" />
 					</div>
-					<div className="mt-1 space-y-1 pl-3">
+					<div className="mt-0.5 space-y-0 pl-3">
 						{projectItems.map((item) => (
-							<div
-								key={item.label}
-								className={`h-[22px] truncate rounded-[4px] px-2 py-1 text-[10px] ${
-									item.active ? "bg-[#3a3a3a] text-[#f3f4f6]" : "text-[#8b949e]"
+							<button
+								type="button"
+								key={item.id}
+								onClick={() => onSelectTrack(item.id)}
+								className={`h-[22px] w-full truncate rounded-[4px] px-2 py-1 text-left text-[10px] leading-[14px] transition-colors ${
+									item.id === selectedTrackId
+										? "bg-[var(--preview-sidebar-accent)] text-[var(--preview-sidebar-foreground)]"
+										: "text-[var(--preview-muted-foreground)] hover:bg-[var(--preview-sidebar-accent)] hover:text-[var(--preview-sidebar-foreground)]"
 								}`}
 							>
 								{item.label}
-							</div>
+							</button>
 						))}
 					</div>
 				</div>
 			</div>
 
-			<div className="mt-auto border-t border-[#202020] px-3 py-3">
-				<div className="flex items-center gap-1.5 text-[11px] text-[#8b949e]">
+			<div className="mt-auto border-t border-[var(--preview-sidebar-border)] px-3 py-3">
+				<div className="flex items-center gap-1.5 text-[11px] text-[var(--preview-muted-foreground)]">
 					<SettingsIcon className="h-3.5 w-3.5" />
 					<span>Settings</span>
 				</div>
@@ -663,23 +741,43 @@ function Sidebar() {
 	);
 }
 
-function Topbar({ mergedCount }: { mergedCount: number }) {
+function Topbar({
+	mergedCount,
+	selectedTrack,
+	viewMode,
+}: {
+	mergedCount: number;
+	selectedTrack: TrackItem;
+	viewMode: ViewMode;
+}) {
 	return (
-		<div className="flex h-[53px] shrink-0 items-center border-b border-[#30363d] bg-[#181818] px-4">
+		<div className="flex h-[53px] shrink-0 items-center border-b border-[var(--preview-border)] bg-[var(--preview-card)] px-4">
 			<div className="min-w-0">
-				<div className="truncate text-[12px] font-bold tracking-[0.5px] text-[#8b949e]">
-					Board, landing preview polish
+				<div className="truncate text-[12px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
+					{viewMode === "orchestrator" ? "Orchestrator" : "Board"}, {selectedTrack.label.toLowerCase()}
+				</div>
+				<div className="mt-0.5 max-w-[420px] truncate text-[10px] text-[var(--preview-muted-foreground)]/75">
+					{selectedTrack.summary}
 				</div>
 			</div>
-			<div className="ml-auto grid grid-cols-2 gap-2 font-mono text-[10px] tracking-[0.5px] text-[#6b7280]">
-				<span className="rounded border border-[#2a2d36] px-2 py-1">CI 2 failed</span>
-				<span className="rounded border border-[#2a2d36] px-2 py-1">{mergedCount} Merged</span>
+			<div className="ml-auto grid grid-cols-2 gap-2 font-mono text-[10px] tabular-nums tracking-[0.5px] text-[var(--preview-muted-foreground)]/75">
+				<span className="rounded border border-[var(--preview-border)] px-2 py-1">CI 2 failed</span>
+				<span className="rounded border border-[var(--preview-border)] px-2 py-1">{mergedCount} Merged</span>
 			</div>
 		</div>
 	);
 }
 
-function BoardCard({ card, onMerge }: { card: PreviewCard; onMerge: (id: string) => void }) {
+function BoardCard({
+	card,
+	onMerge,
+	onOpen,
+}: {
+	card: PreviewCard;
+	onMerge: (id: string) => void;
+	onOpen: (card: PreviewCard) => void;
+}) {
+	const [canPressScale, setCanPressScale] = useState(true);
 	const prMatch = card.pr.match(/PR\s+#(\d+)/i);
 	const prStatus =
 		card.tone === "ready"
@@ -702,6 +800,23 @@ function BoardCard({ card, onMerge }: { card: PreviewCard; onMerge: (id: string)
 		<motion.div
 			layout
 			layoutId={`${card.id}-${card.column}`}
+			role="button"
+			tabIndex={0}
+			aria-label={`Open ${card.title} agent status`}
+			onClick={() => onOpen(card)}
+			onPointerDownCapture={(event) => {
+				const target = event.target as HTMLElement;
+				setCanPressScale(!target.closest("button"));
+			}}
+			onPointerLeave={() => setCanPressScale(true)}
+			onPointerUp={() => setCanPressScale(true)}
+			onKeyDown={(event) => {
+				if (event.key === "Enter" || event.key === " ") {
+					event.preventDefault();
+					onOpen(card);
+				}
+			}}
+			whileTap={canPressScale ? { scale: 0.96 } : undefined}
 			initial={{ opacity: 0, scale: 0.98, y: -8 }}
 			animate={
 				card.merging
@@ -714,7 +829,7 @@ function BoardCard({ card, onMerge }: { card: PreviewCard; onMerge: (id: string)
 				ease: [0.22, 1, 0.36, 1],
 				layout: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
 			}}
-			className="rounded-[8px] border border-[#2a2d36] bg-[#181818] p-[15px] shadow-[0_1px_1px_rgba(0,0,0,0.05)]"
+			className="cursor-pointer rounded-[8px] border border-[var(--preview-border)] bg-[var(--preview-card)] p-[15px] shadow-[0_1px_1px_rgba(0,0,0,0.05)] outline-none transition-colors hover:bg-[var(--preview-muted)] focus-visible:ring-2 focus-visible:ring-[var(--preview-ring)]"
 		>
 			<div className="flex items-start gap-2">
 				<img
@@ -726,17 +841,17 @@ function BoardCard({ card, onMerge }: { card: PreviewCard; onMerge: (id: string)
 					className="mt-0.5 h-4 w-4 shrink-0"
 					draggable="false"
 				/>
-				<div className="min-w-0 pr-2 text-[12px] font-medium leading-[16px] text-[#e5e7eb]">
+				<div className="min-w-0 pr-2 text-[12px] font-medium leading-[16px] text-[var(--preview-card-foreground)]">
 					{card.title}
 				</div>
 			</div>
-			<div className="mt-3 text-[10px] leading-4 text-[#6b7280]">
+			<div className="mt-3 text-[10px] leading-4 text-[var(--preview-muted-foreground)]">
 				<div className="flex items-center gap-1.5 py-1.5">
 					<BranchIcon className="h-3 w-3 shrink-0" />
 					<span className="truncate font-mono">{card.branch}</span>
 				</div>
 				{prMatch ? (
-					<div className={`flex items-center gap-1.5 border-t border-[#2a2d36] py-1.5 ${prClass}`}>
+					<div className={`flex items-center gap-1.5 border-t border-[var(--preview-border)] py-1.5 ${prClass}`}>
 						<GitHubIcon className="h-3 w-3 shrink-0" />
 						<span className="font-mono">#{prMatch[1]}</span>
 						<span className="truncate">{prStatus}</span>
@@ -747,12 +862,15 @@ function BoardCard({ card, onMerge }: { card: PreviewCard; onMerge: (id: string)
 				<div className="mt-3 flex items-center justify-between gap-2">
 					<button
 						type="button"
-						onClick={() => onMerge(card.id)}
-						className="inline-flex h-7 items-center justify-center rounded-[6px] bg-[#3b82f6] px-2.5 text-[10px] font-medium text-white"
+						onClick={(event) => {
+							event.stopPropagation();
+							onMerge(card.id);
+						}}
+						className="inline-flex h-7 items-center justify-center rounded-[6px] bg-[var(--preview-primary)] px-2.5 text-[10px] font-semibold text-[var(--preview-primary-foreground)] transition-transform active:scale-[0.96]"
 					>
 						Review and merge PR
 					</button>
-					<span className="shrink-0 text-[10px] text-[#6b7280]">{card.time}</span>
+					<span className="shrink-0 text-[10px] text-[var(--preview-muted-foreground)]">{card.time}</span>
 				</div>
 			) : (
 				<div className="mt-3 flex items-center justify-between">
@@ -778,7 +896,7 @@ function BoardCard({ card, onMerge }: { card: PreviewCard; onMerge: (id: string)
 						)}
 						{card.activity}
 					</span>
-					<span className="text-[10px] text-[#6b7280]">{card.time}</span>
+					<span className="text-[10px] text-[var(--preview-muted-foreground)]">{card.time}</span>
 				</div>
 			)}
 		</motion.div>
@@ -789,23 +907,30 @@ function BoardColumn({
 	cards,
 	count,
 	onMerge,
+	onOpen,
 	title,
 }: {
 	cards: PreviewCard[];
 	count: number;
 	onMerge: (id: string) => void;
+	onOpen: (card: PreviewCard) => void;
 	title: string;
 }) {
 	return (
-		<section className="flex min-h-0 min-w-0 flex-col border-r border-[#242424] last:border-r-0">
-			<div className="flex items-center border-b border-[#2a2d36] px-3 py-2.5">
-				<div className="text-[11px] font-semibold tracking-[0.6px] text-[#9ca3af]">{title}</div>
-				<div className="ml-2 text-[10px] text-[#6b7280]">{count}</div>
+		<section className="flex min-h-0 min-w-0 flex-col border-r border-[var(--preview-border)] last:border-r-0">
+			<div className="flex items-center border-b border-[var(--preview-border)] px-3 py-2.5">
+				<div className="text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">{title}</div>
+				<div className="ml-2 text-[10px] tabular-nums text-[var(--preview-muted-foreground)]">{count}</div>
 			</div>
 			<div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-2 scrollbar-hide">
 				<AnimatePresence initial={false}>
 					{cards.map((card) => (
-						<BoardCard key={`${card.id}-${card.column}`} card={card} onMerge={onMerge} />
+						<BoardCard
+							key={`${card.id}-${card.column}`}
+							card={card}
+							onMerge={onMerge}
+							onOpen={onOpen}
+						/>
 					))}
 				</AnimatePresence>
 			</div>
@@ -813,10 +938,326 @@ function BoardColumn({
 	);
 }
 
+function CloseIcon({ className = "" }: { className?: string }) {
+	return (
+		<svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+			<path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
+		</svg>
+	);
+}
+
+function AgentTerminalDisplay({ card }: { card: PreviewCard }) {
+	const terminalElementRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const element = terminalElementRef.current;
+		if (!element) return;
+
+		element.replaceChildren();
+		const cols = 72;
+		const block = (text: string) => `\x1b[48;2;17;24;39m\x1b[37m ${text.padEnd(cols - 2, " ")} \x1b[0m\r\n`;
+
+		const terminal = new XTerm({
+			allowProposedApi: false,
+			cols,
+			convertEol: true,
+			cursorBlink: false,
+			disableStdin: true,
+			fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+			fontSize: 11,
+			lineHeight: 1.35,
+			rows: 15,
+			scrollback: 0,
+			theme: {
+				background: "oklch(0.153 0.006 107.1)",
+				black: "oklch(0.153 0.006 107.1)",
+				blue: "#93c5fd",
+				brightBlack: "#6b7280",
+				brightBlue: "#bfdbfe",
+				brightGreen: "#bbf7d0",
+				brightYellow: "#fde68a",
+				cursor: "#d1d5db",
+				foreground: "oklch(0.737 0.021 106.9)",
+				green: "#86efac",
+				red: "#fca5a5",
+				white: "#f9fafb",
+				yellow: "#fcd34d",
+			},
+		});
+
+		terminal.open(element);
+		terminal.write(block(card.title.toLowerCase()));
+		terminal.write("I'll inspect the branch, check the current agent output, and keep\r\n");
+		terminal.write("the fix scoped to this worktree.\r\n\r\n");
+		terminal.write("\x1b[36m⏺ Read\x1b[0m(src/app/components/HeroSection/...)\r\n");
+		terminal.write("  \x1b[2m⎿  opened preview component and current task state\x1b[0m\r\n\r\n");
+		terminal.write(`\x1b[36m⏺ Bash\x1b[0m(${card.checks})\r\n`);
+		terminal.write(`  \x1b[2m⎿  ${card.activity.toLowerCase()} · ${card.files.toLowerCase()}\x1b[0m\r\n\r\n`);
+		terminal.write("\x1b[36m⏺ Edit\x1b[0m(agent status surface)\r\n");
+		terminal.write(
+			card.tone === "ready"
+				? "  \x1b[32m⎿  ready to summarize and merge\x1b[0m\r\n\r\n"
+				: "  \x1b[33m⎿  waiting on final agent output\x1b[0m\r\n\r\n",
+		);
+		terminal.write("checking whether this needs a patch, a review reply, or a merge\r\n");
+		const spinnerFrames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+		let spinnerIndex = 0;
+		const renderSpinner = () => {
+			const frame = spinnerFrames[spinnerIndex % spinnerFrames.length];
+			spinnerIndex += 1;
+			terminal.write(`\r\x1b[2K\x1b[35m${frame}\x1b[0m Thinking`);
+			terminal.scrollToBottom();
+		};
+		renderSpinner();
+		terminal.scrollToBottom();
+		const spinnerInterval = window.setInterval(renderSpinner, 140);
+
+		return () => {
+			window.clearInterval(spinnerInterval);
+			terminal.dispose();
+		};
+	}, [card]);
+
+	return (
+		<div className="mt-4 overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] p-3">
+			<div
+				ref={terminalElementRef}
+				className="pointer-events-none h-[236px] select-none overflow-hidden [font-feature-settings:'liga'_0] [&_.xterm-viewport]:!overflow-hidden"
+			/>
+		</div>
+	);
+}
+
+function AgentMetaItem({
+	children,
+	Icon,
+}: {
+	children: ReactNode;
+	Icon: (props: { className?: string }) => ReactNode;
+}) {
+	return (
+		<div className="flex min-w-0 items-center gap-2 rounded-lg border border-[var(--preview-border)] bg-[var(--preview-muted)] px-3 py-2 text-[10px] text-[var(--preview-muted-foreground)]">
+			<Icon className="h-3.5 w-3.5 shrink-0 text-[var(--preview-foreground)]" />
+			<span className="truncate">{children}</span>
+		</div>
+	);
+}
+
+function AgentStatusModal({
+	card,
+	onClose,
+}: {
+	card: PreviewCard | null;
+	onClose: () => void;
+}) {
+	return (
+		<AnimatePresence initial={false}>
+			{card ? (
+				<>
+					<motion.div
+						key="agent-status-titlebar-blur"
+						className="absolute inset-x-0 bottom-auto top-0 z-40 h-10 bg-black/35 backdrop-blur-[1px]"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
+						onClick={onClose}
+					/>
+					<motion.div
+						key="agent-status-overlay"
+						className="absolute inset-x-0 bottom-0 top-10 z-40 grid place-items-center bg-black/35 p-8 backdrop-blur-[1px]"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
+						onClick={onClose}
+					>
+					<motion.div
+						role="dialog"
+						aria-modal="true"
+						aria-label={`${card.title} agent status`}
+						className="w-[520px] max-w-full rounded-2xl border border-[var(--preview-border)] bg-[var(--preview-card)] p-4 text-[var(--preview-card-foreground)] shadow-[0_24px_80px_rgba(0,0,0,0.45)] outline-none"
+						initial={{ opacity: 0, scale: 0.99 }}
+						animate={{ opacity: 1, scale: 1 }}
+						exit={{ opacity: 0, scale: 0.99 }}
+						transition={{ duration: 0.16, ease: [0.2, 0, 0, 1] }}
+						onClick={(event) => event.stopPropagation()}
+					>
+						<div className="flex items-start gap-3">
+							<img
+								src={card.icon}
+								alt=""
+								width={24}
+								height={24}
+								aria-hidden="true"
+								className="mt-0.5 h-6 w-6"
+								draggable="false"
+							/>
+							<div className="min-w-0 flex-1">
+								<div className="text-[13px] font-semibold tracking-[-0.5px] text-[var(--preview-foreground)]">
+									{card.agent} worker
+								</div>
+								<div className="mt-1 truncate font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]">
+									{card.branch} · {card.pr}
+								</div>
+							</div>
+							<button
+								type="button"
+								onClick={onClose}
+								className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-[var(--preview-muted-foreground)] transition-[background-color,color,transform] hover:bg-[var(--preview-muted)] hover:text-[var(--preview-foreground)] active:scale-[0.96]"
+								aria-label="Close agent status"
+							>
+								<CloseIcon className="h-4 w-4" />
+							</button>
+						</div>
+
+						<div className="mt-4 grid grid-cols-2 gap-2">
+							<AgentMetaItem Icon={BranchIcon}>{card.branch}</AgentMetaItem>
+							<AgentMetaItem Icon={FileIcon}>{card.files} changed</AgentMetaItem>
+							<AgentMetaItem Icon={GitHubIcon}>{card.pr}</AgentMetaItem>
+							<AgentMetaItem
+								Icon={
+									card.activityState === "passed"
+										? CheckIcon
+										: card.activityState === "failed"
+											? WarningIcon
+											: WaitingIcon
+								}
+							>
+								{card.activity}
+							</AgentMetaItem>
+						</div>
+
+						<AgentTerminalDisplay card={card} />
+					</motion.div>
+				</motion.div>
+				</>
+			) : null}
+		</AnimatePresence>
+	);
+}
+
+function OrchestratorView({
+	cards,
+	onNewTask,
+	selectedTrack,
+}: {
+	cards: PreviewCard[];
+	onNewTask: () => void;
+	selectedTrack: TrackItem;
+}) {
+	const activeCards = cards.filter((card) => !card.merging);
+	const workingCards = activeCards.filter((card) => card.column === "working");
+	const waitingCards = activeCards.filter((card) => card.column === "action");
+	const readyCards = activeCards.filter((card) => card.column === "merge");
+	const leadWorker = workingCards[0] ?? activeCards[0];
+
+	return (
+		<div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1.05fr)_minmax(260px,0.65fr)] overflow-hidden bg-[var(--preview-background)]">
+			<section className="flex min-h-0 flex-col border-r border-[var(--preview-border)] p-4">
+				<div className="flex items-center gap-3">
+					<div className="grid h-9 w-9 place-items-center rounded-[10px] border border-[var(--preview-border)] bg-[var(--preview-muted)] text-[var(--preview-foreground)]">
+						<BeakerIcon className="h-5 w-5" />
+					</div>
+					<div className="min-w-0">
+						<div className="text-[13px] font-semibold tracking-[-0.5px] text-[var(--preview-foreground)]">
+							AO Orchestrator
+						</div>
+						<div className="truncate text-[10px] text-[var(--preview-muted-foreground)]">
+							Planning workers for {selectedTrack.label.toLowerCase()}
+						</div>
+					</div>
+				</div>
+
+				<div className="mt-5 rounded-[10px] border border-[var(--preview-border)] bg-[var(--preview-card)] p-4">
+					<div className="mb-3 text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
+						Current plan
+					</div>
+					<div className="space-y-3 text-[12px] leading-5 text-[var(--preview-foreground)]">
+						<div className="flex gap-2">
+							<CheckIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#86efac]" />
+							<span>Read project context and split the track into worker-sized branches.</span>
+						</div>
+						<div className="flex gap-2">
+							<span className="mt-1 h-3 w-3 shrink-0 animate-spin rounded-full border border-[#4b5563] border-t-[#d1d5db]" />
+							<span>
+								Keep {workingCards.length || 1} worker{workingCards.length === 1 ? "" : "s"} moving while routing blockers back here.
+							</span>
+						</div>
+						<div className="flex gap-2">
+							<WaitingIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#fcd34d]" />
+							<span>
+								Escalate {waitingCards.length} decision{waitingCards.length === 1 ? "" : "s"} and queue {readyCards.length} approved PR{readyCards.length === 1 ? "" : "s"} for merge.
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div className="mt-4 min-h-0 flex-1 rounded-[10px] border border-[var(--preview-border)] bg-[var(--preview-card)] p-4 font-mono text-[11px] leading-5 text-[var(--preview-muted-foreground)]">
+					<div className="text-[var(--preview-muted-foreground)]">ao orchestrator</div>
+					<div className="mt-3 text-[var(--preview-foreground)]">
+						<span className="text-[#60a5fa]">track</span> {selectedTrack.id}
+					</div>
+					<div className="mt-2 text-[var(--preview-foreground)]">
+						<span className="text-[#60a5fa]">next</span>{" "}
+						{leadWorker ? `watch ${leadWorker.branch}` : "spawn first worker"}
+					</div>
+					<div className="mt-2 text-[var(--preview-muted-foreground)]">
+						Workers report back here when checks fail, reviews arrive, or a branch is ready to land.
+					</div>
+				</div>
+			</section>
+
+			<aside className="flex min-h-0 flex-col bg-[var(--preview-background)] p-4">
+				<div className="text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
+					Worker queue
+				</div>
+				<div className="mt-3 space-y-2 overflow-y-auto scrollbar-hide">
+					{activeCards.slice(0, 4).map((card) => (
+						<div key={card.id} className="rounded-[8px] border border-[var(--preview-border)] bg-[var(--preview-card)] p-3">
+							<div className="flex items-center gap-2">
+								<img
+									src={card.icon}
+									alt=""
+									width={14}
+									height={14}
+									aria-hidden="true"
+									className="h-3.5 w-3.5"
+									draggable="false"
+								/>
+								<div className="min-w-0 flex-1 truncate text-[11px] font-medium text-[var(--preview-card-foreground)]">
+									{card.title}
+								</div>
+							</div>
+							<div className="mt-2 truncate font-mono text-[10px] text-[var(--preview-muted-foreground)]">
+								{card.branch}
+							</div>
+						</div>
+					))}
+				</div>
+				<button
+					type="button"
+					onClick={onNewTask}
+					className="mt-4 inline-flex h-8 items-center justify-center gap-2 rounded-[8px] bg-[var(--preview-primary)] px-3 text-[12px] font-semibold text-[var(--preview-primary-foreground)] transition-transform active:scale-[0.96]"
+				>
+					<PlusIcon className="h-4 w-4" />
+					Spawn worker
+				</button>
+			</aside>
+		</div>
+	);
+}
+
 export function AppMockup() {
 	const [cards, setCards] = useState<PreviewCard[]>(createInitialCards);
 	const [mergedCount, setMergedCount] = useState(18);
+	const [boardVersion, setBoardVersion] = useState(0);
+	const [selectedTrackId, setSelectedTrackId] = useState<TrackId>("landing");
+	const [selectedCard, setSelectedCard] = useState<PreviewCard | null>(null);
+	const [viewMode, setViewMode] = useState<ViewMode>("board");
 	const incomingIndex = useRef(0);
+	const selectedTrack =
+		projectItems.find((item) => item.id === selectedTrackId) ?? projectItems[0];
 
 	const mergeCard = useCallback((id: string) => {
 		setCards((current) =>
@@ -829,6 +1270,46 @@ export function AppMockup() {
 		}, 520);
 	}, []);
 
+	const spawnRandomTask = useCallback(() => {
+		setViewMode("board");
+		setCards((current) => {
+			const existingTitles = new Set(current.map((card) => card.title));
+			const startIndex = Math.floor(Math.random() * incomingCards.length);
+			const templateOffset = incomingCards.findIndex((_, offset) => {
+				const candidate = incomingCards[(startIndex + offset) % incomingCards.length];
+				return candidate ? !existingTitles.has(candidate.title) : false;
+			});
+
+			if (templateOffset < 0) return current;
+
+			const templateIndex = (startIndex + templateOffset) % incomingCards.length;
+			const template = incomingCards[templateIndex];
+			if (!template) return current;
+
+			incomingIndex.current += 1;
+			return [
+				{
+					...template,
+					badge: "New task",
+					column: "working",
+					id: `manual-${Date.now()}-${incomingIndex.current}`,
+					time: "now",
+				},
+				...current,
+			];
+		});
+	}, []);
+
+	const selectTrack = useCallback((trackId: TrackId) => {
+		setSelectedTrackId(trackId);
+		setSelectedCard(null);
+		setViewMode("board");
+		setBoardVersion((current) => current + 1);
+		setCards(createInitialCards());
+	}, []);
+
+	const selectedCardId = selectedCard?.id ?? null;
+
 	useEffect(() => {
 		let timeoutId: number;
 
@@ -839,7 +1320,7 @@ export function AppMockup() {
 		const runStep = () => {
 			setCards((current) => {
 				const chosen = randomItem(
-					current.filter((card) => !card.merging),
+					current.filter((card) => !card.merging && card.id !== selectedCardId),
 				);
 
 				let next = current;
@@ -889,7 +1370,7 @@ export function AppMockup() {
 
 		scheduleNext();
 		return () => window.clearTimeout(timeoutId);
-	}, [mergeCard]);
+	}, [mergeCard, selectedCardId]);
 
 	const runningCount = cards.filter((card) => card.column === "working").length;
 	const waitingCount = cards.filter((card) => card.column === "action").length;
@@ -904,29 +1385,56 @@ export function AppMockup() {
 
 	return (
 		<div
-			className="relative w-full min-w-[1024px] overflow-hidden rounded-xl border border-[#30363d] bg-[#131313] font-sans shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75)]"
-			style={{ aspectRatio: "1024 / 615" }}
+			className="relative w-full min-w-[1024px] select-none overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans tracking-[-0.5px] text-[var(--preview-foreground)] antialiased shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75)] [&_.font-mono]:tracking-normal"
+			style={{ ...previewTokenStyle, aspectRatio: "1024 / 615" }}
 		>
 			<div className="flex h-full flex-col">
 				<WindowTitlebar
 					mergedCount={mergedCount}
+					onNewTask={spawnRandomTask}
+					onViewChange={setViewMode}
 					runningCount={runningCount}
+					viewMode={viewMode}
 					waitingCount={waitingCount}
 				/>
 				<div className="flex min-h-0 flex-1">
-					<Sidebar />
-					<div className="flex min-w-0 flex-1 flex-col bg-[#131313]">
-						<Topbar mergedCount={mergedCount} />
-						<LayoutGroup>
-							<div className="grid min-h-0 flex-1 grid-cols-4 overflow-hidden">
-								{boardColumns.map((column) => (
-									<BoardColumn key={column.title} {...column} onMerge={mergeCard} />
-								))}
-							</div>
-						</LayoutGroup>
+					<Sidebar
+						onSelectTrack={selectTrack}
+						selectedTrackId={selectedTrack.id}
+					/>
+					<div className="flex min-w-0 flex-1 flex-col bg-[var(--preview-background)]">
+						<Topbar
+							mergedCount={mergedCount}
+							selectedTrack={selectedTrack}
+							viewMode={viewMode}
+						/>
+						{viewMode === "orchestrator" ? (
+							<OrchestratorView
+								cards={cards}
+								onNewTask={spawnRandomTask}
+								selectedTrack={selectedTrack}
+							/>
+						) : (
+							<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
+								<div className="grid min-h-0 flex-1 grid-cols-4 overflow-hidden">
+									{boardColumns.map((column) => (
+										<BoardColumn
+											key={column.title}
+											{...column}
+											onMerge={mergeCard}
+											onOpen={setSelectedCard}
+										/>
+									))}
+								</div>
+							</LayoutGroup>
+						)}
 					</div>
 				</div>
 			</div>
+			<AgentStatusModal
+				card={selectedCard}
+				onClose={() => setSelectedCard(null)}
+			/>
 		</div>
 	);
 }

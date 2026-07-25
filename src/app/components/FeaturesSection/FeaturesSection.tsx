@@ -45,7 +45,7 @@ export function FeaturesSection() {
 										<span className="text-sm font-mono text-muted-foreground tracking-[0.5px]">
 											{feature.tag}
 										</span>
-										<h3 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-[0.5px] text-foreground">
+										<h3 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-[-0.5px] text-foreground">
 											{feature.title}
 										</h3>
 									</div>

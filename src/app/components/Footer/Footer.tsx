@@ -15,7 +15,7 @@ export function Footer() {
         <div className="max-w-7xl mx-auto py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:items-start">
           <div className="flex flex-col gap-5">
-            <p className="select-none font-sans text-5xl font-medium leading-none tracking-[-1.5px] text-foreground sm:text-6xl">
+            <p className="select-none font-sans text-5xl font-medium leading-none tracking-[-0.5px] text-foreground sm:text-6xl">
               <span className="block">Spawn Agents</span>
               <span className="block">Step Away</span>
               <span className="block">Ship Faster</span>
@@ -31,6 +31,7 @@ export function Footer() {
                 { href: `${COMPANY.DOCS_URL}/installation/`, label: "Install", external: true },
                 { href: `${COMPANY.DOCS_URL}/cli/`, label: "CLI", external: true },
                 { href: "/changelog", label: "Changelog" },
+                { href: "/design-partners", label: "Design Partners" },
               ]}
             />
 
@@ -67,7 +68,7 @@ interface FooterLink {
   external?: boolean;
 }
 
-const FOOTER_ROW_COUNT = 5;
+const FOOTER_ROW_COUNT = 6;
 
 function FooterColumn({
   title,

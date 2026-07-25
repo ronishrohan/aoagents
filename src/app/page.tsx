@@ -72,8 +72,8 @@ export default async function Home() {
       <HeroSection initialStars={stars} />
       <TrustedBySection />
       <FeaturesSection />
-      <WallOfLoveSection />
       <VideoSection />
+      <WallOfLoveSection />
       <FAQSection />
     </main>
   );

@@ -49,7 +49,7 @@ export function MainPanel({ activeDemo }: MainPanelProps) {
 						</div>
 
 						<div className="space-y-2.5 border-t border-border pt-4">
-							<div className="text-[10px] font-medium tracking-[0.5px] text-muted-foreground/65">
+							<div className="text-[10px] font-medium tracking-[-0.5px] text-muted-foreground/65">
 								MCP Servers
 							</div>
 							<div className="text-[11px] text-muted-foreground">

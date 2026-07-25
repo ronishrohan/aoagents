@@ -90,7 +90,7 @@ export function LeftSidebar({ activeDemo }: LeftSidebarProps) {
 			</div>
 
 			<div className="border-t border-border pb-1.5">
-				<div className="flex h-7 items-center gap-1.5 px-3 text-[10px] font-medium tracking-[0.5px] text-muted-foreground/65">
+				<div className="flex h-7 items-center gap-1.5 px-3 text-[10px] font-medium tracking-[-0.5px] text-muted-foreground/65">
 					<span className="font-mono normal-case text-muted-foreground/55">
 						⌥
 					</span>
@@ -161,7 +161,7 @@ function GroupHeader({
 }) {
 	const ChevronIcon = expanded ? LuChevronDown : LuChevronRight;
 	return (
-		<div className="flex h-6 items-center gap-1.5 px-3 text-[10px] font-medium tracking-[0.5px] text-muted-foreground/65">
+		<div className="flex h-6 items-center gap-1.5 px-3 text-[10px] font-medium tracking-[-0.5px] text-muted-foreground/65">
 			<ChevronIcon className="size-2.5 text-muted-foreground/45" />
 			<span className="truncate">{label}</span>
 			<span className="ml-auto font-mono tabular-nums text-muted-foreground/40">

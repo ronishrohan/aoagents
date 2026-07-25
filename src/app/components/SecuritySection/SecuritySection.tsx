@@ -49,7 +49,7 @@ export function SecuritySection() {
 						<h2 className="text-2xl sm:text-3xl font-mono tracking-[0.5px] text-foreground">
 							Private by default
 						</h2>
-						<h2 className="text-lg sm:text-xl font-light tracking-[0.5px] text-muted-foreground max-w-[700px]">
+						<h2 className="text-lg sm:text-xl font-light tracking-[-0.5px] text-muted-foreground max-w-[700px]">
 							Your code stays local by default, with explicit control over
 							connected services.
 						</h2>

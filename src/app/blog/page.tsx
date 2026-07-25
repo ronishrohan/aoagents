@@ -53,7 +53,7 @@ export default async function BlogPage() {
           <span className="text-sm font-mono text-muted-foreground tracking-[0.5px]">
             Blog
           </span>
-          <h1 className="text-3xl md:text-4xl font-medium tracking-[0.5px] text-foreground mt-4">
+          <h1 className="text-3xl md:text-4xl font-medium tracking-[-0.5px] text-foreground mt-4">
             News & Updates
           </h1>
           <p className="text-muted-foreground mt-3 max-w-lg">

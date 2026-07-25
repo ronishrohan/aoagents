@@ -10,7 +10,7 @@ export function AOLogo() {
         width={20}
         height={20}
         aria-hidden="true"
-        className="size-5 shrink-0 brightness-0 invert"
+        className="size-5 shrink-0"
       />
       <span>Agent Orchestrator</span>
     </span>

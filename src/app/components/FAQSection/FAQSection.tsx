@@ -16,7 +16,7 @@ function FAQAccordionItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border-b border-border">
+    <div>
       <button
         type="button"
         onClick={onToggle}
@@ -62,7 +62,7 @@ export function FAQSection() {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_1.5fr] gap-12 xl:gap-20">
           <div className="xl:sticky xl:top-24 xl:self-start">
-            <h2 className="text-3xl sm:text-4xl xl:text-5xl font-medium tracking-[0.5px] text-foreground leading-[1.1]">
+            <h2 className="text-3xl sm:text-4xl xl:text-5xl font-medium tracking-[-0.5px] text-foreground leading-[1.1]">
               Frequently
               <br />
               asked questions
@@ -70,7 +70,7 @@ export function FAQSection() {
           </div>
 
           <div>
-            <div className="w-full">
+            <div className="w-full divide-y divide-border">
               {FAQ_ITEMS.map((item, index) => (
                 <FAQAccordionItem
                   key={item.question}

@@ -185,7 +185,7 @@ export function ParallelExecutionDemo() {
 				<div className="w-56 border-r border-white/5 bg-[#1e1e1e]/50 overflow-hidden flex-shrink-0">
 					{/* In Progress Section */}
 					<div className="p-3">
-						<div className="text-[10px] text-white/40 font-medium tracking-[0.5px] mb-2">
+						<div className="text-[10px] text-white/40 font-medium tracking-[-0.5px] mb-2">
 							In Progress{" "}
 							<span className="text-white/30">{IN_PROGRESS_TASKS.length}</span>
 						</div>
@@ -215,7 +215,7 @@ export function ParallelExecutionDemo() {
 
 					{/* Ready for Review Section */}
 					<div className="p-3 pt-0">
-						<div className="text-[10px] text-white/40 font-medium tracking-[0.5px] mb-2">
+						<div className="text-[10px] text-white/40 font-medium tracking-[-0.5px] mb-2">
 							Ready for Review{" "}
 							<span className="text-white/30">{READY_FOR_REVIEW.length}</span>
 						</div>

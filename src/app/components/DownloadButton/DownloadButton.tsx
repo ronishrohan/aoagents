@@ -92,7 +92,7 @@ export function DownloadButton({
       : "px-3 sm:px-6 py-2 sm:py-3 text-sm sm:text-base";
   const label = getLabel(size, downloadPlatform);
 
-  const buttonClasses = `bg-foreground text-background ${sizeClasses} rounded-2xl tracking-[0.5px] font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap shrink-0 ${className}`;
+  const buttonClasses = `bg-foreground text-background ${sizeClasses} rounded-2xl tracking-[-0.5px] font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap shrink-0 ${className}`;
 
   const openLatestRelease = () => {
     track("download_clicked");

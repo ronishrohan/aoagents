@@ -42,7 +42,7 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
         <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-[30px]">
           <div className="flex flex-col items-center text-center">
             <div className="space-y-5 sm:space-y-7">
-              <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-normal tracking-[0.5px] leading-[0.98] text-foreground max-w-6xl mx-auto text-balance">
+              <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-normal tracking-[-0.5px] leading-[0.98] text-foreground max-w-6xl mx-auto text-balance">
                 {TAGLINE}
               </h1>
               <p
@@ -57,7 +57,7 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
               <DownloadButton />
               <button
                 type="button"
-                className="px-4 py-2.5 sm:px-6 sm:py-3 rounded-2xl text-sm sm:text-base tracking-[0.5px] font-normal bg-background border border-border text-foreground hover:bg-muted transition-colors flex items-center gap-2"
+                className="px-4 py-2.5 sm:px-6 sm:py-3 rounded-2xl text-sm sm:text-base tracking-[-0.5px] font-normal bg-background border border-border text-foreground hover:bg-muted transition-colors flex items-center gap-2"
                 onClick={() => window.open(COMPANY.GITHUB_URL, "_blank")}
                 aria-label={githubButtonLabel}
               >

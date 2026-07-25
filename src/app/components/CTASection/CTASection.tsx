@@ -6,7 +6,7 @@ export function CTASection() {
   return (
     <section className="relative py-32 px-8 lg:px-[30px]">
       <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-        <h2 className="text-3xl sm:text-4xl xl:text-5xl font-medium tracking-[0.5px] leading-[1.1] text-foreground mb-4">
+        <h2 className="text-3xl sm:text-4xl xl:text-5xl font-medium tracking-[-0.5px] leading-[1.1] text-foreground mb-4">
           Your agents are waiting.
         </h2>
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8">

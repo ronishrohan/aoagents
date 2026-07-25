@@ -47,7 +47,7 @@ export function ChangelogEntryLayout({
 							{formattedDate}
 						</time>
 
-						<h1 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-[0.5px] text-foreground mt-4 mb-4">
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-[-0.5px] text-foreground mt-4 mb-4">
 							{entry.title}
 						</h1>
 

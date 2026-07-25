@@ -46,7 +46,7 @@ export function WindowChrome({
 			<div className="ml-2 flex items-center gap-2">
 				<button
 					type="button"
-					className="flex h-6 items-center gap-1 border border-border bg-background px-2 text-[10px] font-medium tracking-[0.5px] text-foreground/85 hover:bg-foreground/[0.04]"
+					className="flex h-6 items-center gap-1 border border-border bg-background px-2 text-[10px] font-medium tracking-[-0.5px] text-foreground/85 hover:bg-foreground/[0.04]"
 				>
 					<LuExternalLink className="size-2.5 text-muted-foreground/65" />
 					<span>Open</span>

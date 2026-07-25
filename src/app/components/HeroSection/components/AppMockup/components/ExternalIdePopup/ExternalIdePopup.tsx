@@ -41,7 +41,7 @@ export function ExternalIdePopup({ activeDemo }: ExternalIdePopupProps) {
 
 			<div className="flex h-[calc(100%-32px)]">
 				<div className="w-[120px] border-r border-border bg-card p-3 text-[11px]">
-					<div className="mb-2 flex items-center gap-1.5 text-[10px] font-medium tracking-[0.5px] text-muted-foreground/55">
+					<div className="mb-2 flex items-center gap-1.5 text-[10px] font-medium tracking-[-0.5px] text-muted-foreground/55">
 						<LuFolder className={treeIconClassName} />
 						<span>src</span>
 					</div>

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@superset/ui/globals.css";
+@import "@xterm/xterm/css/xterm.css";
 
 /* ===== Dark theme color tokens ===== */
 /* These must be defined at :root so Tailwind v4 utilities
@@ -105,6 +106,16 @@
 	body {
 		font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 		font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+		letter-spacing: -0.5px;
+	}
+
+	code,
+	pre,
+	kbd,
+	samp,
+	.font-mono,
+	.font-serif {
+		letter-spacing: normal;
 	}
 
 	button:not(:disabled),

@@ -32,7 +32,7 @@ export function RightSidebar({ activeDemo }: RightSidebarProps) {
 			<div className="flex h-9 items-center justify-end border-b border-border px-3">
 				<button
 					type="button"
-					className="flex h-6 items-center gap-1.5 border border-border bg-background px-2 text-[10px] font-medium tracking-[0.5px] text-foreground/85 hover:bg-foreground/[0.04]"
+					className="flex h-6 items-center gap-1.5 border border-border bg-background px-2 text-[10px] font-medium tracking-[-0.5px] text-foreground/85 hover:bg-foreground/[0.04]"
 				>
 					<LuGitPullRequest className="size-2.5 text-brand-light" />
 					<span>PR</span>
