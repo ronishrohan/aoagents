@@ -1,6 +1,5 @@
 import { COMPANY } from "@superset/shared/constants";
 import type { Metadata } from "next";
-import { BlackHoleBG } from "@/app/components/BlackHoleBG/BlackHoleBG";
 
 const CONTACT_EMAIL = "prateek@untrivial.ai";
 const CAL_URL = "https://cal.com/agentwrapper/ao-design-partner";
@@ -113,17 +112,6 @@ export default function DesignPartnersPage() {
   return (
     <main className="bg-background text-foreground">
       <section className="relative overflow-hidden px-8 pb-20 pt-24 sm:pb-28 sm:pt-32 lg:px-[30px] lg:pt-36">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-screen opacity-70 [mask-image:linear-gradient(to_bottom,black_30%,transparent_100%)]">
-          <BlackHoleBG
-            speed={12}
-            lines={14}
-            particles={false}
-            glow={false}
-            strokeColor="rgba(255,255,255,0.72)"
-            canvasOpacity={0.1}
-            backgroundColor="transparent"
-          />
-        </div>
         <div className="relative mx-auto max-w-7xl">
           <div className="max-w-5xl">
             <SectionLabel>Design partners</SectionLabel>

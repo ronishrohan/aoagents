@@ -3,7 +3,6 @@
 import { COMPANY, HERO_SUBHEADLINE, TAGLINE } from "@superset/shared/constants";
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
-import { BlackHoleBG } from "@/app/components/BlackHoleBG/BlackHoleBG";
 import { DownloadButton } from "../DownloadButton";
 import { ProductDemo } from "./components/ProductDemo";
 
@@ -39,17 +38,6 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
 
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <BlackHoleBG
-          speed={18}
-          lines={12}
-          particles={false}
-          glow={false}
-          strokeColor="rgba(255,255,255,0.7)"
-          canvasOpacity={0.12}
-          backgroundColor="var(--background)"
-        />
-      </div>
       <div className="relative flex flex-col items-center overflow-hidden pt-24 pb-8 sm:pt-32 sm:pb-10 lg:pt-36 lg:pb-12">
         <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-[30px]">
           <div className="flex flex-col items-center text-center">

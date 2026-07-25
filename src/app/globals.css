@@ -62,9 +62,9 @@
 @source "../../packages/ui/src/**/*.{ts,tsx}";
 
 @theme {
-	--font-family-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-	--font-family-serif: Georgia, "Times New Roman", Times, serif;
-	--font-family-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+	--font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+	--font-serif: Georgia, "Times New Roman", Times, serif;
+	--font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
 }
 
 @theme inline {
@@ -103,6 +103,17 @@
 
 
 @layer base {
+	html,
+	body {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	html::-webkit-scrollbar,
+	body::-webkit-scrollbar {
+		display: none;
+	}
+
 	body {
 		font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 		font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -213,7 +224,7 @@
 	border-radius: 0.25rem;
 	font-size: 0.875em;
 	color: rgb(255 255 255 / 0.9);
-	font-family: var(--font-family-mono);
+	font-family: var(--font-mono);
 }
 
 .prose code::before,
@@ -228,7 +239,7 @@
 	padding: 1rem;
 	overflow-x: auto;
 	color: rgb(255 255 255 / 0.85);
-	font-family: var(--font-family-mono);
+	font-family: var(--font-mono);
 	font-size: 0.875rem;
 	line-height: 1.7;
 }
