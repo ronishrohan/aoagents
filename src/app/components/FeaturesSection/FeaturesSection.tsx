@@ -1,17 +1,17 @@
 "use client";
 
 import { FeatureDemo } from "./components/FeatureDemo";
-import { IsolationDemo } from "./components/IsolationDemo";
-import { OpenInDemo } from "./components/OpenInDemo";
-import { ParallelExecutionDemo } from "./components/ParallelExecutionDemo";
-import { UniversalCompatibilityDemo } from "./components/UniversalCompatibilityDemo";
+import { DelegationDemo } from "./components/DelegationDemo/DelegationDemo";
+import { FeedbackLoopDemo } from "./components/FeedbackLoopDemo/FeedbackLoopDemo";
+import { FleetBoardDemo } from "./components/FleetBoardDemo/FleetBoardDemo";
+import { HarnessCoverageDemo } from "./components/HarnessCoverageDemo/HarnessCoverageDemo";
 import { FEATURES } from "./constants";
 
 const DEMO_COMPONENTS = [
-	ParallelExecutionDemo,
-	UniversalCompatibilityDemo,
-	IsolationDemo,
-	OpenInDemo,
+	DelegationDemo,
+	FleetBoardDemo,
+	FeedbackLoopDemo,
+	HarnessCoverageDemo,
 ];
 
 const FEATURE_BACKGROUNDS = [
@@ -59,6 +59,7 @@ export function FeaturesSection() {
 								{/* Demo */}
 								<div className={`${isReversed ? "lg:order-1" : "lg:order-2"}`}>
 									<FeatureDemo
+										className={index === 3 ? "overflow-visible" : ""}
 										backgroundImage={
 											FEATURE_BACKGROUNDS[index % FEATURE_BACKGROUNDS.length]
 										}

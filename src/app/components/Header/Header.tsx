@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { MobileNav } from "./components/MobileNav";
 import { DesktopNav } from "./components/DesktopNav";
 import { AOLogo } from "./components/AOLogo";
@@ -13,9 +14,35 @@ interface HeaderProps {
 export function Header({ ctaButtons }: HeaderProps) {
   const pathname = usePathname();
   if (pathname === "/download") return null;
+  const hasTransparentHero =
+    pathname === "/" || pathname === "/design-partners";
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!hasTransparentHero) {
+      setHasScrolled(false);
+      return;
+    }
+
+    const updateScrollState = () => {
+      setHasScrolled(window.scrollY > 0);
+    };
+
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrollState);
+  }, [hasTransparentHero]);
 
   return (
-    <header className="sticky top-0 z-50 bg-background">
+    <header
+      className={
+        hasTransparentHero
+          ? `fixed inset-x-0 top-0 z-50 transition-colors ${
+              hasScrolled ? "bg-background" : "bg-transparent"
+            }`
+          : "sticky top-0 z-50 bg-background"
+      }
+    >
       <div className="px-8 lg:px-[30px]">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between h-14">

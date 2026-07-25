@@ -1,31 +1,18 @@
 "use client";
 
-import { AGENT_HARNESSES } from "@superset/shared/constants";
-import { Plus } from "lucide-react";
-
-const AGENT_LOGOS = [
-  { name: "claude-code", label: "Claude Code", src: "/app-icons/coverage-claude-code.svg" },
-  { name: "codex", label: "Codex", src: "/app-icons/coverage-codex.svg" },
-  { name: "opencode", label: "OpenCode", src: "/app-icons/coverage-opencode.svg" },
-  { name: "cursor", label: "Cursor", src: "/app-icons/coverage-cursor.svg" },
-  { name: "aider", label: "Aider", src: "/app-icons/coverage-aider.png" },
-  { name: "gemini", label: "Gemini", src: "/app-icons/coverage-gemini.svg" },
-  { name: "copilot", label: "Copilot", src: "/app-icons/coverage-copilot.svg" },
-];
-
-const MORE_AGENT_COUNT = AGENT_HARNESSES - AGENT_LOGOS.length;
-const AGENT_ITEMS = [
-  ...AGENT_LOGOS,
-  {
-    name: "more-agents",
-    label: `${MORE_AGENT_COUNT} others`,
-    src: null,
-  },
-];
-
-const AGENT_LOGO_ROWS = [
-  AGENT_ITEMS.slice(0, 4),
-  AGENT_ITEMS.slice(4, 8),
+const SUPPORTED_APP_ICONS = [
+  { name: "Claude", src: "/app-icons/claude.svg" },
+  { name: "Codex", src: "/app-icons/codex.svg" },
+  { name: "OpenCode", src: "/app-icons/opencode.svg" },
+  { name: "Cursor", src: "/app-icons/cursor.svg" },
+  { name: "Copilot", src: "/app-icons/copilot-white.svg" },
+  { name: "Gemini", src: "/app-icons/gemini.svg" },
+  { name: "Amp", src: "/app-icons/amp.svg" },
+  { name: "Mistral Vibe", src: "/app-icons/vibe.svg" },
+  { name: "Kimi Code", src: "/app-icons/kimi.svg" },
+  { name: "Pi Agent", src: "/app-icons/pi-white.svg" },
+  { name: "MastraCode", src: "/app-icons/mastracode-white.svg" },
+  { name: "JetBrains", src: "/app-icons/jetbrains.svg" },
 ];
 
 export function TrustedBySection() {
@@ -33,36 +20,19 @@ export function TrustedBySection() {
     <section className="py-16 sm:py-24 bg-background overflow-hidden">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="select-none text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground max-w-3xl mx-auto mb-12">
-          Use the agent you already trust.
+          Use the agents you already trust.
         </h2>
 
-        <div className="max-w-3xl mx-auto overflow-hidden rounded-xl border border-border bg-card divide-y divide-border">
-          {AGENT_LOGO_ROWS.map((row) => (
-            <div
-              key={row.map((agent) => agent.name).join("-")}
-              className="grid grid-cols-4 divide-x divide-border"
-            >
-              {row.map((agent) => (
-                <div
-                  key={agent.name}
-                  className="flex h-14 items-center justify-center gap-2.5 px-4 hover:bg-muted/60"
-                >
-                  {agent.src ? (
-                    <img
-                      src={agent.src}
-                      alt={agent.label}
-                      className="h-6 w-6 object-contain"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <Plus className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                  )}
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {agent.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+        <div className="mx-auto flex w-full max-w-6xl flex-row items-center justify-center gap-4 overflow-x-auto px-4 scrollbar-hide sm:gap-5">
+          {SUPPORTED_APP_ICONS.map((app) => (
+            <img
+              key={app.name}
+              src={app.src}
+              alt={app.name}
+              className="h-8 w-8 shrink-0 object-contain"
+              loading="lazy"
+              draggable="false"
+            />
           ))}
         </div>
       </div>

@@ -107,7 +107,7 @@ export default function RootLayout({
         <SoftwareApplicationJsonLd />
         <WebsiteJsonLd />
       </head>
-      <body className="overscroll-none font-sans antialiased">
+      <body className="relative overscroll-none font-sans antialiased">
         <Providers>
           <Header ctaButtons={<CTAButtons />} />
           {children}

@@ -1,5 +1,6 @@
 import { COMPANY } from "@superset/shared/constants";
 import type { Metadata } from "next";
+import { BlackHoleBG } from "@/app/components/BlackHoleBG/BlackHoleBG";
 
 const CONTACT_EMAIL = "prateek@untrivial.ai";
 const CAL_URL = "https://cal.com/agentwrapper/ao-design-partner";
@@ -101,7 +102,7 @@ function TextLink({
   return (
     <a
       href={href}
-      className="inline-flex items-center gap-2 text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-muted-foreground"
+      className="inline-flex min-h-11 items-center gap-2 text-foreground underline decoration-border underline-offset-4 transition-colors duration-150 hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
     >
       {children}
     </a>
@@ -112,7 +113,18 @@ export default function DesignPartnersPage() {
   return (
     <main className="bg-background text-foreground">
       <section className="relative overflow-hidden px-8 pb-20 pt-24 sm:pb-28 sm:pt-32 lg:px-[30px] lg:pt-36">
-        <div className="mx-auto max-w-7xl">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-screen opacity-70 [mask-image:linear-gradient(to_bottom,black_30%,transparent_100%)]">
+          <BlackHoleBG
+            speed={12}
+            lines={14}
+            particles={false}
+            glow={false}
+            strokeColor="rgba(255,255,255,0.72)"
+            canvasOpacity={0.1}
+            backgroundColor="transparent"
+          />
+        </div>
+        <div className="relative mx-auto max-w-7xl">
           <div className="max-w-5xl">
             <SectionLabel>Design partners</SectionLabel>
             <h1 className="mt-5 max-w-5xl text-balance font-sans text-4xl font-normal leading-[0.98] tracking-[-0.5px] text-foreground sm:text-5xl md:text-6xl lg:text-[4.75rem]">
@@ -128,23 +140,26 @@ export default function DesignPartnersPage() {
                 href={CAL_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-2xl bg-foreground px-6 py-3 text-base font-semibold tracking-[-0.5px] text-background transition-opacity hover:opacity-90"
+                className="inline-flex min-h-11 items-center gap-2 rounded-3xl bg-foreground px-6 py-3 text-base font-semibold tracking-[-0.5px] text-background transition-[transform,opacity] duration-150 hover:opacity-90 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background motion-reduce:transition-none"
               >
                 Book a discovery call
                 <ArrowIcon className="h-4 w-4" />
               </a>
               <a
                 href={MAILTO_HREF}
-                className="inline-flex items-center gap-2 rounded-2xl border border-border bg-background px-6 py-3 text-base font-normal tracking-[-0.5px] text-foreground transition-colors hover:bg-muted"
+                className="inline-flex min-h-11 items-center gap-2 rounded-3xl border border-border bg-background px-6 py-3 text-base font-normal tracking-[-0.5px] text-foreground transition-[transform,background-color] duration-150 hover:bg-muted active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background motion-reduce:transition-none"
               >
                 Email us
               </a>
             </div>
           </div>
 
-          <div className="mt-16 grid overflow-hidden rounded-2xl border border-border bg-card md:grid-cols-3 md:divide-x md:divide-border">
+          <div className="mt-16 grid gap-8 md:grid-cols-3">
             {outcomes.map((item) => (
-              <div key={item.title} className="border-b border-border p-6 last:border-b-0 md:border-b-0">
+              <div
+                key={item.title}
+                className="py-6"
+              >
                 <h2 className="text-xl font-medium tracking-[-0.5px] text-foreground">
                   {item.title}
                 </h2>
@@ -157,7 +172,7 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-20 lg:px-[30px]">
+      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div>
             <SectionLabel>Why now</SectionLabel>
@@ -181,7 +196,7 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-20 lg:px-[30px]">
+      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
             <SectionLabel>Program shape</SectionLabel>
@@ -190,26 +205,26 @@ export default function DesignPartnersPage() {
             </h2>
           </div>
 
-          <div className="mt-12 grid overflow-hidden rounded-2xl border border-border bg-card lg:grid-cols-2 lg:divide-x lg:divide-border">
+          <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
-              <p className="border-b border-border px-5 py-4 text-base font-medium tracking-[-0.5px] text-foreground">
+              <p className="py-4 text-base font-medium tracking-[-0.5px] text-foreground">
                 You get
               </p>
-              <ul className="divide-y divide-border">
+              <ul>
                 {partnerGets.map((item) => (
-                  <li key={item} className="px-5 py-4 text-sm leading-7 text-muted-foreground">
+                  <li key={item} className="py-4 text-sm leading-7 text-muted-foreground">
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <p className="border-b border-border px-5 py-4 text-base font-medium tracking-[-0.5px] text-foreground">
+              <p className="py-4 text-base font-medium tracking-[-0.5px] text-foreground">
                 We ask
               </p>
-              <ul className="divide-y divide-border">
+              <ul>
                 {partnerAsks.map((item) => (
-                  <li key={item} className="px-5 py-4 text-sm leading-7 text-muted-foreground">
+                  <li key={item} className="py-4 text-sm leading-7 text-muted-foreground">
                     {item}
                   </li>
                 ))}
@@ -219,14 +234,14 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-20 lg:px-[30px]">
+      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
         <div className="mx-auto max-w-7xl">
           <SectionLabel>Roadmap</SectionLabel>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="mt-8 grid gap-8 md:grid-cols-3">
             {phases.map((phase) => (
               <article
                 key={phase.title}
-                className="rounded-2xl border border-border bg-card p-6"
+                className="py-6"
               >
                 <p className="text-sm font-medium tracking-[-0.5px] text-muted-foreground">
                   {phase.label}
@@ -243,8 +258,8 @@ export default function DesignPartnersPage() {
         </div>
       </section>
 
-      <section className="border-t border-border px-8 py-20 lg:px-[30px]">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 rounded-2xl border border-border bg-card p-6 sm:p-8 lg:flex-row lg:items-center">
+      <section className="border-t border-border px-8 py-16 sm:py-20 lg:px-[30px]">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 py-8 lg:flex-row lg:items-center">
           <div>
             <SectionLabel>Start with your real repos</SectionLabel>
             <h2 className="mt-4 max-w-3xl text-3xl font-medium leading-tight tracking-[-0.5px] text-foreground sm:text-4xl">
@@ -256,7 +271,7 @@ export default function DesignPartnersPage() {
               href={CAL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-6 py-3 text-base font-semibold tracking-[-0.5px] text-background transition-opacity hover:opacity-90"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-3xl bg-foreground px-6 py-3 text-base font-semibold tracking-[-0.5px] text-background transition-[transform,opacity] duration-150 hover:opacity-90 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background motion-reduce:transition-none"
             >
               Book a call
             </a>

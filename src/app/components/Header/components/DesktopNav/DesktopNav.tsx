@@ -9,7 +9,7 @@ import {
 } from "../../constants";
 
 const linkClass = cn(
-  "h-8 bg-transparent px-3 text-sm font-normal text-muted-foreground hover:bg-accent/40 hover:text-foreground focus:bg-accent/40 focus:text-foreground inline-flex items-center gap-2 whitespace-nowrap rounded-2xl font-medium transition-colors focus-visible:outline-none no-underline",
+  "h-8 border border-transparent bg-transparent px-3 text-sm font-normal text-muted-foreground hover:border-white hover:bg-accent/40 hover:text-foreground focus:bg-accent/40 focus:text-foreground inline-flex items-center gap-2 whitespace-nowrap rounded-2xl font-medium transition-colors focus-visible:outline-none no-underline",
 );
 
 export function DesktopNav() {
