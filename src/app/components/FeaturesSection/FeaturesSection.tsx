@@ -59,7 +59,6 @@ export function FeaturesSection() {
 								{/* Demo */}
 								<div className={`${isReversed ? "xl:order-1" : "xl:order-2"}`}>
 									<FeatureDemo
-										className={index === 3 ? "overflow-visible" : ""}
 										backgroundImage={
 											FEATURE_BACKGROUNDS[index % FEATURE_BACKGROUNDS.length]
 										}

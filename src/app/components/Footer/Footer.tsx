@@ -16,7 +16,14 @@ export function Footer() {
         <div className="max-w-7xl mx-auto py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.75fr)] lg:items-start">
           <div className="flex flex-col gap-5">
-            <TileWordmark />
+            <div className="text-left text-4xl font-semibold leading-[1.08] tracking-[-0.04em] text-foreground sm:hidden">
+              <p>Spawn Agents</p>
+              <p>Step Away</p>
+              <p>Ship Faster</p>
+            </div>
+            <div className="hidden sm:block">
+              <TileWordmark />
+            </div>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-3">

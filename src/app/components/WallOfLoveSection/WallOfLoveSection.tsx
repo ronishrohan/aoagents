@@ -33,7 +33,13 @@ function Avatar({ src, name }: { src?: string; name: string }) {
 	);
 }
 
-function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
+function TestimonialCard({
+	testimonial,
+	className = "",
+}: {
+	testimonial: Testimonial;
+	className?: string;
+}) {
 	const [showOriginal, setShowOriginal] = useState(false);
 	const hasTranslation = !!testimonial.originalContent;
 
@@ -42,7 +48,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 			href={testimonial.url}
 			target="_blank"
 			rel="noopener noreferrer"
-			className="block h-full min-h-[220px] bg-card p-5 hover:bg-muted/60 transition-colors"
+			className={`mb-px w-full break-inside-avoid bg-card p-5 align-top hover:bg-muted/60 transition-colors md:mb-0 md:block md:h-[220px] ${className}`}
 		>
 			<div className="flex items-start gap-3">
 				<Avatar src={testimonial.avatar} name={testimonial.author} />
@@ -83,7 +89,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 }
 
 export function WallOfLoveSection() {
-	const testimonials = TESTIMONIALS.slice(0, 9);
+	const testimonials = TESTIMONIALS.slice(0, 6);
 
 	return (
 		<section className="relative px-4 py-16 sm:px-8 sm:py-20 lg:px-[30px] lg:py-24">
@@ -97,9 +103,13 @@ export function WallOfLoveSection() {
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 gap-px bg-border md:grid-cols-3 auto-rows-fr">
-					{testimonials.map((testimonial) => (
-						<TestimonialCard key={testimonial.id} testimonial={testimonial} />
+				<div className="columns-1 gap-px bg-border md:grid md:grid-cols-3">
+					{testimonials.map((testimonial, index) => (
+						<TestimonialCard
+							key={testimonial.id}
+							testimonial={testimonial}
+							className={index >= 4 ? "hidden md:block" : "inline-block"}
+						/>
 					))}
 				</div>
 			</div>

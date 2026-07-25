@@ -74,7 +74,6 @@ export function HarnessCoverageDemo() {
 
 	return (
 		<FeaturePreviewShell
-			className="overflow-visible"
 			title="Project settings · Agents"
 			trailing={
 				<span className="font-mono text-[9px] text-[var(--preview-muted-foreground)]">
@@ -140,7 +139,7 @@ export function HarnessCoverageDemo() {
 							animate={{ opacity: 1, y: 0, scale: 1 }}
 							exit={{ opacity: 0, y: -3, scale: 0.98 }}
 							transition={{ duration: 0.16 }}
-							className={`absolute left-3 right-3 top-[132px] z-10 overflow-hidden rounded-lg border border-[var(--preview-border)] bg-[var(--preview-card)] p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] sm:top-[142px] sm:w-[calc(50%_-_22px)] sm:min-w-[220px] ${
+							className={`absolute left-3 right-3 top-[132px] z-10 overflow-hidden rounded-lg border border-[var(--preview-border)] bg-[var(--preview-card)] p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] sm:top-[130px] sm:w-[calc(50%_-_22px)] sm:min-w-[220px] ${
 								openField === "worker"
 									? "sm:left-4 sm:right-auto"
 									: "sm:left-auto sm:right-4"
@@ -156,7 +155,7 @@ export function HarnessCoverageDemo() {
 										key={harness.id}
 										disabled={disabled}
 										onClick={() => chooseHarness(index)}
-										className="flex h-8 w-full items-center gap-2 rounded-md px-2 text-left outline-none transition-colors hover:bg-[var(--preview-muted)] disabled:cursor-not-allowed disabled:opacity-45 focus-visible:ring-2 focus-visible:ring-[var(--preview-ring)]"
+										className="flex h-7 w-full items-center gap-2 rounded-md px-2 text-left outline-none transition-colors hover:bg-[var(--preview-muted)] disabled:cursor-not-allowed disabled:opacity-45 focus-visible:ring-2 focus-visible:ring-[var(--preview-ring)]"
 									>
 										<img
 											src={harness.icon}
