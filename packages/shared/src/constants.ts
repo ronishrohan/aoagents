@@ -39,8 +39,8 @@ export const DOWNLOAD_URL_WINDOWS = "https://github.com/AgentWrapper/agent-orche
 export const DOWNLOAD_URL_LINUX = "https://github.com/AgentWrapper/agent-orchestrator/releases/latest/download/agent-orchestrator-linux-x64.AppImage";
 
 export const AGENT_HARNESSES = 23;
-export const TAGLINE = "Turn agent chaos into mergeable work.";
-export const HERO_SUBHEADLINE = "Run a fleet of coding agents without losing track of branches, reviews, or CI failures.";
+export const TAGLINE = "Turn agent chaos into managable work.";
+export const HERO_SUBHEADLINE = "Run a fleet of coding agents while keeping branches, reviews, and CI failures managable.";
 export const HERO_SECONDARY_SUBHEADLINE = "Isolated workspaces for Claude Code, Codex, and any CLI agent. Review every change from one dashboard. Free and open source.";
 
 export const NAV_ITEMS = [

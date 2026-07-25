@@ -41,7 +41,7 @@ export function HeroSection({ initialStars }: HeroSectionProps) {
       <div className="relative flex flex-col items-center pt-24 sm:pt-32 lg:pt-36 overflow-hidden">
         <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-[30px]">
           <div className="flex flex-col items-center text-center">
-            <div className="space-y-5 sm:space-y-7">
+            <div className="space-y-5 sm:space-y-7 select-none">
               <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-normal tracking-[-0.5px] leading-[0.98] text-foreground max-w-6xl mx-auto text-balance">
                 {TAGLINE}
               </h1>

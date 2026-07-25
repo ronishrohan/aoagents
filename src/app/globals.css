@@ -122,6 +122,12 @@
 	[role="button"]:not([aria-disabled="true"]) {
 		cursor: pointer;
 	}
+
+	button,
+	[role="button"] {
+		user-select: none;
+		-webkit-user-select: none;
+	}
 }
 
 @utility scrollbar-hide {

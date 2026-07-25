@@ -377,15 +377,14 @@ const incomingCards: StaticPreviewCard[] = [
 const BASE_WIDTH = 1024;
 const BASE_HEIGHT = 615;
 const WINDOW_MARGIN = 4;
-const MIN_WINDOW_WIDTH = 240;
-const MIN_WINDOW_HEIGHT = 144;
+const MIN_WINDOW_WIDTH = 860;
+const MIN_WINDOW_HEIGHT = 500;
 
 interface WindowState {
 	x: number;
 	y: number;
 	width: number;
 	height: number;
-	scale: number;
 }
 
 function clampWindowState(
@@ -394,26 +393,18 @@ function clampWindowState(
 	containerHeight: number,
 ): WindowState {
 	let { x, y, width, height } = state;
-	const maxWidth = containerWidth - WINDOW_MARGIN * 2;
-	const maxHeight = containerHeight - WINDOW_MARGIN * 2;
+	const maxWidth = Math.max(1, containerWidth - WINDOW_MARGIN * 2);
+	const maxHeight = Math.max(1, containerHeight - WINDOW_MARGIN * 2);
+	const minWidth = Math.min(MIN_WINDOW_WIDTH, maxWidth);
+	const minHeight = Math.min(MIN_WINDOW_HEIGHT, maxHeight);
 
-	width = Math.max(MIN_WINDOW_WIDTH, Math.min(width, maxWidth));
-	height = Math.max(MIN_WINDOW_HEIGHT, Math.min(height, maxHeight));
-
-	let scale = width / BASE_WIDTH;
-	const targetHeight = BASE_HEIGHT * scale;
-	if (targetHeight > maxHeight) {
-		scale = maxHeight / BASE_HEIGHT;
-		width = BASE_WIDTH * scale;
-		height = BASE_HEIGHT * scale;
-	} else {
-		height = targetHeight;
-	}
+	width = Math.max(minWidth, Math.min(width, maxWidth));
+	height = Math.max(minHeight, Math.min(height, maxHeight));
 
 	x = Math.max(WINDOW_MARGIN, Math.min(x, containerWidth - width - WINDOW_MARGIN));
 	y = Math.max(WINDOW_MARGIN, Math.min(y, containerHeight - height - WINDOW_MARGIN));
 
-	return { x, y, width, height, scale };
+	return { x, y, width, height };
 }
 
 function createInitialWindowState(
@@ -434,13 +425,11 @@ function createInitialWindowState(
 		y: (containerHeight - height) / 2,
 		width,
 		height,
-		scale,
 	};
 }
 
 function useFloatingWindow(
 	outerRef: React.RefObject<HTMLElement | null>,
-	innerRef: React.RefObject<HTMLElement | null>,
 ) {
 	const stateRef = useRef<WindowState | null>(null);
 	const containerSizeRef = useRef({ width: 0, height: 0 });
@@ -454,15 +443,14 @@ function useFloatingWindow(
 
 	const applyState = useCallback(() => {
 		const outer = outerRef.current;
-		const inner = innerRef.current;
 		const state = stateRef.current;
-		if (!outer || !inner || !state) return;
+		if (!outer || !state) return;
 		outer.style.left = `${state.x}px`;
 		outer.style.top = `${state.y}px`;
 		outer.style.width = `${state.width}px`;
 		outer.style.height = `${state.height}px`;
-		inner.style.transform = `scale(${state.scale})`;
-	}, [outerRef, innerRef]);
+		outer.style.transform = "none";
+	}, [outerRef]);
 
 	const updateContainer = useCallback(() => {
 		const outer = outerRef.current;
@@ -530,60 +518,31 @@ function useFloatingWindow(
 				next.x = interaction.initial.x + dx;
 				next.y = interaction.initial.y + dy;
 			} else if (interaction.type === "resize" && interaction.direction) {
-				const baseMagSq = BASE_WIDTH * BASE_WIDTH + BASE_HEIGHT * BASE_HEIGHT;
-				switch (interaction.direction) {
-					case "se": {
-						const vectorX = interaction.initial.width + dx;
-						const vectorY = interaction.initial.height + dy;
-						const dot = Math.max(
-							0,
-							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
-						);
-						const scale = dot / baseMagSq;
-						next.width = BASE_WIDTH * scale;
-						next.height = BASE_HEIGHT * scale;
-						break;
-					}
-					case "nw": {
-						const vectorX = interaction.initial.width - dx;
-						const vectorY = interaction.initial.height - dy;
-						const dot = Math.max(
-							0,
-							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
-						);
-						const scale = dot / baseMagSq;
-						next.width = BASE_WIDTH * scale;
-						next.height = BASE_HEIGHT * scale;
-						next.x = interaction.initial.x + (interaction.initial.width - next.width);
-						next.y = interaction.initial.y + (interaction.initial.height - next.height);
-						break;
-					}
-					case "sw": {
-						const vectorX = interaction.initial.width - dx;
-						const vectorY = interaction.initial.height + dy;
-						const dot = Math.max(
-							0,
-							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
-						);
-						const scale = dot / baseMagSq;
-						next.width = BASE_WIDTH * scale;
-						next.height = BASE_HEIGHT * scale;
-						next.x = interaction.initial.x + (interaction.initial.width - next.width);
-						break;
-					}
-					case "ne": {
-						const vectorX = interaction.initial.width + dx;
-						const vectorY = interaction.initial.height - dy;
-						const dot = Math.max(
-							0,
-							vectorX * BASE_WIDTH + vectorY * BASE_HEIGHT,
-						);
-						const scale = dot / baseMagSq;
-						next.width = BASE_WIDTH * scale;
-						next.height = BASE_HEIGHT * scale;
-						next.y = interaction.initial.y + (interaction.initial.height - next.height);
-						break;
-					}
+				if (interaction.direction.includes("e")) {
+					next.width = interaction.initial.width + dx;
+				}
+				if (interaction.direction.includes("s")) {
+					next.height = interaction.initial.height + dy;
+				}
+				if (interaction.direction.includes("w")) {
+					next.width = interaction.initial.width - dx;
+					next.x = interaction.initial.x + dx;
+				}
+				if (interaction.direction.includes("n")) {
+					next.height = interaction.initial.height - dy;
+					next.y = interaction.initial.y + dy;
+				}
+				if (interaction.direction === "n") {
+					next.width = interaction.initial.width;
+				}
+				if (interaction.direction === "s") {
+					next.width = interaction.initial.width;
+				}
+				if (interaction.direction === "w") {
+					next.height = interaction.initial.height;
+				}
+				if (interaction.direction === "e") {
+					next.height = interaction.initial.height;
 				}
 			}
 
@@ -604,9 +563,7 @@ function useFloatingWindow(
 		};
 	}, [applyState]);
 
-	const getScale = useCallback(() => stateRef.current?.scale ?? 1, []);
-
-	return { getScale, startDrag, startResize };
+	return { startDrag, startResize };
 }
 
 function ResizeHandle({
@@ -628,9 +585,7 @@ function ResizeHandle({
 				event.stopPropagation();
 				onResizeStart(direction, event.clientX, event.clientY);
 			}}
-		>
-			<div className="h-full w-full rounded-sm bg-[var(--preview-foreground)]/0 transition-colors hover:bg-[var(--preview-foreground)]/15" />
-		</div>
+		/>
 	);
 }
 
@@ -642,27 +597,51 @@ function ResizeHandles({
 	return (
 		<>
 			<ResizeHandle
-				className="left-2 top-2 h-4 w-4"
+				className="-left-1 -top-1 h-3 w-3"
 				cursor="cursor-nwse-resize"
 				direction="nw"
 				onResizeStart={onResizeStart}
 			/>
 			<ResizeHandle
-				className="right-2 top-2 h-4 w-4"
+				className="-right-1 -top-1 h-3 w-3"
 				cursor="cursor-nesw-resize"
 				direction="ne"
 				onResizeStart={onResizeStart}
 			/>
 			<ResizeHandle
-				className="left-2 bottom-2 h-4 w-4"
+				className="-left-1 -bottom-1 h-3 w-3"
 				cursor="cursor-nesw-resize"
 				direction="sw"
 				onResizeStart={onResizeStart}
 			/>
 			<ResizeHandle
-				className="right-2 bottom-2 h-4 w-4"
+				className="-right-1 -bottom-1 h-3 w-3"
 				cursor="cursor-nwse-resize"
 				direction="se"
+				onResizeStart={onResizeStart}
+			/>
+			<ResizeHandle
+				className="left-2 right-2 -top-1 h-2"
+				cursor="cursor-ns-resize"
+				direction="n"
+				onResizeStart={onResizeStart}
+			/>
+			<ResizeHandle
+				className="left-2 right-2 -bottom-1 h-2"
+				cursor="cursor-ns-resize"
+				direction="s"
+				onResizeStart={onResizeStart}
+			/>
+			<ResizeHandle
+				className="-left-1 top-2 bottom-2 w-2"
+				cursor="cursor-ew-resize"
+				direction="w"
+				onResizeStart={onResizeStart}
+			/>
+			<ResizeHandle
+				className="-right-1 top-2 bottom-2 w-2"
+				cursor="cursor-ew-resize"
+				direction="e"
 				onResizeStart={onResizeStart}
 			/>
 		</>
@@ -722,6 +701,27 @@ function randomDelay() {
 function randomItem<T>(items: T[]): T | null {
 	if (items.length === 0) return null;
 	return items[Math.floor(Math.random() * items.length)] ?? null;
+}
+
+function useImageReady(src: string) {
+	const [isReady, setIsReady] = useState(false);
+
+	useEffect(() => {
+		setIsReady(false);
+		const image = new window.Image();
+		image.src = src;
+
+		if (image.complete) {
+			setIsReady(true);
+			return;
+		}
+
+		const handleLoad = () => setIsReady(true);
+		image.addEventListener("load", handleLoad);
+		return () => image.removeEventListener("load", handleLoad);
+	}, [src]);
+
+	return isReady;
 }
 
 function PanelIcon({ className = "" }: { className?: string }) {
@@ -962,11 +962,13 @@ function WindowTitlebar({
 }
 
 function Sidebar({
+	isRepoAvatarReady,
 	onResizeStart,
 	onSelectTrack,
 	selectedTrackId,
 	sidebarRef,
 }: {
+	isRepoAvatarReady: boolean;
 	onResizeStart: (clientX: number) => void;
 	onSelectTrack: (trackId: TrackId) => void;
 	selectedTrackId: TrackId;
@@ -1011,15 +1013,25 @@ function Sidebar({
 						<span className="text-[13px] font-normal">+</span>
 					</div>
 					<div className="flex h-[18px] items-center gap-1.5 text-[10px] text-[var(--preview-foreground)]">
-						<img
-							src={repoAvatar}
-							alt=""
-							width={14}
-							height={14}
-							aria-hidden="true"
-							className="h-3.5 w-3.5 rounded-sm"
-							draggable="false"
-						/>
+						<div className="relative h-3.5 w-3.5 shrink-0 overflow-hidden rounded-sm bg-[var(--preview-muted)]">
+							<img
+								src={repoAvatar}
+								alt=""
+								width={14}
+								height={14}
+								aria-hidden="true"
+								loading="eager"
+								decoding="sync"
+								fetchPriority="high"
+								className={`h-3.5 w-3.5 rounded-sm object-cover transition-opacity ${
+									isRepoAvatarReady ? "opacity-100" : "opacity-0"
+								}`}
+								draggable="false"
+							/>
+							{isRepoAvatarReady ? null : (
+								<GitHubIcon className="absolute inset-0 m-auto h-2.5 w-2.5 text-[var(--preview-muted-foreground)]/65" />
+							)}
+						</div>
 						<span className="min-w-0 flex-1 truncate">{repoName}</span>
 						<GridIcon className="h-3.5 w-3.5 text-[var(--preview-muted-foreground)]" />
 						<BranchIcon className="h-3.5 w-3.5 text-[var(--preview-muted-foreground)]" />
@@ -1189,9 +1201,9 @@ function BoardCard({
 							event.stopPropagation();
 							onMerge(card.id);
 						}}
-						className="inline-flex h-7 items-center justify-center rounded-[6px] bg-[var(--preview-primary)] px-2.5 text-[10px] font-semibold text-[var(--preview-primary-foreground)] transition-transform active:scale-[0.96]"
+						className="inline-flex h-7 items-center justify-center whitespace-nowrap rounded-[6px] bg-[var(--preview-primary)] px-2.5 text-[10px] font-semibold text-[var(--preview-primary-foreground)] transition-transform active:scale-[0.96]"
 					>
-						Review and merge PR
+						Review PR
 					</button>
 					<span className="shrink-0 text-[10px] text-[var(--preview-muted-foreground)]">{card.time}</span>
 				</div>
@@ -1587,13 +1599,10 @@ export function AppMockup() {
 	const [viewMode, setViewMode] = useState<ViewMode>("board");
 	const incomingIndex = useRef(0);
 	const windowRef = useRef<HTMLDivElement>(null);
-	const innerRef = useRef<HTMLDivElement>(null);
 	const sidebarRef = useRef<HTMLElement>(null);
 	const sidebarWidthRef = useRef(178);
-	const { startDrag, startResize, getScale } = useFloatingWindow(
-		windowRef,
-		innerRef,
-	);
+	const { startDrag, startResize } = useFloatingWindow(windowRef);
+	const isRepoAvatarReady = useImageReady(repoAvatar);
 
 	const selectedTrack =
 		projectItems.find((item) => item.id === selectedTrackId) ?? projectItems[0];
@@ -1603,8 +1612,7 @@ export function AppMockup() {
 		const startX = clientX;
 
 		const handleMove = (event: PointerEvent) => {
-			const scale = getScale();
-			const delta = (event.clientX - startX) / scale;
+			const delta = event.clientX - startX;
 			const nextWidth = Math.max(140, Math.min(320, startWidth + delta));
 			sidebarWidthRef.current = nextWidth;
 			if (sidebarRef.current) {
@@ -1619,7 +1627,7 @@ export function AppMockup() {
 
 		window.addEventListener("pointermove", handleMove);
 		window.addEventListener("pointerup", handleUp);
-	}, [getScale]);
+	}, []);
 
 	const mergeCard = useCallback((id: string) => {
 		setCards((current) =>
@@ -1752,69 +1760,65 @@ export function AppMockup() {
 			style={{
 				...previewTokenStyle,
 				position: "absolute",
-				left: 0,
-				top: 0,
-				width: BASE_WIDTH,
-				height: BASE_HEIGHT,
+				left: "50%",
+				top: "50%",
+				width: `min(${BASE_WIDTH}px, calc(100% - ${WINDOW_MARGIN * 2}px))`,
+				height: `min(${BASE_HEIGHT}px, calc(100% - ${WINDOW_MARGIN * 2}px))`,
+				transform: "translate(-50%, -50%)",
 			}}
 		>
-			<div
-				ref={innerRef}
-				className="origin-top-left"
-				style={{ width: BASE_WIDTH, height: BASE_HEIGHT }}
-			>
-				<div className="flex h-full flex-col">
-					<WindowTitlebar
-						mergedCount={mergedCount}
-						onNewTask={spawnRandomTask}
-						onTitlebarPointerDown={startDrag}
-						onViewChange={setViewMode}
-						runningCount={runningCount}
-						viewMode={viewMode}
-						waitingCount={waitingCount}
+			<div className="flex h-full flex-col">
+				<WindowTitlebar
+					mergedCount={mergedCount}
+					onNewTask={spawnRandomTask}
+					onTitlebarPointerDown={startDrag}
+					onViewChange={setViewMode}
+					runningCount={runningCount}
+					viewMode={viewMode}
+					waitingCount={waitingCount}
+				/>
+				<div className="flex min-h-0 flex-1">
+					<Sidebar
+						isRepoAvatarReady={isRepoAvatarReady}
+						onResizeStart={startSidebarResize}
+						onSelectTrack={selectTrack}
+						selectedTrackId={selectedTrack.id}
+						sidebarRef={sidebarRef}
 					/>
-					<div className="flex min-h-0 flex-1">
-						<Sidebar
-							onResizeStart={startSidebarResize}
-							onSelectTrack={selectTrack}
-							selectedTrackId={selectedTrack.id}
-							sidebarRef={sidebarRef}
+					<div className="flex min-w-0 flex-1 flex-col bg-[var(--preview-background)]">
+						<Topbar
+							mergedCount={mergedCount}
+							selectedTrack={selectedTrack}
+							viewMode={viewMode}
 						/>
-						<div className="flex min-w-0 flex-1 flex-col bg-[var(--preview-background)]">
-							<Topbar
-								mergedCount={mergedCount}
+						{viewMode === "orchestrator" ? (
+							<OrchestratorView
+								cards={cards}
+								onNewTask={spawnRandomTask}
 								selectedTrack={selectedTrack}
-								viewMode={viewMode}
 							/>
-							{viewMode === "orchestrator" ? (
-								<OrchestratorView
-									cards={cards}
-									onNewTask={spawnRandomTask}
-									selectedTrack={selectedTrack}
-								/>
-							) : (
-								<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
-									<div className="grid min-h-0 flex-1 grid-cols-4 overflow-hidden">
-										{boardColumns.map((column) => (
-											<BoardColumn
-												key={column.title}
-												{...column}
-												color={COLUMN_COLORS[column.id]}
-												onMerge={mergeCard}
-												onOpen={setSelectedCard}
-											/>
-										))}
-									</div>
-								</LayoutGroup>
-							)}
-						</div>
+						) : (
+							<LayoutGroup key={`${selectedTrack.id}-${boardVersion}`}>
+								<div className="grid min-h-0 flex-1 grid-cols-4 overflow-hidden">
+									{boardColumns.map((column) => (
+										<BoardColumn
+											key={column.title}
+											{...column}
+											color={COLUMN_COLORS[column.id]}
+											onMerge={mergeCard}
+											onOpen={setSelectedCard}
+										/>
+									))}
+								</div>
+							</LayoutGroup>
+						)}
 					</div>
 				</div>
-				<AgentStatusModal
-					card={selectedCard}
-					onClose={() => setSelectedCard(null)}
-				/>
 			</div>
+			<AgentStatusModal
+				card={selectedCard}
+				onClose={() => setSelectedCard(null)}
+			/>
 			{selectedCard ? null : <ResizeHandles onResizeStart={startResize} />}
 		</div>
 	);

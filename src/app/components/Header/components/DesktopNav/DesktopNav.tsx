@@ -16,7 +16,7 @@ export function DesktopNav() {
   const links = [...PRODUCT_LINKS, ...RESOURCE_LINKS];
 
   return (
-    <nav className="flex items-center gap-1">
+    <nav className="flex items-center gap-1 select-none">
       {links.map((link) => (
         <NavLinkItem key={link.href} link={link} />
       ))}

@@ -88,7 +88,7 @@ export function WallOfLoveSection() {
 	return (
 		<section className="relative py-24">
 			<div className="max-w-7xl mx-auto">
-				<div className="text-left mb-12">
+				<div className="text-left mb-12 select-none">
 					<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground">
 						In the wild
 					</h2>

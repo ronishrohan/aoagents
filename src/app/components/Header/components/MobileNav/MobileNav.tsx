@@ -19,7 +19,7 @@ export function MobileNav({ ctaButtons }: MobileNavProps) {
 	const close = () => setIsOpen(false);
 
 	return (
-		<div className="lg:hidden flex items-center gap-2">
+		<div className="lg:hidden flex items-center gap-2 select-none">
 			<div className="hidden sm:flex items-center gap-2 shrink-0">
 				{ctaButtons}
 			</div>
