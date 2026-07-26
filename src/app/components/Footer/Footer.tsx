@@ -8,7 +8,6 @@ import { TileWordmark } from "./TileWordmark";
 
 export function Footer() {
   const pathname = usePathname();
-  if (pathname === "/download") return null;
 
   return (
     <footer className="bg-card">

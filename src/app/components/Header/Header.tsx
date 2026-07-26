@@ -13,7 +13,6 @@ interface HeaderProps {
 
 export function Header({ ctaButtons }: HeaderProps) {
   const pathname = usePathname();
-  if (pathname === "/download") return null;
   const hasTransparentHero =
     pathname === "/" || pathname === "/design-partners";
   const [hasScrolled, setHasScrolled] = useState(false);

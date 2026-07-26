@@ -1166,6 +1166,7 @@ function WindowTitlebar({
 	onTitlebarPointerDown,
 	onViewChange,
 	runningCount,
+	showMetrics,
 	viewMode,
 	waitingCount,
 }: {
@@ -1174,6 +1175,7 @@ function WindowTitlebar({
 	onTitlebarPointerDown: (clientX: number, clientY: number) => void;
 	onViewChange: (mode: ViewMode) => void;
 	runningCount: number;
+	showMetrics: boolean;
 	viewMode: ViewMode;
 	waitingCount: number;
 }) {
@@ -1196,15 +1198,19 @@ function WindowTitlebar({
 				<span className="truncate text-[12px] font-bold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">
 					{repoName}
 				</span>
-				<span className="hidden rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 md:inline">
-					{mergedCount} PRs merged
-				</span>
-				<span className="hidden rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 lg:inline">
-					{runningCount} agents running
-				</span>
-				<span className="hidden rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 lg:inline">
-					{waitingCount} waiting
-				</span>
+				{showMetrics ? (
+					<>
+						<span className="hidden whitespace-nowrap rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 md:inline">
+							{mergedCount} PRs merged
+						</span>
+						<span className="hidden whitespace-nowrap rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 lg:inline">
+							{runningCount} agents running
+						</span>
+						<span className="hidden whitespace-nowrap rounded border border-[var(--preview-border)] px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-[var(--preview-muted-foreground)]/70 lg:inline">
+							{waitingCount} waiting
+						</span>
+					</>
+				) : null}
 			</div>
 			<div className="ml-auto flex items-center gap-1.5">
 				<button
@@ -1374,8 +1380,8 @@ function Topbar({
 				</div>
 			</div>
 			<div className="ml-auto hidden grid-cols-2 gap-2 font-mono text-[10px] tabular-nums tracking-[0.5px] text-[var(--preview-muted-foreground)]/75 sm:grid">
-				<span className="rounded border border-[var(--preview-border)] px-2 py-1">CI 2 failed</span>
-				<span className="rounded border border-[var(--preview-border)] px-2 py-1">{mergedCount} Merged</span>
+				<span className="whitespace-nowrap rounded border border-[var(--preview-border)] px-2 py-1">CI 2 failed</span>
+				<span className="whitespace-nowrap rounded border border-[var(--preview-border)] px-2 py-1">{mergedCount} Merged</span>
 			</div>
 		</div>
 	);
@@ -1454,7 +1460,7 @@ function BoardCard({
 					className="mt-0.5 h-4 w-4 shrink-0"
 					draggable="false"
 				/>
-				<div className="min-w-0 pr-2 text-[12px] font-medium leading-[16px] text-[var(--preview-card-foreground)]">
+				<div className="line-clamp-2 min-w-0 pr-2 text-[length:var(--preview-task-title-size)] font-medium leading-[var(--preview-task-title-leading)] text-[var(--preview-card-foreground)]">
 					{card.title}
 				</div>
 			</div>
@@ -1488,7 +1494,7 @@ function BoardCard({
 			) : (
 				<div className="mt-3 flex items-center justify-between">
 					<span
-						className={`inline-flex items-center gap-1.5 text-[10px] ${
+						className={`inline-flex items-center gap-1.5 whitespace-nowrap text-[10px] ${
 							card.activityState === "passed"
 								? "text-[#86efac]"
 								: card.activityState === "failed"
@@ -1539,7 +1545,7 @@ function BoardColumn({
 		<section className="flex min-h-0 min-w-0 snap-start flex-col border-r border-[var(--preview-border)] last:border-r-0">
 			<div className="flex items-center gap-2 border-b border-[var(--preview-border)] px-3 py-2.5">
 				<span className="h-2 w-2 rounded-[2px]" style={{ backgroundColor: color }} />
-				<div className="text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">{title}</div>
+				<div className="min-w-0 flex-1 truncate whitespace-nowrap text-[11px] font-semibold tracking-[-0.5px] text-[var(--preview-muted-foreground)]">{title}</div>
 				<div className="ml-2 text-[10px] tabular-nums text-[var(--preview-muted-foreground)]">{count}</div>
 			</div>
 			<div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-2 scrollbar-hide">
@@ -1874,7 +1880,13 @@ function OrchestratorView({
 	);
 }
 
-export function AppMockup() {
+export function AppMockup({
+	compactTaskTitles = false,
+	showTitlebarMetrics = true,
+}: {
+	compactTaskTitles?: boolean;
+	showTitlebarMetrics?: boolean;
+}) {
 	const [cardsByTrack, setCardsByTrack] = useState(createInitialCardsByTrack);
 	const [mergedCounts, setMergedCounts] = useState<Record<TrackId, number>>({
 		landing: 18,
@@ -2077,16 +2089,18 @@ export function AppMockup() {
 			ref={windowRef}
 			role="img"
 			aria-label="Preview of the Agent Orchestrator board: agent tasks move across Working, Needs you, In review, and Ready to merge, each card showing its agent, branch, and pull request state."
-			className="absolute z-10 select-none overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans tracking-[-0.5px] text-[var(--preview-foreground)] antialiased shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75)] [&_.font-mono]:tracking-normal"
+			className="absolute z-10 select-none overflow-hidden rounded-xl border border-[var(--preview-border)] bg-[var(--preview-background)] font-sans tracking-[-0.5px] text-[var(--preview-foreground)] antialiased shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75)] [&_.font-mono]:tracking-normal [&_button]:whitespace-nowrap"
 			style={{
 				...previewTokenStyle,
+				"--preview-task-title-leading": compactTaskTitles ? "13px" : "16px",
+				"--preview-task-title-size": compactTaskTitles ? "10px" : "12px",
 				position: "absolute",
 				left: "50%",
 				top: "50%",
 				width: `min(${BASE_WIDTH}px, calc(100% - ${WINDOW_MARGIN * 2}px))`,
 				height: `min(${BASE_HEIGHT}px, calc(100% - ${WINDOW_MARGIN * 2}px))`,
 				transform: "translate(-50%, -50%)",
-			}}
+			} as CSSProperties}
 		>
 			<div className="flex h-full flex-col">
 				<WindowTitlebar
@@ -2095,6 +2109,7 @@ export function AppMockup() {
 					onTitlebarPointerDown={startDrag}
 					onViewChange={setViewMode}
 					runningCount={runningCount}
+					showMetrics={showTitlebarMetrics}
 					viewMode={viewMode}
 					waitingCount={waitingCount}
 				/>
